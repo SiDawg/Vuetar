@@ -1,0 +1,237 @@
+[
+  {
+    "group": "Common",
+    "rows": [
+      [
+        {
+          "name": "Major",
+          "shortname": "M",
+          "scale": 1,
+          "mode": 1,
+          "scaletheme": 1,
+          "sid" : 1
+        },
+        {
+          "name": "Minor",
+          "shortname": "m",
+          "scale": 1,
+          "mode": 6,
+          "scaletheme": 1,
+          "sid" : 2
+        },
+        {
+          "name": "Major Pentatonic",
+          "shortname": "M p",
+          "scale": 2,
+          "mode": 1,
+          "scaletheme": 1,
+          "sid" : 3
+        },
+        {
+          "name": "Minor Pentatonic",
+          "shortname": "m p",
+          "scale": 2,
+          "mode": 6,
+          "scaletheme": 1,
+          "sid" : 4
+        }
+      ],
+      [
+        {
+          "name": "Major (highlight on 3 & 5)",
+          "shortname": "M+",
+          "scale": 1,
+          "mode": 1,
+          "scaletheme": 2,
+          "sid" : 5
+        },
+        {
+          "name": "Minor (highlight on 3 & 5)",
+          "shortname": "m+",
+          "scale": 1,
+          "mode": 6,
+          "scaletheme": 2,
+          "sid" : 6
+        },
+        {
+          "name": "Major (highlight on pentatonic notes)",
+          "shortname": "M+p",
+          "scale": 1,
+          "mode": 1,
+          "scaletheme": 3,
+          "sid" : 7
+        },
+        {
+          "name": "Minor (highlight on pentatonic notes)",
+          "shortname": "m+p",
+          "scale": 1,
+          "mode": 6,
+          "scaletheme": 3,
+          "sid" : 8
+        }
+      ]
+    ]
+  },
+  {
+    "group": "Modes",
+    "rows": [
+      [
+        {
+          "name": "Ionian (Major)",
+          "shortname": "Io",
+          "scale": 1,
+          "mode": 1,
+          "scaletheme": 1,
+          "sid" : 9
+        },
+        {
+          "name": "Dorian",
+          "shortname": "Do",
+          "scale": 1,
+          "mode": 2,
+          "scaletheme": 1,
+          "sid" : 10
+        },
+        {
+          "name": "Phrygian",
+          "shortname": "Ph",
+          "scale": 1,
+          "mode": 3,
+          "scaletheme": 1,
+          "sid" : 11
+        },
+        {
+          "name": "Lydian",
+          "shortname": "Ly",
+          "scale": 1,
+          "mode": 4,
+          "scaletheme": 1,
+          "sid" : 12
+        },
+        {
+          "name": "Mixolydian",
+          "shortname": "Mi",
+          "scale": 1,
+          "mode": 5,
+          "scaletheme": 1,
+          "sid" : 13
+        },
+        {
+          "name": "Aeolian (Natural Minor)",
+          "shortname": "Ae",
+          "scale": 1,
+          "mode": 6,
+          "scaletheme": 1,
+          "sid" : 14
+        },
+        {
+          "name": "Locrian",
+          "shortname": "Lo",
+          "scale": 1,
+          "mode": 7,
+          "scaletheme": 1,
+          "sid" : 15
+        }
+      ],
+      [
+        {
+          "name": "Ionian (No colour notes, but highlights on 3 & 5)",
+          "shortname": "Io+",
+          "scale": 1,
+          "mode": 1,
+          "scaletheme": 4,
+          "sid" : 16
+        },
+        {
+          "name": "Dorian (colour notes: ♭3, ♭7)",
+          "shortname": "Do+",
+          "scale": 1,
+          "mode": 2,
+          "scaletheme": 4,
+          "sid" : 17
+        },
+        {
+          "name": "Phrygian (colour notes: ♭2, ♭3, ♭6, ♭7)",
+          "shortname": "Ph+",
+          "scale": 1,
+          "mode": 3,
+          "scaletheme": 4,
+          "sid" : 18
+        },
+        {
+          "name": "Lydian (colour notes: ♯4 ",
+          "shortname": "Ly+",
+          "scale": 1,
+          "mode": 4,
+          "scaletheme": 4,
+          "sid" : 19
+        },
+        {
+          "name": "Mixolydian (colour notes: ♭7 ",
+          "shortname": "Mi+",
+          "scale": 1,
+          "mode": 5,
+          "scaletheme": 4,
+          "sid" : 20
+        },
+        {
+          "name": "Aeolian (colour notes: ♭3, ♭6, ♭7",
+          "shortname": "Ae+",
+          "scale": 1,
+          "mode": 6,
+          "scaletheme": 4,
+          "sid" : 21
+        },
+        {
+          "name": "Locrian (colour notes: ♭2, ♭3, ♭5, ♭6, ♭7",
+          "shortname": "Lo+",
+          "scale": 1,
+          "mode": 7,
+          "scaletheme": 4,
+          "sid" : 22
+        }
+      ]
+    ]
+  },
+  {
+    "group": "Other",
+    "rows": [
+      [
+        {
+          "name": "Ionian (Major)",
+          "shortname": "Hi",
+          "scale": 1,
+          "mode": 1,
+          "scaletheme": 1,
+          "sid" : 23
+        },
+        {
+          "name": "Dorian",
+          "shortname": "Po",
+          "scale": 1,
+          "mode": 2,
+          "scaletheme": 1,
+          "sid" : 24
+        }
+      ],
+      [
+        {
+          "name": "Ionian (No colour notes, but highlights on 3 & 5)",
+          "shortname": "St",
+          "scale": 1,
+          "mode": 1,
+          "scaletheme": 4,
+          "sid" : 25
+        },
+        {
+          "name": "Dorian (colour notes: ♭3, ♭7)",
+          "shortname": "Ej",
+          "scale": 1,
+          "mode": 2,
+          "scaletheme": 4,
+          "sid" : 26
+        }
+      ]
+    ]
+  }
+]
