@@ -42,6 +42,7 @@
 		mounted() {
 			window.addEventListener('resize', this.handleResize);
 			this.handleResize();
+			// this.$parent.$on('note-drop',scaleID, ndX, ndY);
 			},
 
 		beforeUnmount() {

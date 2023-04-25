@@ -42,7 +42,7 @@
                           class="scaleCircle"
                           :id="scale.sid"
                           @mousedown.prevent="startDragging($event, scale.sid)" 
-                          @touchstart.prevent="startDragging($event, scale.sid)">
+                          @touchstart.prevent="startDragging($event, scale.sid)" >
                         
                           <title>{{ scale.name }}</title>
                         </circle>
@@ -91,10 +91,13 @@ export default {
   },
   methods: {
     startDragging(event, id) {
-      const { clientX, clientY, type, touches } = event
+      const { type, touches, clientX, clientY } = event
+      const scaleX = event.target.getBoundingClientRect().left 
+      const scaleY = event.target.getBoundingClientRect().top
 
-      this.$emit('scale-clicked', {id, clientX, clientY, type, touches});
+      this.$emit('scale-clicked', {id, scaleCircles: this.scaleCircles, scaleX, scaleY, clientX, clientY, type, touches });
     }
+
   },
 
   computed: {

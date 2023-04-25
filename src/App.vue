@@ -10,17 +10,15 @@
             <FretBoard  style="pointer-events:none" />
           </div>
         </v-row>
-        <svg style="pointer-events: none; position: absolute; top: 0; left: 0; z-index: 10; height: 100%; width: 100%;">
+        <svg v-if="isDragging" style="pointer-events: none; position: absolute; top: 0; left: 0; z-index: 10; height: 100%; width: 100%;">
           <circle :cx="ndX" :cy="ndY" :r="noteCircles" :fill="ndFill"/>
-          <text 
-            :x="ndX" 
-            :y="ndY" 
-            pointer-events="none"
-          >
-                        {{ this.ndScaleID }}
-          </text>
         </svg>
+        <div style="pointer-events: none; position: absolute; top: 0; left: 0; z-index: 10; height: 100%; width: 100%;">
 
+<!--           {{ this.ndX + ' ' + this.ndY }}<br>
+          {{ this.ndOffX + ' ' + this.ndOffY }}<br> -->
+
+        </div>
     </v-container>
   </v-app>
 </template>
@@ -39,6 +37,9 @@
         ndFill: '#8789C0',  
         isDragging: false,
         ndScaleID: 0, 
+        ndOffX: 10,
+        ndOffY: 10,
+
 
       }
     },
@@ -51,15 +52,19 @@
     methods: {
       startDragging(event) {
         this.isDragging = true;
-        this.ndX = this.clientX(event);
-        this.ndY = this.clientY(event);
+
+        this.ndOffX = this.clientX(event) - event.scaleCircles - event.scaleX 
+        this.ndOffY = this.clientY(event) - event.scaleCircles - event.scaleY 
+
+        this.ndX = this.clientX(event) - this.ndOffX;
+        this.ndY = this.clientY(event) - this.ndOffY;
         this.ndScaleID = event.id
       },
 
       dragging(event) {
         if (this.isDragging) {
-          this.ndX = this.clientX(event);
-          this.ndY = this.clientY(event);
+          this.ndX = this.clientX(event) - this.ndOffX;
+          this.ndY = this.clientY(event) - this.ndOffY;
         }
       },
 
@@ -87,11 +92,13 @@
       window.addEventListener('mousemove', this.dragging);
       window.addEventListener('touchmove', this.dragging);
       window.addEventListener('mouseup', this.stopDragging);
+      window.addEventListener('touchend', this.stopDragging);
     },
     beforeUnmount() {
       window.removeEventListener('mousemove', this.dragging);
       window.removeEventListener('touchmove', this.dragging);
       window.removeEventListener('mouseup', this.stopDragging);
+      window.removeEventListener('touchend', this.stopDragging);
 
     }
   }
