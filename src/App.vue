@@ -1,14 +1,16 @@
 <template>
   <v-app>
-    <v-container>
+    <v-container fluid>
 
         <v-row>
             <TopDashboard @scale-clicked="startDragging" @mousedown.prevent/>
         </v-row>
-        <v-row>
-          <div>
-            <FretBoard  style="pointer-events:none" />
-          </div>
+        <v-row >
+            <FretBoard             
+              :ndX="ndX"
+              :ndY="ndY"
+              :ndScaleID="ndScaleID"
+               />
         </v-row>
         <svg v-if="isDragging" style="pointer-events: none; position: absolute; top: 0; left: 0; z-index: 10; height: 100%; width: 100%;">
           <circle :cx="ndX" :cy="ndY" :r="noteCircles" :fill="ndFill"/>
@@ -70,6 +72,8 @@
 
       stopDragging() {
         this.isDragging = false;
+        this.$emit('note-drop', { ndScaleID: this.ndScaleID, ndX: this.ndX, ndY: this.ndY }); 
+        console.log('Note Dropped from App')       
       },
 
       clientX(event) {

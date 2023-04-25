@@ -1,24 +1,32 @@
 <template>
-	<v-container>
-		<v-row>
-			<v-col>				
-				<div>
-					<svg :width="width" :height="cellSize * rows + 10">
+	<v-container fluid  style="overflow-x: auto;">
+		<svg no-gutter left="0" top="0" align-left 
+			:width="this.width" 
+			:height="stringGap * rows" 
+			:style="{background: `rgba(var(--v-theme-surface))`}"
+			@mouseup="handleNoteDrop"
+			> 
+			<g v-for="(i,index) in columns" :key="index">
+				<line 
+					:x1="(i * colWidth) - 2.5" 
+					y1="0"
+					:x2="(i * colWidth) - 2.5" 
+					:y2="stringGap * rows" 
+					:style="{stroke: `rgba(var(--v-border-color), var(--v-border-opacity))`, strokeWidth: '5'}" />
+			</g>
 
-						<!-- vertical lines -->
-						<g v-for="(i,index) in columns" :key="index">
-							<line :x1="i * colWidth - (colWidth / 2)" y1="0" :x2="i * colWidth - (colWidth / 2)" :y2="cellSize * (rows - 1) + 20" :style="{stroke: `rgba(var(--v-border-color), var(--v-border-opacity))`, strokeWidth: '5'}" />
-						</g>
+			<g v-for="(i,index) in rows" :key="index">
+				<line 
+					x1="0" 
+					:y1="index * stringGap + stringGap / 2" 
+					:x2="neckLength" 
+					:y2="index * stringGap + stringGap / 2" 
+					:style="{stroke: `rgba(var(--v-border-color), var(--v-border-opacity))`}" />
 
-						<!-- horizontal lines -->
-						<g v-for="(i,index) in rows" :key="index">
-							<line x1="0" :y1="index * cellSize + 10" :x2="width" :y2="index * cellSize + 10" :style="{stroke: `rgba(var(--v-border-color), var(--v-border-opacity))`}" />
-							<!-- <text :y="i * cellSize + 5" :x="20" style="fill: white;">horse</text> -->
-						</g>
-					</svg>
-				</div>
-			</v-col>
-	</v-row>
+			</g>
+			<text x = "10" :y="30" fill="white">{{this.dropX}}</text><br>
+			<text x = "10" :y="50" fill="white">{{this.dropY}}</text><br>
+		</svg>
 	</v-container>
 </template>
 
@@ -28,21 +36,30 @@
 
 		name: "FretBoard",
 
+		props: {
+		ndScaleID: Number,
+		ndX: Number,
+		ndY: Number,
+		},
+
 		data() {
 			return {
-			width: 100,
+			width: 300,
 			colWidth: 20,
 			height: 150,
-			cellSize: 30,
+			stringGap: 30,
 			columns: 20,
 			rows: 6,
+			minLength: 1200,
+			neckLength: 1200,
+			dropX: 0,
+			dropY: 0,
 			};
 		},
 
 		mounted() {
 			window.addEventListener('resize', this.handleResize);
 			this.handleResize();
-			// this.$parent.$on('note-drop',scaleID, ndX, ndY);
 			},
 
 		beforeUnmount() {
@@ -51,8 +68,18 @@
 
 		methods: {
 			handleResize() {
-			this.width = `${window.innerWidth}px`;
-			this.colWidth = window.innerWidth / this.columns;
+				if ((window.innerWidth - 60) <= this.minLength) {
+					this.width = this.minLength;					
+				} else { 
+					this.width = window.innerWidth - 60;
+				}
+				this.neckLength = this.width;
+				this.colWidth = this.neckLength / this.columns;
+				
+			},
+			handleNoteDrop(event) {
+				this.dropX = event.clientX - event.target.getBoundingClientRect().left;
+				this.dropY = event.clientY - event.target.getBoundingClientRect().top;
 			}
 		}
 	}

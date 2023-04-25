@@ -1,6 +1,6 @@
 <template>
     <v-container class="bg-background d-flex justify-center flex-shrink-0">
-      <v-card :width="scaleBoxWidth" :height="dashboardHeight" elevation="2"  class="rounded-lg mx-1" >
+      <v-card :width="scaleBoxWidth" :min-width="scaleBoxWidth" :height="dashboardHeight" elevation="2"  class="rounded-lg mx-1" >
           <v-btn-toggle
             v-model="toggle"
             class="rounded-t-lg rounded-b-0"
@@ -74,6 +74,7 @@
 import scaleButtons from './scaleButtons.json'
 export default {
   name: 'TopDashboard',
+
   data() {
     return {
 
@@ -97,7 +98,6 @@ export default {
 
       this.$emit('scale-clicked', {id, scaleCircles: this.scaleCircles, scaleX, scaleY, clientX, clientY, type, touches });
     }
-
   },
 
   computed: {
