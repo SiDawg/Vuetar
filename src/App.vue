@@ -129,7 +129,7 @@
 }
 
 body {
-  background-color: #37474F !important;
+  background-color: #27474F !important;
 /*  margin: 8px !important;*/
 }
 
