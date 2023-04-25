@@ -24,8 +24,9 @@
 					:style="{stroke: `rgba(var(--v-border-color), var(--v-border-opacity))`}" />
 
 			</g>
-			<text x = "10" :y="30" fill="white">{{this.dropX}}</text><br>
-			<text x = "10" :y="50" fill="white">{{this.dropY}}</text><br>
+			<text x = "10" :y="30" fill="white">{{Math.floor(this.dropX)}}</text><br>
+			<text x = "10" :y="50" fill="white">{{Math.floor(this.dropY)}}</text><br>
+
 		</svg>
 	</v-container>
 </template>
@@ -77,9 +78,9 @@
 				this.colWidth = this.neckLength / this.columns;
 				
 			},
-			handleNoteDrop(event) {
-				this.dropX = event.clientX - event.target.getBoundingClientRect().left;
-				this.dropY = event.clientY - event.target.getBoundingClientRect().top;
+			handleNoteDrop() {
+				this.dropX = this.ndX - event.target.getBoundingClientRect().left;
+				this.dropY = this.ndY - event.target.getBoundingClientRect().top;
 			}
 		}
 	}

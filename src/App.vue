@@ -72,8 +72,7 @@
 
       stopDragging() {
         this.isDragging = false;
-        this.$emit('note-drop', { ndScaleID: this.ndScaleID, ndX: this.ndX, ndY: this.ndY }); 
-        console.log('Note Dropped from App')       
+  
       },
 
       clientX(event) {
