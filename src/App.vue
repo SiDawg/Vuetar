@@ -1,7 +1,6 @@
 <template>
   <v-app>
-    <v-container fluid>
-
+    <v-container fluid >
         <v-row>
             <TopDashboard @scale-clicked="startDragging" @mousedown.prevent/>
         </v-row>
@@ -10,6 +9,7 @@
               :ndX="ndX"
               :ndY="ndY"
               :ndScaleID="ndScaleID"
+              :isDragging="isDragging"
                />
         </v-row>
         <svg v-if="isDragging" style="pointer-events: none; position: absolute; top: 0; left: 0; z-index: 10; height: 100%; width: 100%;">
@@ -60,7 +60,7 @@
 
         this.ndX = this.clientX(event) - this.ndOffX;
         this.ndY = this.clientY(event) - this.ndOffY;
-        this.ndScaleID = event.id
+        this.ndScaleID = event.sid
       },
 
       dragging(event) {
@@ -134,6 +134,7 @@
 body {
   background-color: #27474F !important;
 /*  margin: 8px !important;*/
+  overflow: hidden;
 }
 
 </style>
