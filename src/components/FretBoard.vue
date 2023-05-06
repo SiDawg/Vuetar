@@ -2,20 +2,20 @@
 	<v-container ref="dropArea" @mouseup="handleNoteDrop" @touchend.prevent="handleNoteDrop" fluid style="overflow-x: auto; padding: 15px;">
 		<svg  
 			:width="this.width" 
-			:height="stringGap * rows" 
+			:height="stringGap * strings" 
 			:style="{background: `rgba(var(--v-theme-surface))`}"
 			
 			> 
-			<g v-for="(i,index) in columns" :key="index">
+			<g v-for="(i,index) in frets" :key="index">
 				<line 
 					:x1="(i * colWidth) - 2.5" 
 					y1="0"
 					:x2="(i * colWidth) - 2.5" 
-					:y2="stringGap * rows" 
+					:y2="stringGap * strings" 
 					:style="{stroke: `rgba(var(--v-border-color), var(--v-border-opacity))`, strokeWidth: '5'}" />
 			</g>
 
-			<g v-for="(i,index) in rows" :key="index">
+			<g v-for="(i,index) in strings" :key="index">
 				<line 
 					x1="0" 
 					:y1="index * stringGap + stringGap / 2" 
@@ -25,31 +25,26 @@
 
 			</g>
 
-			<g  v-if="isDragging" >
-				<!-- <text x="50" y="50" class="scaleText">{{Math.floor((this.ndX - this.neckX - 15) / this.colWidth)}}  {{Math.floor((this.ndY - this.neckY + 15) / this.stringGap)}}</text> -->
-				
-				<text :x="ndX - neckX - 15" :y="ndY - neckY - 40" class="scaleText">{{hoverNote}}</text>
-
-				<!-- 			
-				<g v-for="(note,i) in this.scaleA.notes" :key="i">	
-				<circle :cx = "i * 50 + 50" :cy="50" r="15" 
-					:fill="this.scaleA.scColor" 
-					:fill-opacity="this.scaleA.notes[i].ntOpacity"
-					:stroke="this.scaleA.notes[i].ntStroke ? this.scaleA.scColor : 'none'"
-					:stroke-width="this.scaleA.notes[i].ntStroke ? 3 : 0"
-					:stroke-opacity="this.scaleA.notes[i].ntStroke ? 1 : 0"
-					/>	
-				<text class="scaleText" :x = "i * 50 + 50" :y="51" fill="white">{{this.scaleA.notes[i].ntNum}}</text><br> -->
-				<!-- <text :x = "i * 50" :y="50" fill="white">{{this.scaleA.scColor}}</text><br> --> -->
-			</g> -->
+			<g  v-if="isDragging" >		
+				<text :x="ndX - neckX - 15" :y="ndY - neckY - 40" class="scaleText">{{noteName(hoverNote)}}</text>
+			</g>
+		
+			<g v-for="pos in this.fretboard" :key="pos">
+				<circle :cx = "pos.fret * this.colWidth + 30" :cy="pos.string * this.stringGap + 15" r="14" 
+					:fill="pos.fillc" 
+					:fill-opacity="pos.note.ntOpacity"
+					:stroke="pos.note.ntStroke ? pos.fillc : 'none'"
+					:stroke-width="pos.note.ntStroke ? 2 : 0"
+					:stroke-opacity="pos.note.ntStroke ? 1 : 0"
+				/>	
+				<text class="scaleText" :x = "pos.fret * this.colWidth  + 30" :y="pos.string * this.stringGap  + 16" fill="white">{{pos.note.ntName}}</text><br>
+			</g>
 		</svg>
 	</v-container>
 </template>
 
 <script>
-	// import scaleButtons from './scaleButtons.json'
-	import scaleTypes from './scaleTypes.json'
-	import scaleThemes from './scaleThemes.json'
+	import * as ScaleClasses from '../scales.js'
 
 	// 0: Tonic only
 	// 1: 3 and 5
@@ -62,86 +57,11 @@
 	// 8: Aeolian 3 6 7	
 	// 9: Locrian 2 3 5 6 7
 
-	const Chroma = ['A','Bb','B','C','Db','D','Eb','E','F','Gb','G','Ab'];
+	import scaleButtons from './scaleButtons.json'
+
+	const scaleSelections = scaleButtons.flatMap(group => group.rows).flat();
+
 	const Tuning = ['E','B','G','D','A','E'];
-
-	class ScNote {
-		constructor(ntNum, ntStyle) {
-			this.ntNum = ntNum;
-			this.ntStyle = ntStyle;
-			this.ntName = Chroma[ntNum];
-
-			switch (ntStyle) {
-				case 0 :
-					this.ntOpacity = 1;
-					this.ntStroke = false;
-					break;
-				case 1 :
-					this.ntOpacity = 0.6;
-					this.ntStroke = false;
-					break;
-				case 2 :
-					this.ntOpacity = 0;
-					this.ntStroke = true;
-					break;
-			}
-		}
-	}
-	
-	class ScaleInstance {
-		constructor(scaleType, tonic, mode, scColor, scTheme) {
-			this.scaleType = scaleType;
-
-			if (typeof tonic === 'number') {
-				this.tonic = tonic;
-			} else {				
-				this.tonic = Chroma.indexOf(tonic)
-			}			
-
-			this.mode = mode;
-			this.scColor = scColor
-			this.scTheme = scTheme;
-
-			this.notes = [];
-			this.setNotes();
-		}
-
-		setNotes() {
-			const scaleObj = scaleTypes.find(obj => obj.name === this.scaleType);
-
-			if (typeof scaleObj === 'undefined') {
-				console.log('scaleObj is undefined');
-			} else {
-				var stepIndex = this.mode;
-				var noteIndex = 0;
-				var prevNoteNum = this.tonic;
-				var newNoteNum = this.tonic;
-
-				// console.log('Step Length: ' + scaleObj.absSteps.length)
-
-				do {
-					if (noteIndex === 0) {
-						this.notes.push(new ScNote(this.tonic, scaleThemes[this.scTheme][0]));
-						// console.log('FirstStep: ' + scaleObj.absSteps[stepIndex])
-					} else {
-						// console.log('StepIndex:' + stepIndex + ', Step: ' + scaleObj.absSteps[stepIndex])
-						newNoteNum = (prevNoteNum + scaleObj.absSteps[stepIndex]) % 12;
-						// console.log('NewNote: ' + newNoteNum)
-						this.notes.push(new ScNote(newNoteNum, scaleThemes[this.scTheme][noteIndex]));
-						prevNoteNum = newNoteNum;
-					}
-					// console.log(noteIndex + ' of ' + scaleObj.absSteps.length + ' (stepIndex: ' + stepIndex + ')')
-					noteIndex++;
-					stepIndex++;
-					if (stepIndex > scaleObj.absSteps.length - 1) {stepIndex = 0}
-
-					// console.log(' ')
-				} while (noteIndex <= scaleObj.absSteps.length - 1);
-
-			}
-		}
-	}
-
 
 	export default {
 
@@ -160,16 +80,16 @@
 			colWidth: 20,
 			height: 150,
 			stringGap: 30,
-			columns: 20,
-			rows: 6,
+			frets: 20,
+			strings: 6,
 			minLength: 1200,
 			neckLength: 1200,
 			dropX: 0,
 			dropY: 0,
 			neckX: 0,
 			neckY: 0,
-
-			scaleA: new ScaleInstance('Diatonic','C',3,'#8789C0',4),
+			scales: [],
+			fretboard: [],
 			};
 		},
 
@@ -182,8 +102,11 @@
 			},
 
 			hoverNote() {
-				const hoverNote = this.noteAdd(this.noteNum(Tuning[this.hoverY]), this.hoverX);
-				return Chroma[hoverNote];
+				if (this.hoverX < 0 || this.hoverX > this.frets || this.hoverY < 0 || this.hoverY > this.strings) {
+					return undefined
+				} else {
+					return this.noteAdd(this.noteNum(Tuning[this.hoverY]), this.hoverX);
+				}							
 			}
 		},
 		mounted() {
@@ -207,19 +130,50 @@
 					this.width = window.innerWidth - 60;
 				}
 				this.neckLength = this.width;
-				this.colWidth = this.neckLength / this.columns;
+				this.colWidth = this.neckLength / this.frets;
 				
 			},
 			handleNoteDrop() {
 				this.dropX = this.ndX - this.neckX;
 				this.dropY = this.ndY - this.neckY;
+				console.log(this.hoverNote);
+				const dropNote = this.hoverNote;
+				if (dropNote === undefined || !this.isDragging) { return }
+
+				const sel = scaleSelections.find(selections => selections.sid === this.ndScaleID)
+
+				this.scales.push(new ScaleClasses.ScaleInstance(
+					sel.scaleType,
+					dropNote,
+					sel.mode,
+					'#7777AA',
+					sel.scaleTheme,
+					));
+
+				this.buildFretboard();
 
 			},
+			buildFretboard() {
+				this.fretboard.length = 0;
+
+				for (let freti = 0; freti < this.frets; freti++) {
+					for (let stringi = 0; stringi < this.strings; stringi++) {
+						let checkNoteNum = this.noteAdd(this.noteNum(Tuning[stringi]), freti)
+						for (let scObj of this.scales) {
+							let noteObj = scObj.getNote(checkNoteNum);
+							if (noteObj !== undefined) {
+								this.fretboard.push({fret: freti, string: stringi, note: noteObj, fillc: scObj.scColor})
+							}
+						}
+					}
+				}
+			},
+
 			noteName(noteNum) {
-				return Chroma[noteNum];
+				return ScaleClasses.Chroma[noteNum];
 			},
 			noteNum(noteName) {
-				return Chroma.indexOf(noteName);
+				return ScaleClasses.Chroma.indexOf(noteName);
 			},
 			noteAdd(noteOne, noteTwo) {
 				return (noteOne + noteTwo) % 12;

@@ -92,16 +92,16 @@
       },
     },
     mounted() {
-      window.addEventListener('mousemove', this.dragging);
-      window.addEventListener('touchmove', this.dragging);
-      window.addEventListener('mouseup', this.stopDragging);
-      window.addEventListener('touchend', this.stopDragging);
+      window.addEventListener('mousemove', this.dragging, {passive: true});
+      window.addEventListener('touchmove', this.dragging, {passive: true});
+      window.addEventListener('mouseup', this.stopDragging, {passive: true});
+      window.addEventListener('touchend', this.stopDragging, {passive: true});
     },
     beforeUnmount() {
-      window.removeEventListener('mousemove', this.dragging);
-      window.removeEventListener('touchmove', this.dragging);
-      window.removeEventListener('mouseup', this.stopDragging);
-      window.removeEventListener('touchend', this.stopDragging);
+      window.removeEventListener('mousemove', this.dragging, {passive: true});
+      window.removeEventListener('touchmove', this.dragging, {passive: true});
+      window.removeEventListener('mouseup', this.stopDragging, {passive: true});
+      window.removeEventListener('touchend', this.stopDragging, {passive: true});
 
     }
   }

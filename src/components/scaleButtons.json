@@ -8,7 +8,7 @@
           "shortname": "M",
           "scaleType": "Diatonic",
           "mode": 0,
-          "scaletheme": 0,
+          "scaleTheme": 0,
           "sid" : 1
         },
         {
@@ -16,7 +16,7 @@
           "shortname": "m",
           "scaleType": "Diatonic",
           "mode": 5,
-          "scaletheme": 0,
+          "scaleTheme": 0,
           "sid" : 2
         },
         {
@@ -24,15 +24,15 @@
           "shortname": "M p",
           "scaleType": "Pentatonic",
           "mode": 0,
-          "scaletheme": 0,
+          "scaleTheme": 0,
           "sid" : 3
         },
         {
           "name": "Minor Pentatonic",
           "shortname": "m p",
           "scaleType": "Pentatonic",
-          "mode": 3,
-          "scaletheme": 0,
+          "mode": 4,
+          "scaleTheme": 0,
           "sid" : 4
         }
       ],
@@ -42,7 +42,7 @@
           "shortname": "M+",
           "scaleType": "Diatonic",
           "mode": 0,
-          "scaletheme": 1,
+          "scaleTheme": 1,
           "sid" : 5
         },
         {
@@ -50,7 +50,7 @@
           "shortname": "m+",
           "scaleType": "Diatonic",
           "mode": 5,
-          "scaletheme": 1,
+          "scaleTheme": 1,
           "sid" : 6
         },
         {
@@ -58,15 +58,15 @@
           "shortname": "M+p",
           "scaleType": "Diatonic",
           "mode": 0,
-          "scaletheme": 2,
+          "scaleTheme": 2,
           "sid" : 7
         },
         {
           "name": "Minor (highlight on pentatonic notes)",
           "shortname": "m+p",
           "scaleType": "Diatonic",
-          "mode": 3,
-          "scaletheme": 3,
+          "mode": 4,
+          "scaleTheme": 3,
           "sid" : 8
         }
       ]
@@ -81,7 +81,7 @@
           "shortname": "Io",
           "scaleType": "Diatonic",
           "mode": 0,
-          "scaletheme": 0,
+          "scaleTheme": 0,
           "sid" : 9
         },
         {
@@ -89,7 +89,7 @@
           "shortname": "Do",
           "scaleType": "Diatonic",
           "mode": 1,
-          "scaletheme": 0,
+          "scaleTheme": 0,
           "sid" : 10
         },
         {
@@ -97,7 +97,7 @@
           "shortname": "Ph",
           "scaleType": "Diatonic",
           "mode": 2,
-          "scaletheme": 0,
+          "scaleTheme": 0,
           "sid" : 11
         },
         {
@@ -105,7 +105,7 @@
           "shortname": "Ly",
           "scaleType": "Diatonic",
           "mode": 3,
-          "scaletheme": 0,
+          "scaleTheme": 0,
           "sid" : 12
         },
         {
@@ -113,7 +113,7 @@
           "shortname": "Mi",
           "scaleType": "Diatonic",
           "mode": 4,
-          "scaletheme": 0,
+          "scaleTheme": 0,
           "sid" : 13
         },
         {
@@ -121,7 +121,7 @@
           "shortname": "Ae",
           "scaleType": "Diatonic",
           "mode": 5,
-          "scaletheme": 0,
+          "scaleTheme": 0,
           "sid" : 14
         },
         {
@@ -129,7 +129,7 @@
           "shortname": "Lo",
           "scaleType": "Diatonic",
           "mode": 6,
-          "scaletheme": 0,
+          "scaleTheme": 0,
           "sid" : 15
         }
       ],
@@ -139,7 +139,7 @@
           "shortname": "Io+",
           "scaleType": "Diatonic",
           "mode": 0,
-          "scaletheme": 1,
+          "scaleTheme": 1,
           "sid" : 16
         },
         {
@@ -147,7 +147,7 @@
           "shortname": "Do+",
           "scaleType": "Diatonic",
           "mode": 1,
-          "scaletheme": 4,
+          "scaleTheme": 4,
           "sid" : 17
         },
         {
@@ -155,7 +155,7 @@
           "shortname": "Ph+",
           "scaleType": "Diatonic",
           "mode": 2,
-          "scaletheme": 5,
+          "scaleTheme": 5,
           "sid" : 18
         },
         {
@@ -163,7 +163,7 @@
           "shortname": "Ly+",
           "scaleType": "Diatonic",
           "mode": 3,
-          "scaletheme": 6,
+          "scaleTheme": 6,
           "sid" : 19
         },
         {
@@ -171,7 +171,7 @@
           "shortname": "Mi+",
           "scaleType": "Diatonic",
           "mode": 4,
-          "scaletheme": 7,
+          "scaleTheme": 7,
           "sid" : 20
         },
         {
@@ -179,7 +179,7 @@
           "shortname": "Ae+",
           "scaleType": "Diatonic",
           "mode": 5,
-          "scaletheme": 8,
+          "scaleTheme": 8,
           "sid" : 21
         },
         {
@@ -187,7 +187,7 @@
           "shortname": "Lo+",
           "scaleType": "Diatonic",
           "mode": 6,
-          "scaletheme": 9,
+          "scaleTheme": 9,
           "sid" : 22
         }
       ]
@@ -202,7 +202,7 @@
           "shortname": "Hi",
           "scaleType": "Diatonic",
           "mode": 1,
-          "scaletheme": 0,
+          "scaleTheme": 0,
           "sid" : 23
         },
         {
@@ -210,7 +210,7 @@
           "shortname": "Po",
           "scaleType": "Diatonic",
           "mode": 2,
-          "scaletheme": 0,
+          "scaleTheme": 0,
           "sid" : 24
         }
       ],
@@ -220,7 +220,7 @@
           "shortname": "St",
           "scaleType": "Diatonic",
           "mode": 1,
-          "scaletheme": 4,
+          "scaleTheme": 4,
           "sid" : 25
         },
         {
@@ -228,7 +228,7 @@
           "shortname": "Ej",
           "scaleType": "Diatonic",
           "mode": 2,
-          "scaletheme": 4,
+          "scaleTheme": 4,
           "sid" : 26
         }
       ]
