@@ -42,7 +42,7 @@
                           class="scaleCircle"
                           :id="scale.sid"
                           @mousedown.prevent="startDragging($event, scale.sid)" 
-                          @touchstart.passive="startDragging($event, scale.sid)" >
+                          @touchstart.prevent="startDragging($event, scale.sid)" >
                         
                           <title>{{ scale.name }}</title>
                         </circle>
