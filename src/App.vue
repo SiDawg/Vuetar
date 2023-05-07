@@ -10,6 +10,7 @@
               :ndY="ndY"
               :ndScaleID="ndScaleID"
               :isDragging="isDragging"
+              :isMobile="isMobile"
                />
         </v-row>
         <svg v-if="isDragging" style="pointer-events: none; position: absolute; top: 0; left: 0; z-index: 10; height: 100%; width: 100%;">
@@ -41,6 +42,7 @@
         ndScaleID: 0, 
         ndOffX: 10,
         ndOffY: 10,
+        isMobile: false,
 
 
       }
@@ -79,8 +81,10 @@
 
       clientX(event) {
         if (event.type.startsWith("touch")) {
+          this.isMobile = true;
           return event.touches[0].clientX;
         } else {
+          this.isMobile = false;
           return event.clientX;
         }
       },

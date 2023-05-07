@@ -26,7 +26,7 @@
 			</g>
 
 			<g  v-if="isDragging" >		
-				<text :x="ndX - neckX - 15" :y="ndY - neckY - 40" class="scaleText">{{noteName(hoverNote)}}</text>
+				<text :x="ndX - neckX - 15" :y="ndY - neckY - (isMobile ? 60 : 40)" class="scaleText">{{noteName(hoverNote)}}</text>
 			</g>
 		
 			<g v-for="pos in this.fretboard" :key="pos">
@@ -73,6 +73,7 @@
 		ndX: Number,
 		ndY: Number,
 		isDragging: Boolean,
+		isMobile: Boolean
 		},
 
 		data() {
