@@ -23,11 +23,7 @@
 					:y2="index * stringGap + stringGap / 2" 
 					:style="{stroke: `rgba(var(--v-border-color), var(--v-border-opacity))`}" />
 
-			</g>
-
-			<g  v-if="isDragging" >		
-				<text :x="ndX - neckX - 15" :y="ndY - neckY - (isMobile ? 60 : 40)" class="scaleText">{{noteName(hoverNote)}}</text>
-			</g>
+			</g>		
 		
 			<g v-for="pos in this.fretboard" :key="pos">
 				<circle :cx = "pos.fret * this.colWidth + 22 + (pos.scIndex * 32)" :cy="pos.string * this.stringGap + 15" r="14" 
@@ -38,6 +34,10 @@
 					:stroke-opacity="pos.note.ntStroke ? 1 : 0"
 				/>	
 				<text class="scaleText" :x = "pos.fret * this.colWidth + 22 + (pos.scIndex * 32)" :y="pos.string * this.stringGap  + 16" fill="white">{{pos.note.ntName}}</text><br>
+			</g>
+
+			<g  v-if="isDragging" >		
+				<text :x="ndX - neckX - 15" :y="ndY - neckY - (isMobile ? 60 : 40)" class="scaleText">{{noteName(hoverNote)}}</text>
 			</g>
 		</svg>
 		<text x="50" y="50" fill="white">{{scColor}}</text>
@@ -105,7 +105,7 @@
 			},
 
 			hoverNote() {
-				if (this.hoverX < 0 || this.hoverX > this.frets || this.hoverY < 0 || this.hoverY > this.strings) {
+				if (this.hoverX < 0 || this.hoverX > this.frets - 1 || this.hoverY < 0 || this.hoverY > this.strings - 1) {
 					return undefined
 				} else {
 					return this.noteAdd(this.noteNum(Tuning[this.hoverY]), this.hoverX);
