@@ -12,7 +12,7 @@
 					y1="0"
 					:x2="(i * colWidth) - 2.5" 
 					:y2="stringGap * strings" 
-					:style="{stroke: `rgba(var(--v-border-color), var(--v-border-opacity))`, strokeWidth: '5'}" />
+					:style="{stroke: index === 0 ? `rgba(var(--v-theme-on-surface), 1)` : `rgba(var(--v-border-color), var(--v-border-opacity))`, strokeWidth: '5'}" />
 			</g>
 
 			<g v-for="(i,index) in strings" :key="index">
@@ -30,17 +30,17 @@
 			</g>
 		
 			<g v-for="pos in this.fretboard" :key="pos">
-				<circle :cx = "pos.fret * this.colWidth + 30" :cy="pos.string * this.stringGap + 15" r="14" 
+				<circle :cx = "pos.fret * this.colWidth + 22 + (pos.scIndex * 32)" :cy="pos.string * this.stringGap + 15" r="14" 
 					:fill="pos.fillc" 
 					:fill-opacity="pos.note.ntOpacity"
 					:stroke="pos.note.ntStroke ? pos.fillc : 'none'"
 					:stroke-width="pos.note.ntStroke ? 2 : 0"
 					:stroke-opacity="pos.note.ntStroke ? 1 : 0"
 				/>	
-				<text class="scaleText" :x = "pos.fret * this.colWidth  + 30" :y="pos.string * this.stringGap  + 16" fill="white">{{pos.note.ntName}}</text><br>
+				<text class="scaleText" :x = "pos.fret * this.colWidth + 22 + (pos.scIndex * 32)" :y="pos.string * this.stringGap  + 16" fill="white">{{pos.note.ntName}}</text><br>
 			</g>
 		</svg>
-		
+		<text x="50" y="50" fill="white">{{scColor}}</text>
 	</v-container>
 </template>
 
@@ -73,7 +73,8 @@
 		ndX: Number,
 		ndY: Number,
 		isDragging: Boolean,
-		isMobile: Boolean
+		isMobile: Boolean,
+		scColor: String,
 		},
 
 		data() {
@@ -140,8 +141,6 @@
 			handleNoteDrop() {
 				this.dropX = this.ndX - this.neckX;
 				this.dropY = this.ndY - this.neckY;
-				
-				console.log(event);
 
 				const dropNote = this.hoverNote;
 				if (dropNote === undefined || !this.isDragging) { return }
@@ -154,29 +153,40 @@
 					sel.scaleType,
 					dropNote,
 					sel.mode,
-					'#7777AA',
+					this.scColor,
 					sel.scaleTheme,
 					));
 
 				this.buildFretboard();
 
-				console.log(this.scales);
-
 			},
 			buildFretboard() {
 				this.fretboard.length = 0;
 
+				// for (let freti = 0; freti < this.frets; freti++) {
+				// 	for (let stringi = 0; stringi < this.strings; stringi++) {
+				// 		let checkNoteNum = this.noteAdd(this.noteNum(Tuning[stringi]), freti)
+				// 		for (let scObj of this.scales) {
+				// 			let noteObj = scObj.getNote(checkNoteNum);
+				// 			if (noteObj !== undefined) {
+				// 				this.fretboard.push({fret: freti, string: stringi, note: noteObj, fillc: scObj.scColor})
+				// 			}
+				// 		}
+				// 	}
+				// }
+
 				for (let freti = 0; freti < this.frets; freti++) {
 					for (let stringi = 0; stringi < this.strings; stringi++) {
 						let checkNoteNum = this.noteAdd(this.noteNum(Tuning[stringi]), freti)
-						for (let scObj of this.scales) {
+						this.scales.forEach((scObj, i) => {
 							let noteObj = scObj.getNote(checkNoteNum);
 							if (noteObj !== undefined) {
-								this.fretboard.push({fret: freti, string: stringi, note: noteObj, fillc: scObj.scColor})
+								this.fretboard.push({scIndex: i, fret: freti, string: stringi, note: noteObj, fillc: scObj.scColor})
 							}
-						}
+						})
 					}
 				}
+
 			},
 
 			noteName(noteNum) {

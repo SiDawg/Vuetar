@@ -11,10 +11,11 @@
               :ndScaleID="ndScaleID"
               :isDragging="isDragging"
               :isMobile="isMobile"
+              :scColor="scColors[colIndex]"
                />
         </v-row>
         <svg v-if="isDragging" style="pointer-events: none; position: absolute; top: 0; left: 0; z-index: 10; height: 100%; width: 100%;">
-          <circle :cx="ndX" :cy="ndY" :r="noteCircles" :fill="ndFill"/>
+          <circle :cx="ndX" :cy="ndY" :r="noteCircles" :fill="scColors[colIndex]"/>
         </svg>
         <div style="pointer-events: none; position: absolute; top: 0; left: 0; z-index: 10; height: 100%; width: 100%;">
 
@@ -37,13 +38,13 @@
         noteCircles: 15,
         ndX: 40,
         ndY: 40,
-        ndFill: '#8789C0',  
         isDragging: false,
         ndScaleID: 0, 
         ndOffX: 10,
         ndOffY: 10,
         isMobile: false,
-
+        scColors: ['#8789C0', '#E71D36', '#8AC926'],
+        colIndex: 0,
 
       }
     },
@@ -55,7 +56,6 @@
   
     methods: {
       startDragging(event) {        
-        console.log(event);
         this.isDragging = true;
 
         this.ndOffX = this.clientX(event) - event.scaleCircles - event.scaleX 
@@ -75,8 +75,12 @@
       },
 
       stopDragging() {
-        this.isDragging = false;
-  
+        if (this.isDragging === true) {
+          this.colIndex++;
+          if (this.colIndex >= this.scColors.length) this.colIndex = 0;
+          this.isDragging = false;
+        }
+        
       },
 
       clientX(event) {

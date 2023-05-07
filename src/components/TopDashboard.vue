@@ -95,7 +95,6 @@ export default {
       const { type, touches, clientX, clientY } = event
       const scaleX = event.target.getBoundingClientRect().left 
       const scaleY = event.target.getBoundingClientRect().top
-      event.stopPropagation();
       this.$emit('scale-clicked', {sid, scaleCircles: this.scaleCircles, scaleX, scaleY, clientX, clientY, type, touches });
     }
   },
