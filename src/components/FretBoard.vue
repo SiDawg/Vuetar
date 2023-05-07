@@ -145,9 +145,7 @@
 				const dropNote = this.hoverNote;
 				if (dropNote === undefined || !this.isDragging) { return }
 
-				const sel = scaleSelections.find(selections => selections.sid === this.ndScaleID)
-
-				
+				const sel = scaleSelections.find(selections => selections.sid === this.ndScaleID)				
 
 				this.scales.push(new ScaleClasses.ScaleInstance(
 					sel.scaleType,
@@ -157,23 +155,12 @@
 					sel.scaleTheme,
 					));
 
+				console.log(sel.mode);
 				this.buildFretboard();
 
 			},
 			buildFretboard() {
 				this.fretboard.length = 0;
-
-				// for (let freti = 0; freti < this.frets; freti++) {
-				// 	for (let stringi = 0; stringi < this.strings; stringi++) {
-				// 		let checkNoteNum = this.noteAdd(this.noteNum(Tuning[stringi]), freti)
-				// 		for (let scObj of this.scales) {
-				// 			let noteObj = scObj.getNote(checkNoteNum);
-				// 			if (noteObj !== undefined) {
-				// 				this.fretboard.push({fret: freti, string: stringi, note: noteObj, fillc: scObj.scColor})
-				// 			}
-				// 		}
-				// 	}
-				// }
 
 				for (let freti = 0; freti < this.frets; freti++) {
 					for (let stringi = 0; stringi < this.strings; stringi++) {

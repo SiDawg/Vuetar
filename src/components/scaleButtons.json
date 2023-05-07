@@ -65,7 +65,7 @@
           "name": "Minor (highlight on pentatonic notes)",
           "shortname": "m+p",
           "scaleType": "Diatonic",
-          "mode": 4,
+          "mode": 5,
           "scaleTheme": 3,
           "sid" : 8
         }
