@@ -1,6 +1,6 @@
 <template>
     <v-container class="bg-background d-flex justify-center flex-shrink-0">
-      <v-card :width="scaleBoxWidth" :min-width="scaleBoxWidth" :height="dashboardHeight" elevation="2"  class="rounded-lg mx-1" >
+      <v-card :width="scaleBoxWidth" :min-width="scaleBoxWidth" :height="dashboardHeight" elevation="2"  class="rounded-lg mx-1">
           <v-btn-toggle
             v-model="toggle"
             class="rounded-t-lg rounded-b-0"
@@ -95,7 +95,7 @@ export default {
       const { type, touches, clientX, clientY } = event
       const scaleX = event.target.getBoundingClientRect().left 
       const scaleY = event.target.getBoundingClientRect().top
-
+      event.stopPropagation();
       this.$emit('scale-clicked', {sid, scaleCircles: this.scaleCircles, scaleX, scaleY, clientX, clientY, type, touches });
     }
   },

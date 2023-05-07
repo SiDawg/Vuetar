@@ -52,7 +52,8 @@
     },
   
     methods: {
-      startDragging(event) {
+      startDragging(event) {        
+        console.log(event);
         this.isDragging = true;
 
         this.ndOffX = this.clientX(event) - event.scaleCircles - event.scaleX 
@@ -61,6 +62,7 @@
         this.ndX = this.clientX(event) - this.ndOffX;
         this.ndY = this.clientY(event) - this.ndOffY;
         this.ndScaleID = event.sid
+
       },
 
       dragging(event) {

@@ -1,5 +1,5 @@
 <template>
-	<v-container ref="dropArea" @mouseup="handleNoteDrop" @touchend.prevent="handleNoteDrop" fluid style="overflow-x: auto; padding: 15px;">
+	<v-container ref="dropArea" @mouseup="handleNoteDrop" @touchend="handleNoteDrop" fluid style="overflow-x: auto; padding: 15px;">
 		<svg  
 			:width="this.width" 
 			:height="stringGap * strings" 
@@ -40,6 +40,7 @@
 				<text class="scaleText" :x = "pos.fret * this.colWidth  + 30" :y="pos.string * this.stringGap  + 16" fill="white">{{pos.note.ntName}}</text><br>
 			</g>
 		</svg>
+		
 	</v-container>
 </template>
 
@@ -111,6 +112,8 @@
 		},
 		mounted() {
 			window.addEventListener('resize', this.handleResize);
+			window.addEventListener('touchend', this.handleNoteDrop);
+
 			this.handleResize();
 
 			const dropArea = this.$refs.dropArea;
@@ -136,11 +139,15 @@
 			handleNoteDrop() {
 				this.dropX = this.ndX - this.neckX;
 				this.dropY = this.ndY - this.neckY;
-				console.log(this.hoverNote);
+				
+				console.log(event);
+
 				const dropNote = this.hoverNote;
 				if (dropNote === undefined || !this.isDragging) { return }
 
 				const sel = scaleSelections.find(selections => selections.sid === this.ndScaleID)
+
+				
 
 				this.scales.push(new ScaleClasses.ScaleInstance(
 					sel.scaleType,
@@ -151,6 +158,8 @@
 					));
 
 				this.buildFretboard();
+
+				console.log(this.scales);
 
 			},
 			buildFretboard() {
@@ -177,6 +186,9 @@
 			},
 			noteAdd(noteOne, noteTwo) {
 				return (noteOne + noteTwo) % 12;
+			},
+			testtouch(event) {
+				console.log(event);
 			}
 		}
 	}
