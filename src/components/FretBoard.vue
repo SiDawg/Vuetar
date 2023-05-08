@@ -8,9 +8,9 @@
 			> 
 			<g v-for="(i,index) in frets" :key="index">
 				<line 
-					:x1="(i * colWidth) - 2.5" 
+					:x1="(i * fretGap) - 2.5" 
 					y1="0"
-					:x2="(i * colWidth) - 2.5" 
+					:x2="(i * fretGap) - 2.5" 
 					:y2="stringGap * strings" 
 					:style="{stroke: index === 0 ? `rgba(var(--v-theme-on-surface), 1)` : `rgba(var(--v-border-color), var(--v-border-opacity))`, strokeWidth: '5'}" />
 			</g>
@@ -26,21 +26,58 @@
 			</g>		
 		
 			<g v-for="pos in this.fretboard" :key="pos">
-				<circle :cx = "pos.fret * this.colWidth + 22 + (pos.scIndex * 32)" :cy="pos.string * this.stringGap + 15" r="14" 
+				<circle 
+					:cx = "pos.fret * this.fretGap 
+						+ this.noteR + (this.noteGapX * 3) 
+						+ ((pos.scIndex * ((this.noteR * 2) 
+						+ this.noteGapX)))" 
+					:cy="pos.string * this.stringGap + 15" :r="this.noteR" 
 					:fill="pos.fillc" 
 					:fill-opacity="pos.note.ntOpacity"
 					:stroke="pos.note.ntStroke ? pos.fillc : 'none'"
 					:stroke-width="pos.note.ntStroke ? 2 : 0"
 					:stroke-opacity="pos.note.ntStroke ? 1 : 0"
+					@click="removeScale(pos.scIndex)"
+					@touchstart="removeScale(pos.scIndex)"
 				/>	
-				<text class="scaleText" :x = "pos.fret * this.colWidth + 22 + (pos.scIndex * 32)" :y="pos.string * this.stringGap  + 16" fill="white">{{pos.note.ntName}}</text><br>
+				<text class="scaleText" 
+					:x = "pos.fret * this.fretGap 
+						+ this.noteR + (this.noteGapX * 3) 
+						+ ((pos.scIndex * ((this.noteR * 2) 
+						+ this.noteGapX)))" 
+					:y="pos.string * this.stringGap + 16" :r="this.noteR"
+					fill="white">
+
+					{{pos.note.ntName}}
+					<!-- {{pos.desc}} -->
+
+				</text><br>
 			</g>
+
+
 
 			<g  v-if="isDragging" >		
 				<text :x="ndX - neckX - 15" :y="ndY - neckY - (isMobile ? 60 : 40)" class="scaleText">{{noteName(hoverNote)}}</text>
 			</g>
+		</svg>		
+		
+	</v-container>
+	<v-container fluid style="padding: 15px;">
+		<svg :width="this.width">
+			<g v-for="(scale, index) in this.scales" :key="index">
+				console.log(scale);
+				<circle 
+					:cx="this.noteR + this.noteGapX" 
+					:cy="(index * (this.noteR * 2 + this.noteGapX * 5)) + this.noteR"
+					:fill="scale.scColor"
+					fill-opacity="1"
+					:r="this.noteR"
+				/>
+				<text dominant-baseline="middle" alignment-baseline="middle" :x="noteR + noteR + noteGapX + 3" 
+					:y="(index * (this.noteR * 2 + this.noteGapX * 5)) + this.noteR"
+					fill="white">{{noteName(scale.tonic) + ' ' + scale.scName}}</text>
+			</g>			
 		</svg>
-		<text x="50" y="50" fill="white">{{scColor}}</text>
 	</v-container>
 </template>
 
@@ -80,12 +117,13 @@
 		data() {
 			return {
 			width: 300,
-			colWidth: 20,
 			height: 150,
-			stringGap: 30,
 			frets: 20,
 			strings: 6,
-			minLength: 1200,
+			fretGap: 20, 
+			stringGap: 30,
+			noteR: 14,
+			noteGapX: 1,
 			neckLength: 1200,
 			dropX: 0,
 			dropY: 0,
@@ -97,8 +135,15 @@
 		},
 
 		computed: {
+			minFretGap() {
+				var numScales = this.scales.length;
+				if (numScales === 0) numScales = 1;
+
+				return (this.noteGapX * 3) + (numScales * (this.noteR * 2)) + (numScales * this.noteGapX) + (this.noteGapX * 7);
+			},
+
 			hoverX() {
-				return Math.floor((this.ndX - this.neckX - 15) / this.colWidth);
+				return Math.floor((this.ndX - this.neckX - 15) / this.fretGap);
 			},
 			hoverY() {
 				return (Math.floor((this.ndY - this.neckY + 15) / this.stringGap) - 1);
@@ -129,13 +174,15 @@
 
 		methods: {
 			handleResize() {
-				if ((window.innerWidth - 60) <= this.minLength) {
-					this.width = this.minLength;					
+				var minLength = this.minFretGap * this.frets;
+
+				if ((document.documentElement.clientWidth - 40) <= minLength) {
+					this.width = minLength;					
 				} else { 
-					this.width = window.innerWidth - 60;
+					this.width = document.documentElement.clientWidth - 40
 				}
 				this.neckLength = this.width;
-				this.colWidth = this.neckLength / this.frets;
+				this.fretGap = this.width / this.frets;
 				
 			},
 			handleNoteDrop() {
@@ -144,6 +191,7 @@
 
 				const dropNote = this.hoverNote;
 				if (dropNote === undefined || !this.isDragging) { return }
+				if (this.scales.length >= 5) return;
 
 				const sel = scaleSelections.find(selections => selections.sid === this.ndScaleID)				
 
@@ -153,11 +201,13 @@
 					sel.mode,
 					this.scColor,
 					sel.scaleTheme,
+					sel.name,
 					));
 
-				console.log(sel.mode);
 				this.buildFretboard();
+				this.handleResize();
 
+				console.log(this.scales);
 			},
 			buildFretboard() {
 				this.fretboard.length = 0;
@@ -168,12 +218,16 @@
 						this.scales.forEach((scObj, i) => {
 							let noteObj = scObj.getNote(checkNoteNum);
 							if (noteObj !== undefined) {
-								this.fretboard.push({scIndex: i, fret: freti, string: stringi, note: noteObj, fillc: scObj.scColor})
+								this.fretboard.push({scIndex: i, fret: freti, string: stringi, note: noteObj, fillc: scObj.scColor, desc: scObj.scName})
 							}
 						})
 					}
 				}
-
+			},
+			removeScale(scaleID) {
+				this.scales.splice(scaleID,1);
+				this.buildFretboard();
+				this.handleResize();
 			},
 
 			noteName(noteNum) {

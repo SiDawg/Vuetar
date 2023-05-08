@@ -43,7 +43,7 @@
         ndOffX: 10,
         ndOffY: 10,
         isMobile: false,
-        scColors: ['#8789C0', '#E71D36', '#8AC926'],
+        scColors: ['#8789C0', '#E71D36', '#8AC926', '#FF9F1C', '#E72AB2'],
         colIndex: 0,
 
       }

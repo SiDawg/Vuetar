@@ -125,7 +125,7 @@ export default {
   .scaleCircle {
     fill: rgba(var(--v-theme-surface)); 
     stroke: rgba(var(--v-theme-surface-variant),.3); 
-/*stroke: white; */
+    /*stroke: white; */
     stroke-width: 3;
   }
 
@@ -134,5 +134,6 @@ export default {
     fill: rgba(var(--v-theme-on-surface));
     text-anchor: middle;
     text-shadow: 1px 1px 1px #000000;
+    pointer-events: none;
   }
 </style>

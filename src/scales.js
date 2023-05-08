@@ -27,7 +27,7 @@ export  class ScNote {
 }
 
 export class ScaleInstance {
-	constructor(scaleType, tonic, mode, scColor, scTheme) {
+	constructor(scaleType, tonic, mode, scColor, scTheme, scName) {
 		this.scaleType = scaleType;
 
 		if (typeof tonic === 'number') {
@@ -37,9 +37,9 @@ export class ScaleInstance {
 		}			
 
 		this.mode = mode;
-		this.scColor = scColor
+		this.scColor = scColor;
 		this.scTheme = scTheme;
-
+		this.scName = scName;
 		this.notes = [];
 		this.setNotes();
 	}
