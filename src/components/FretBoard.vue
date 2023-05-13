@@ -66,7 +66,6 @@
 		</svg>		
 		
 	</v-container>
-
 	<!-- Draw all the scales that are currently drawn -->
 	<v-container fluid style="padding: 15px;">
 		<svg :width="this.width" :height="this.scales.length * (this.noteR * 2 + this.noteGapX * 5)">
@@ -204,7 +203,11 @@
 			const dropArea = this.$refs.dropArea;
 			this.neckX = dropArea.$el.getBoundingClientRect().left;
 			this.neckY =  dropArea.$el.getBoundingClientRect().top;
+
 			},
+		updated() {
+			this.setScrollPos(this.scrollPos);
+		},
 
 		beforeUnmount() {
 			window.removeEventListener('resize', this.handleResize);
@@ -237,6 +240,7 @@
 				this.dropY = this.ndY - this.neckY;
 				const dropFret = this.hoverFret;
 				const dropNote = this.hoverNote;
+
 				if (dropNote === undefined || !this.isDragging) { return }
 				if (this.scales.length >= 5) return;
 
@@ -252,32 +256,17 @@
 					));
 
 				this.buildFretboard();
-
-				console.log('========================================================');
-				console.log('hover fret:' + this.hoverFret);
-				console.log('fret gap:' + this.fretGap);
-				console.log('resizing')
-				this.handleResize();
-
-				console.log('');
-				console.log('fret gap:' + this.fretGap);
-				console.log('drop fret:' + dropFret);
-				console.log('hoverX:' + Math.floor(this.hoverX));	
-				console.log('dropX:' + Math.floor(this.dropX));			
+				this.handleResize();	
 				
 				const noteX = (this.noteStart + this.notePos(this.scales.length));
-				const newFretX = (dropFret * this.fretGap);
+				const newFretX = (dropFret * this.fretGap) ;
 				const totalX = (noteX + newFretX);
-
-				console.log('newFretX:' + newFretX);				
-				console.log('bnoteX:' + noteX) ;
-				console.log('total:' + (newFretX + noteX)) ;
-				console.log('scrollPos:' + Math.floor((totalX - this.dropX - 15)));
 				
 				// Holy crap I know that's just simple maths but that did my head in...
-				this.setScrollPos(totalX - this.dropX - 15);
-
-
+				// Plus you can't set the scroll position directly because the element this event
+				// is called from needs to redraw (or some shit?) so i set the variable, and rely
+				// on 'updated' event to fire to set the new scroll pos
+				this.scrollPos = (totalX - this.dropX - 15)
 
 			},
 			buildFretboard() {
