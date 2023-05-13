@@ -75,8 +75,7 @@
 					fill-opacity="1"
 					:r="this.noteR"
 					@click="removeScale(index)"
-					@touchstart="removeScaleDebounce(index)"
-					@touchend="this.fatFingers = false"
+
 				/>
 
 				<text dominant-baseline="middle" alignment-baseline="middle" :x="noteR + noteR + noteGapX + 3" 
