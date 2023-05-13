@@ -1,5 +1,5 @@
 <template>
-	<v-container ref="dropArea" @mouseup="handleNoteDrop" @touchend="handleNoteDrop" fluid style="overflow-x: auto; padding: 15px;">
+	<v-container ref="dropArea" @mouseup="handleNoteDrop" @touchend="handleNoteDrop" @scroll="handleScroll" fluid style="overflow-x: auto; padding: 15px;">
 		<svg  
 			:width="this.width" 
 			:height="stringGap * strings" 
@@ -26,13 +26,18 @@
 
 			</g>		
 		
-			<!-- Draw all notes from all scales (using pre computed object 'fretboard', which reads the 'scales' object) -->
-			<g v-for="pos in this.fretboard" :key="pos">
-				<circle 
-					:cx = "pos.fret * this.fretGap 
+						<!-- 	:cx = "pos.fret * this.fretGap 
 						+ this.noteR + (this.noteGapX * 3) 
 						+ ((pos.scIndex * ((this.noteR * 2) 
 						+ this.noteGapX)))" 
+						-->
+			<!-- Draw all notes from all scales (using pre computed object 'fretboard', which reads the 'scales' object) -->
+			<g v-for="pos in this.fretboard" :key="pos">
+				<circle
+					:cx="pos.fret * this.fretGap
+						+ this.noteStart
+						+ this.notePos(pos.scIndex)"
+
 					:cy="pos.string * this.stringGap + 15" :r="this.noteR" 
 					:fill="pos.fillc" 
 					:fill-opacity="pos.note.ntOpacity"
@@ -55,10 +60,8 @@
 				</text><br>
 			</g>
 
-
-
 			<g  v-if="isDragging" >		
-				<text :x="ndX - neckX - 15" :y="ndY - neckY - (isMobile ? 60 : 40)" class="scaleText">{{noteName(hoverNote)}}</text>
+				<text :x="hoverX" :y="ndY - neckY - (isMobile ? 60 : 40)" class="scaleText">{{noteName(hoverNote)}}</text>
 			</g>
 		</svg>		
 		
@@ -149,13 +152,17 @@
 			dropY: 0,
 			neckX: 0,
 			neckY: 0,
-			fatFingers: false,
 			scales: [],
 			fretboard: [],
+			scrollPos: 0,
 			};
 		},
 
 		computed: {
+			noteStart() {
+				return this.noteR + (this.noteGapX * 3);
+			},
+
 			minFretGap() {
 				var numScales = this.scales.length;
 				if (numScales === 0) numScales = 1;
@@ -164,17 +171,27 @@
 			},
 
 			hoverX() {
-				return Math.floor((this.ndX - this.neckX - 15) / this.fretGap);
+				
+				// console.log(dropArea.$el.scrollLeft);
+				// console.log(this.scrollPos);
+				return (this.ndX - this.neckX - 15 + this.scrollPos);
+
 			},
-			hoverY() {
+
+			hoverFret() {
+				// console.log('hoverFret:' + this.hoverFret);
+				return Math.floor(this.hoverX / this.fretGap);				
+
+			},
+			hoverString() {
 				return (Math.floor((this.ndY - this.neckY + 15) / this.stringGap) - 1);
 			},
 
 			hoverNote() {
-				if (this.hoverX < 0 || this.hoverX > this.frets - 1 || this.hoverY < 0 || this.hoverY > this.strings - 1) {
+				if (this.hoverFret < 0 || this.hoverFret > this.frets - 1 || this.hoverString < 0 || this.hoverString > this.strings - 1) {
 					return undefined
 				} else {
-					return this.noteAdd(this.noteNum(Tuning[this.hoverY]), this.hoverX);
+					return this.noteAdd(this.noteNum(Tuning[this.hoverString]), this.hoverFret);
 				}							
 			}
 		},
@@ -194,6 +211,15 @@
 		},
 
 		methods: {
+			notePos(index) {
+				return ((index * ((this.noteR * 2) + this.noteGapX)))
+			},
+
+			handleScroll() {							
+				const dropArea = this.$refs.dropArea;
+				this.scrollPos = dropArea.$el.scrollLeft;
+			},
+
 			handleResize() {
 				var minLength = this.minFretGap * this.frets;
 
@@ -209,7 +235,7 @@
 			handleNoteDrop() {
 				this.dropX = this.ndX - this.neckX;
 				this.dropY = this.ndY - this.neckY;
-
+				const dropFret = this.hoverFret;
 				const dropNote = this.hoverNote;
 				if (dropNote === undefined || !this.isDragging) { return }
 				if (this.scales.length >= 5) return;
@@ -226,7 +252,32 @@
 					));
 
 				this.buildFretboard();
+
+				console.log('========================================================');
+				console.log('hover fret:' + this.hoverFret);
+				console.log('fret gap:' + this.fretGap);
+				console.log('resizing')
 				this.handleResize();
+
+				console.log('');
+				console.log('fret gap:' + this.fretGap);
+				console.log('drop fret:' + dropFret);
+				console.log('hoverX:' + Math.floor(this.hoverX));	
+				console.log('dropX:' + Math.floor(this.dropX));			
+				
+				const noteX = (this.noteStart + this.notePos(this.scales.length));
+				const newFretX = (dropFret * this.fretGap);
+				const totalX = (noteX + newFretX);
+
+				console.log('newFretX:' + newFretX);				
+				console.log('bnoteX:' + noteX) ;
+				console.log('total:' + (newFretX + noteX)) ;
+				console.log('scrollPos:' + Math.floor((totalX - this.dropX - 15)));
+				
+				// Holy crap I know that's just simple maths but that did my head in...
+				this.setScrollPos(totalX - this.dropX - 15);
+
+
 
 			},
 			buildFretboard() {
@@ -244,11 +295,10 @@
 					}
 				}
 			},
-			removeScaleDebounce(scaleID) {
-				if (!this.fatFingers) {
-					this.fatFingers = true;
-					this.removeScale(scaleID);
-				}
+
+			setScrollPos(pixels) {
+				const dropArea = this.$refs.dropArea;
+				dropArea.$el.scrollLeft = pixels;
 			},
 
 			removeScale(scaleID) {
