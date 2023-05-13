@@ -43,7 +43,7 @@
         ndOffX: 10,
         ndOffY: 10,
         isMobile: false,
-        scColors: ['#8789C0', '#E71D36', '#8AC926', '#FF9F1C', '#E72AB2'],
+        scColors: ['#FF9F1C','#1A91FF', '#8AC926','#E72AB2','#1BD9E5'],
         colIndex: 0,
 
       }
@@ -57,10 +57,8 @@
     methods: {
       startDragging(event) {        
         this.isDragging = true;
-
         this.ndOffX = this.clientX(event) - event.scaleCircles - event.scaleX 
         this.ndOffY = this.clientY(event) - event.scaleCircles - event.scaleY 
-
         this.ndX = this.clientX(event) - this.ndOffX;
         this.ndY = this.clientY(event) - this.ndOffY;
         this.ndScaleID = event.sid

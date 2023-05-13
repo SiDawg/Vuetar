@@ -6,6 +6,7 @@
 			:style="{background: `rgba(var(--v-theme-surface))`}"
 			
 			> 
+			<!-- Draw Strings and frets -->
 			<g v-for="(i,index) in frets" :key="index">
 				<line 
 					:x1="(i * fretGap) - 2.5" 
@@ -25,6 +26,7 @@
 
 			</g>		
 		
+			<!-- Draw all notes from all scales (using pre computed object 'fretboard', which reads the 'scales' object) -->
 			<g v-for="pos in this.fretboard" :key="pos">
 				<circle 
 					:cx = "pos.fret * this.fretGap 
@@ -37,8 +39,7 @@
 					:stroke="pos.note.ntStroke ? pos.fillc : 'none'"
 					:stroke-width="pos.note.ntStroke ? 2 : 0"
 					:stroke-opacity="pos.note.ntStroke ? 1 : 0"
-					@click="removeScale(pos.scIndex)"
-					@touchstart="removeScale(pos.scIndex)"
+
 				/>	
 				<text class="scaleText" 
 					:x = "pos.fret * this.fretGap 
@@ -62,20 +63,39 @@
 		</svg>		
 		
 	</v-container>
+
+	<!-- Draw all the scales that are currently drawn -->
 	<v-container fluid style="padding: 15px;">
-		<svg :width="this.width">
+		<svg :width="this.width" :height="this.scales.length * (this.noteR * 2 + this.noteGapX * 5)">
 			<g v-for="(scale, index) in this.scales" :key="index">
-				console.log(scale);
 				<circle 
 					:cx="this.noteR + this.noteGapX" 
 					:cy="(index * (this.noteR * 2 + this.noteGapX * 5)) + this.noteR"
 					:fill="scale.scColor"
 					fill-opacity="1"
 					:r="this.noteR"
+					@click="removeScale(index)"
+					@touchstart="removeScale(index)"
 				/>
+
 				<text dominant-baseline="middle" alignment-baseline="middle" :x="noteR + noteR + noteGapX + 3" 
 					:y="(index * (this.noteR * 2 + this.noteGapX * 5)) + this.noteR"
-					fill="white">{{noteName(scale.tonic) + ' ' + scale.scName}}</text>
+					fill="white">
+					{{noteName(scale.tonic) + ' ' + scale.scName}}
+				</text>
+
+				<svg xmlns="http://www.w3.org/2000/svg" 
+					:x="3" 
+					:y="(index * (this.noteR * 2 + this.noteGapX * 5)) + 1"
+					:height="noteR * 2"
+					:width="noteR * 2"
+					style="pointer-events: none;"
+					fill="#FFFFFF">
+					<path d="M0 0h24v24H0V0z" fill="none"/>
+					<path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM8 9h8v10H8V9zm7.5-5l-1-1h-5l-1 1H5v2h14V4h-3.5z"/>
+				</svg>
+				
+
 			</g>			
 		</svg>
 	</v-container>
@@ -207,7 +227,6 @@
 				this.buildFretboard();
 				this.handleResize();
 
-				console.log(this.scales);
 			},
 			buildFretboard() {
 				this.fretboard.length = 0;
