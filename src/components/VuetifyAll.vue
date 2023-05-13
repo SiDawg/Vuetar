@@ -17,9 +17,9 @@
             Lorem ipsum dolor sit amet sdsd
           </v-card-text>
         </v-card>
-        <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 60" style="background-color: rgba(var(--v-theme-background))"> -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 60" style="background-color: rgba(var(--v-theme-background))">
           <!-- <rect x="0" style="opacity: calc(var(--v-activated-opacity) * var(--v-theme-overlay-multiplier)); background: rgb(var(--v-theme-surface)); color: rgba(var(--v-theme-on-surface), var(--v-high-emphasis-opacity));" width="50" height="50">hmm2</rect> -->
-<!--           <rect x="0" style="fill: rgba(var(--v-theme-on-surface), var(--v-high-emphasis-opacity));" width="50" height="50">hmm2</rect>
+          <rect x="0" style="fill: rgba(var(--v-theme-background), 1);" width="50" height="50">hmm2</rect>
           <rect x="50" style="fill: rgba(var(--v-theme-on-surface), var(--v-hover-opacity));" width="50" height="50">hmm2</rect>
           <rect x="100" style="fill: rgba(var(--v-theme-on-surface), var(--v-focus-opacity));" width="50" height="50">hmm2</rect>
           <rect x="150" style="fill: rgba(var(--v-theme-on-surface), var(--v-activated-opacity));" width="50" height="50">hmm2</rect>
@@ -27,16 +27,16 @@
           <rect x="200" style="fill: rgba(var(--v-theme-on-surface),1) opacity: rgba(var(--v-high-emphasis-opacity)* var(--v-theme-overlay-multiplier));" width="50" height="50">hmm2</rect>
           <rect x="250" style="fill: rgba(var(--v-theme-on-surface),1) opacity: rgba(var(--v-hover-opacity)* var(--v-theme-overlay-multiplier));" width="50" height="50">hmm2</rect>
           <rect x="300" style="fill: rgba(var(--v-theme-on-surface),1) opacity: rgba(var(--v-focus-opacity)* var(--v-theme-overlay-multiplier));" width="50" height="50">hmm2</rect>
-          <rect x="350" style="fill: rgba(var(--v-theme-on-surface),1) opacity: rgba(var(--v-activated-opacity)* var(--v-theme-overlay-multiplier));" width="50" height="50">hmm2</rect> -->
+          <rect x="350" style="fill: rgba(var(--v-theme-on-surface),1) opacity: rgba(var(--v-activated-opacity)* var(--v-theme-overlay-multiplier));" width="50" height="50">hmm2</rect>
 <!--           <g v-for="(name,value) in opacs"
             :key="name">
             <rect :x="(keyIndex(value) * 50) + 5"
             width="50"
             height="50"
-            :fill="`rgba(var(--v-theme-on-surface), var(--v-${value}))`"/>
-            <text :x="(keyIndex(value) * 50) + 7" y="20">{{value}}</text>
-          </g>
-        </svg> -->
+            :fill="`rgba(var(--v-theme-on-surface), var(--v-${value}))`"/> -->
+            <!-- <text :x="(keyIndex(value) * 50) + 7" y="20">{{value}}</text> -->
+          <!-- </g> -->
+        </svg>
 
           <div v-for="(name,value) in opacs"
             :key="name"

@@ -2,6 +2,7 @@
   <v-app>
     <v-container fluid >
         <v-row>
+            <!-- <VuetifyAll/> -->
             <TopDashboard @scale-clicked="startDragging" @mousedown.prevent/>
         </v-row>
         <v-row >
@@ -31,6 +32,7 @@
   /* eslint-disable */
   import TopDashboard from './components/TopDashboard.vue'
   import FretBoard from './components/FretBoard.vue'
+  // import VuetifyAll from './components/VuetifyAll.vue'
 
   export default {
     data() {
@@ -52,6 +54,7 @@
     components: {
       TopDashboard,
       FretBoard,
+      // VuetifyAll,
     },
   
     methods: {
