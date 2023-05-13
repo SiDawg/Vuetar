@@ -1,3 +1,4 @@
+@echo off
 
 REM Check if an argument is provided
 IF "%~1"=="" (
