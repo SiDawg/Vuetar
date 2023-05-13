@@ -2,14 +2,21 @@
 
 REM Check if an argument is provided
 IF "%~1"=="" (
-    echo Error: Please provide a commit message as an argument.
+    echo Please provide a commit message
     exit /b 1
 )
 
-REM Execute Git commands
+echo Adding Files ======
 git add .
+
+echo
+echo Comit =============
 git commit -m "%~1"
+
+echo
+echo Push ==============
 git push origin main
 
-REM Exit the batch file
+echo
+echo Done ==============
 exit /b 0
