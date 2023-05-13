@@ -9,14 +9,14 @@ IF "%~1"=="" (
 echo Adding Files ======
 git add .
 
-echo
+echo.
 echo Comit =============
 git commit -m "%~1"
 
-echo
+echo.
 echo Push ==============
 git push origin main
 
-echo
+echo.
 echo Done ==============
 exit /b 0
