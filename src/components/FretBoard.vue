@@ -75,7 +75,8 @@
 					fill-opacity="1"
 					:r="this.noteR"
 					@click="removeScale(index)"
-					@touchend="removeScaleDebounce(index)"
+					@touchstart="removeScaleDebounce(index)"
+					@touchend="this.fatFingers = false"
 				/>
 
 				<text dominant-baseline="middle" alignment-baseline="middle" :x="noteR + noteR + noteGapX + 3" 
@@ -248,7 +249,6 @@
 				if (!this.fatFingers) {
 					this.fatFingers = true;
 					this.removeScale(scaleID);
-					this.fatFingers = false;
 				}
 			},
 
