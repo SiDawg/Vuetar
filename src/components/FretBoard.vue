@@ -75,7 +75,7 @@
 					fill-opacity="1"
 					:r="this.noteR"
 					@click="removeScale(index)"
-					@touchend="removeScale(index)"
+					@touchend="removeScaleDebounce(index)"
 				/>
 
 				<text dominant-baseline="middle" alignment-baseline="middle" :x="noteR + noteR + noteGapX + 3" 
@@ -149,6 +149,7 @@
 			dropY: 0,
 			neckX: 0,
 			neckY: 0,
+			fatFingers: false,
 			scales: [],
 			fretboard: [],
 			};
@@ -243,6 +244,14 @@
 					}
 				}
 			},
+			removeScaleDebounce(scaleID) {
+				if (!this.fatFingers) {
+					this.fatFingers = true;
+					this.removeScale(scaleID);
+					this.fatFingers = false;
+				}
+			},
+
 			removeScale(scaleID) {
 				this.scales.splice(scaleID,1);
 				this.buildFretboard();
