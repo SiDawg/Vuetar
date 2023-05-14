@@ -15,16 +15,18 @@
               :scColor="scColors[colIndex]"
                />
         </v-row>
-        <svg v-if="isDragging" style="pointer-events: none; position: absolute; top: 0; left: 0; z-index: 10; height: 100%; width: 100%;">
-          <circle :cx="ndX" :cy="ndY" :r="noteCircles" :fill="scColors[colIndex]"/>
-        </svg>
-        <div style="pointer-events: none; position: absolute; top: 0; left: 0; z-index: 10; height: 100%; width: 100%;">
 
-<!--           {{ this.ndX + ' ' + this.ndY }}<br>
-          {{ this.ndOffX + ' ' + this.ndOffY }}<br> -->
+        <!-- <div style="pointer-events: none; position: absolute; top: 0; left: 0; z-index: 10; height: 100%; width: 100%;"> -->
 
-        </div>
+          <!-- {{ this.ndX + ' ' + this.ndY }}<br> -->
+          <!-- {{ this.ndOffX + ' ' + this.ndOffY }}<br> -->
+
+        <!-- </div> -->
     </v-container>
+    <svg v-if="isDragging" :width="noteCircles * 2" :height="noteCircles * 2" background="white"
+      :style="`pointer-events: none; position: absolute; z-index: 10; transform: translate(${ndX - noteCircles}px, ${ndY - noteCircles}px)`">
+      <circle :cx="noteCircles" :cy="noteCircles" :r="noteCircles" :fill="scColors[colIndex]"/>
+    </svg>
   </v-app>
 </template>
 
