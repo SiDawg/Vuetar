@@ -55,25 +55,18 @@ export class ScaleInstance {
 			var prevNoteNum = this.tonic;
 			var newNoteNum = this.tonic;
 
-			// console.log('Step Length: ' + scaleObj.absSteps.length)
-
 			do {
 				if (noteIndex === 0) {
 					this.notes.push(new ScNote(this.tonic, scaleThemes[this.scTheme][0]));
-					// console.log('FirstStep: ' + scaleObj.absSteps[stepIndex])
 				} else {
-					// console.log('StepIndex:' + stepIndex + ', Step: ' + scaleObj.absSteps[stepIndex])
 					newNoteNum = (prevNoteNum + scaleObj.absSteps[stepIndex]) % 12;
-					// console.log('NewNote: ' + newNoteNum)
 					this.notes.push(new ScNote(newNoteNum, scaleThemes[this.scTheme][noteIndex]));
 					prevNoteNum = newNoteNum;
 				}
-				// console.log(noteIndex + ' of ' + scaleObj.absSteps.length + ' (stepIndex: ' + stepIndex + ')')
 				noteIndex++;
 				stepIndex++;
 				if (stepIndex > scaleObj.absSteps.length - 1) {stepIndex = 0}
 
-				// console.log(' ')
 			} while (noteIndex <= scaleObj.absSteps.length - 1);
 
 		}

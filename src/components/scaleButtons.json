@@ -1,6 +1,6 @@
 [
   {
-    "group": "Common",
+    "group": "common",
     "rows": [
       [
         {
@@ -73,7 +73,7 @@
     ]
   },
   {
-    "group": "Modes",
+    "group": "modes",
     "rows": [
       [
         {
@@ -194,7 +194,7 @@
     ]
   },
   {
-    "group": "Other",
+    "group": "other",
     "rows": [
       [
         {

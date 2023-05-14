@@ -26,11 +26,6 @@
 
 			</g>		
 		
-						<!-- 	:cx = "pos.fret * this.fretGap 
-						+ this.noteR + (this.noteGapX * 3) 
-						+ ((pos.scIndex * ((this.noteR * 2) 
-						+ this.noteGapX)))" 
-						-->
 			<!-- Draw all notes from all scales (using pre computed object 'fretboard', which reads the 'scales' object) -->
 			<g v-for="pos in this.fretboard" :key="pos">
 				<circle
@@ -44,18 +39,27 @@
 					:stroke="pos.note.ntStroke ? pos.fillc : 'none'"
 					:stroke-width="pos.note.ntStroke ? 2 : 0"
 					:stroke-opacity="pos.note.ntStroke ? 1 : 0"
+				/>
 
-				/>	
 				<text class="scaleText" 
 					:x = "pos.fret * this.fretGap 
-						+ this.noteR + (this.noteGapX * 3) 
-						+ ((pos.scIndex * ((this.noteR * 2) 
-						+ this.noteGapX)))" 
+						+ this.noteStart
+						+ this.notePos(pos.scIndex)"
 					:y="pos.string * this.stringGap + 16" :r="this.noteR"
-					fill="white">
+					fill="`rgba(var(--v-theme-surface))`">
 
-					{{pos.note.ntName}}
-					<!-- {{pos.desc}} -->
+					<template v-if="this.btLabels === '123'">
+						{{pos.note.ntNum}}
+					</template>
+
+					<template v-else-if="this.btLabels === 'b3'">
+						{{pos.note.ntNum}}
+					</template>
+
+					<template v-else>
+						{{pos.note.ntName}}
+					</template>
+					
 
 				</text><br>
 			</g>
@@ -126,7 +130,6 @@
 	export default {
 
 		name: "FretBoard",
-
 		props: {
 		ndScaleID: Number,
 		ndX: Number,
@@ -134,6 +137,8 @@
 		isDragging: Boolean,
 		isMobile: Boolean,
 		scColor: String,
+		btAlign: String,
+		btLabels: String,
 		},
 
 		data() {
