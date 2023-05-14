@@ -206,7 +206,7 @@
 
 			},
 		updated() {
-			this.setScrollPos(this.scrollPos);
+			this.setScrollPos(this.scrollPos);			
 		},
 
 		beforeUnmount() {
@@ -244,7 +244,7 @@
 				if (dropNote === undefined || !this.isDragging) { return }
 				if (this.scales.length >= 5) return;
 
-				const sel = scaleSelections.find(selections => selections.sid === this.ndScaleID)				
+				const sel = scaleSelections.find(selections => selections.sid === this.ndScaleID);
 
 				this.scales.push(new ScaleClasses.ScaleInstance(
 					sel.scaleType,
@@ -291,9 +291,22 @@
 			},
 
 			removeScale(scaleID) {
+				const oldCentre = ((document.documentElement.clientWidth) / 2) + this.scrollPos
+				const centreFret = Math.floor((oldCentre - 20) / this.fretGap);	
+				const offsetX = oldCentre % this.fretGap
+				const percX = offsetX / this.fretGap
+
 				this.scales.splice(scaleID,1);
+
 				this.buildFretboard();
 				this.handleResize();
+
+				const newCentreX = (centreFret * this.fretGap) + (percX * this.fretGap)
+				const newScroll = newCentreX - (document.documentElement.clientWidth / 2)
+		
+				this.scrollPos = newScroll;
+				this.setScrollPos(newScroll);
+
 			},
 
 			noteName(noteNum) {

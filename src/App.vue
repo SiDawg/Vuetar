@@ -143,7 +143,7 @@
 }
 
 body {
-  background-color: #27474F !important;
+  background-color: ##121212 !important;
 /*  margin: 8px !important;*/
   overflow: hidden;
 }
