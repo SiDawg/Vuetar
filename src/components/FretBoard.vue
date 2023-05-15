@@ -1,4 +1,5 @@
 <template>
+
 	<v-container ref="dropArea" @mouseup="handleNoteDrop" @touchend="handleNoteDrop" @scroll="handleScroll" fluid style="overflow-x: auto; padding: 15px;">
 		<svg  
 			:width="this.width" 
@@ -49,11 +50,11 @@
 					fill="`rgba(var(--v-theme-surface))`">
 
 					<template v-if="this.btLabels === '123'">
-						{{pos.note.ntNum}}
+						{{pos.note.ntScaleNum}}
 					</template>
 
 					<template v-else-if="this.btLabels === 'b3'">
-						{{pos.note.ntNum}}
+						{{pos.note.ntRootModeNum}}
 					</template>
 
 					<template v-else>
@@ -272,7 +273,7 @@
 				// is called from needs to redraw (or some shit?) so i set the variable, and rely
 				// on 'updated' event to fire to set the new scroll pos
 				this.scrollPos = (totalX - this.dropX - 15)
-
+				if (this.scrollPos < 0) {this.scrollPos = 0}
 			},
 			buildFretboard() {
 				this.fretboard.length = 0;
@@ -310,6 +311,7 @@
 				const newScroll = newCentreX - (document.documentElement.clientWidth / 2)
 		
 				this.scrollPos = newScroll;
+				if (this.scrollPos < 0) {this.scrollPos = 0}
 				this.setScrollPos(newScroll);
 
 			},

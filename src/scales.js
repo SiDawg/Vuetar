@@ -4,10 +4,12 @@ import scaleThemes from './components/scaleThemes.json'
 export const Chroma = ['A','Bb','B','C','Db','D','Eb','E','F','Gb','G','Ab'];
 
 export  class ScNote {
-	constructor(ntNum, ntStyle) {
-		this.ntNum = ntNum;
+	constructor(ntChromaNum, ntScaleNum, ntRootModeNum, ntStyle) {
+		this.ntChromaNum = ntChromaNum;
+		this.ntScaleNum = ntScaleNum;
+		this.ntRootModeNum = ntRootModeNum;
 		this.ntStyle = ntStyle;
-		this.ntName = Chroma[ntNum];
+		this.ntName = Chroma[ntChromaNum];
 
 		switch (ntStyle) {
 			case 0 :
@@ -41,6 +43,7 @@ export class ScaleInstance {
 		this.scTheme = scTheme;
 		this.scName = scName;
 		this.notes = [];
+		console.log('Setting notes')
 		this.setNotes();
 	}
 
@@ -54,14 +57,37 @@ export class ScaleInstance {
 			var noteIndex = 0;
 			var prevNoteNum = this.tonic;
 			var newNoteNum = this.tonic;
+			var prevRef = this.tonic;
+			var newRef =this.tonic;
+			var rootModeString = '';
+			var rootModeNum = '';
 
 			do {
+				// scNote(ntChromaNum, ntScaleNum, ntRootModeNum, ntStyle)
 				if (noteIndex === 0) {
-					this.notes.push(new ScNote(this.tonic, scaleThemes[this.scTheme][0]));
+					this.notes.push(new ScNote(this.tonic, 1, 1, scaleThemes[this.scTheme][0]));
 				} else {
-					newNoteNum = (prevNoteNum + scaleObj.absSteps[stepIndex]) % 12;
-					this.notes.push(new ScNote(newNoteNum, scaleThemes[this.scTheme][noteIndex]));
+					newNoteNum = (prevNoteNum + scaleObj.absSteps[stepIndex]);
+					newRef = (prevRef + scaleObj.absSteps[noteIndex]);
+					rootModeString = this.getRootModeString(newRef, newNoteNum);
+
+					console.log('pre mod for note' + (noteIndex + 1))
+					console.log(newNoteNum)
+					console.log(newRef)
+					console.log(rootModeString)
+
+					console.log('post mod')
+					console.log(newNoteNum)
+					console.log(newRef)
+
+					console.log('')
+
+					rootModeNum = rootModeString + (noteIndex + 1);
+
+					this.notes.push(new ScNote(newNoteNum % 12, noteIndex + 1, rootModeNum, scaleThemes[this.scTheme][noteIndex]));
+
 					prevNoteNum = newNoteNum;
+					prevRef = newRef;
 				}
 				noteIndex++;
 				stepIndex++;
@@ -72,11 +98,20 @@ export class ScaleInstance {
 		}
 	}
 
+	getRootModeString(RootNum, ModeNum) {
+		var noteDiff = Math.abs(RootNum - ModeNum)
+		if (RootNum > ModeNum) {
+			return "♭".repeat(noteDiff);
+		} else {
+			return "♯".repeat(noteDiff);
+		}
+	}
+
 	hasNote(noteNum) {		
-		return this.notes.some(note => note.ntNum === noteNum);
+		return this.notes.some(note => note.ntChromaNum === noteNum);
 	}
 
 	getNote(noteNum) {
-		return this.notes.find(note => note.ntNum === noteNum);
+		return this.notes.find(note => note.ntChromaNum === noteNum);
 	}
 }

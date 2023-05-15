@@ -1,4 +1,6 @@
 <template>
+
+
 	<v-container class="bg-background d-flex justify-center flex-shrink-0">
 	<v-card :width="scaleBoxWidth" :min-width="scaleBoxWidth" :height="dashboardHeight" elevation="2"  class="rounded-lg mx-1">
 		<v-btn-toggle
@@ -13,6 +15,7 @@
 			<v-btn :width="scaleBoxWidth / 3" value="modes">Modes</v-btn>
 			<v-btn :width="scaleBoxWidth / 3" value="other">Other</v-btn>
 		</v-btn-toggle><br>
+		
 		<v-card-text no-gutters justify-center align-center style="padding: 0px 0px;">
 
 				<svg 
@@ -66,39 +69,77 @@
 					variant="outlined"
 					@click="settingsChange"
 					divided
+					mandatory
 					>
-						<v-btn value="abc"> ABC </v-btn>
-						<v-btn value="123"> 123 </v-btn>
-						<v-btn value="b3" style="text-transform: none"> ♭3 </v-btn>
+						<v-btn value="abc" title="Note Name"> ABC </v-btn>
+						<v-btn value="b3" title="Note Number (standard: relative to root mode)" style="text-transform: none"> ♭3 </v-btn>
+						<v-btn value="123" title="Alternate Note Number (index)"> 123 </v-btn>
+						
 					</v-btn-toggle>
 				</div>
+				<div class="d-flex align-center flex-column mt-5">
+					<div class="d-flex align-center mt-2">
+						<svg viewBox="0 0 500 500" width="50" height="50" x="0" y="0" xmlns="http://www.w3.org/2000/svg">
+						<path style="stroke-linecap: round; stroke-miterlimit: 1; stroke-linejoin: round; stroke: rgb(52, 73, 94); fill: rgb(52, 73, 94); stroke-width: 0px;" d="M 186.187 249.516 L 193.452 193.583 L 341.263 19.193 L 421.911 15.613 L 424.673 49.162 L 361.956 56.584 L 239.344 224.402 L 186.187 249.516 Z">
+						</path>
+						<g transform="matrix(1.542338, 1.120596, 1.120596, -1.542338, -303.13028, 417.528931)" style="">
+							<g transform="translate(178.06 235.01)">
+								<path d="m0 0-22.669-39.264-22.669 39.264h-75.491l98.16-170.02 98.16 170.02z" fill="#41b883"/>
+							</g>
+							<g transform="translate(178.06 235.01)">
+								<path d="m0 0-22.669-39.264-22.669 39.264h-36.227l58.896-102.01 58.896 102.01z" fill="#34495e"/>
+							</g>
+						</g>
+					</svg>
+					<text :style="{fill: `rgba(var(--v-theme-on-surface))`}">Vuetar</text>
+					</div>
+				</div>
 			</v-col>
-			<v-col >
+			<v-col>
 				<div class="d-flex align-center flex-column ">
-					<div class="mt-0 text-subtitle-2">Align</div>
+					<div class="mt-0 text-subtitle-2">Alignment</div>
 					<v-btn-toggle
 					v-model="btAlign"
 					variant="outlined"
 					@click="settingsChange"
 					divided
 					>
-						<v-btn value="left" title="right">
-							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width="20" height="20">
-								<circle :style="{fill: 'none', stroke: `rgba(var(--v-theme-on-surface))`, 'stroke-width': '2px'}" cx="10" cy="10" r="7"/>
-								<rect x="0" y="0" width="2" height="20" style="stroke: rgb(255, 255, 255); fill: rgb(255, 255, 255);"/>
+						<v-btn value="column" title="Locked to columns">
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 20" width="25" height="20">
+								<circle :style="{fill: `rgba(var(--v-theme-on-surface))`, stroke: 'none', 'stroke-width': '2px'}" cx="3" cy="3" r="3"/>
+								<circle :style="{fill: `rgba(var(--v-theme-on-surface))`, stroke: 'none', 'stroke-width': '2px'}" cx="12" cy="3" r="3"/>
+								<circle :style="{fill: `rgba(var(--v-theme-on-surface))`, stroke: 'none', 'stroke-width': '2px'}" cx="21" cy="3" r="3"/>
+								<circle :style="{fill: `rgba(var(--v-theme-on-surface))`, stroke: 'none', 'stroke-width': '2px'}" cx="3" cy="12" r="3"/>
+								<circle :style="{fill: `rgba(var(--v-theme-on-surface))`, stroke: 'none', 'stroke-width': '2px'}" cx="21" cy="12" r="3"/>
 							</svg>
 						</v-btn>
-						<v-btn value="middle" title="centre">
+						<v-btn value="centre" title="Centre between frets">
 							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 20" width="30" height="20">
-								<rect x="0" y="0" width="2" height="20" style="stroke: rgb(255, 255, 255); fill: rgb(255, 255, 255);"/>
-								<circle :style="{fill: 'none', stroke: `rgba(var(--v-theme-on-surface))`, 'stroke-width': '2px'}" cx="15" cy="10" r="7"/>
-								<rect x="28" y="0" width="2" height="20" style="stroke: rgb(255, 255, 255); fill: rgb(255, 255, 255);"/>
+								<circle :style="{fill: `rgba(var(--v-theme-on-surface))`, stroke: 'none', 'stroke-width': '2px'}" cx="7" cy="3" r="3"/>
+								<circle :style="{fill: `rgba(var(--v-theme-on-surface))`, stroke: 'none', 'stroke-width': '2px'}" cx="17" cy="3" r="3"/>
+								<circle :style="{fill: `rgba(var(--v-theme-on-surface))`, stroke: 'none', 'stroke-width': '2px'}" cx="12" cy="12" r="3"/>
 							</svg>
 						</v-btn>
-						<v-btn value="right" title="right">
-							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width="20" height="20">
-								<circle :style="{fill: 'none', stroke: `rgba(var(--v-theme-on-surface))`, 'stroke-width': '2px'}" cx="9" cy="10" r="7"/>
-								<rect x="18" y="0" width="2" height="20" style="stroke: rgb(255, 255, 255); fill: rgb(255, 255, 255);"/>
+					</v-btn-toggle>
+				</div>
+				<div class="d-flex align-center flex-column mt-2">
+					<div class="mt-0 text-subtitle-2">Overlap</div>
+					<v-btn-toggle
+					v-model="btOverlap"
+					variant="outlined"
+					@click="settingsChange"
+					divided
+					>
+						<v-btn value="overlap" title="Overlapped">
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 20" width="25" height="20">
+								<circle :style="{fill: 'none', stroke: `rgba(var(--v-theme-on-surface))`, 'stroke-width': '2px'}" cx="10" cy="9" r="7"/>
+								<circle :style="{fill: 'none', stroke: `rgba(var(--v-theme-on-surface))`, 'stroke-width': '2px'}" cx="17" cy="9" r="7"/>
+							</svg>
+						</v-btn>
+						<v-btn value="discrete" title="Discrete">
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 20" width="30" height="20">
+								<circle :style="{fill: 'none', stroke: `rgba(var(--v-theme-on-surface))`, 'stroke-width': '2px'}" cx="8" cy="9" r="6"/>
+								<circle :style="{fill: 'none', stroke: `rgba(var(--v-theme-on-surface))`, 'stroke-width': '2px'}" cx="23" cy="9" r="6"/>
 							</svg>
 						</v-btn>
 					</v-btn-toggle>
@@ -127,7 +168,8 @@
 				dashboardHeight: 200,    
 				btScales: "common",
 				btLabels: "abc",
-				btAlign: "left",
+				btAlign: "column",
+				btOverlap: "discrete",
 				scaleButtons: scaleButtons,
 				scaleCircles: 20,
 				itemsPerGroup: 7,
