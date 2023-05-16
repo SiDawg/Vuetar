@@ -1,11 +1,11 @@
 <template>
 	<v-app>
 		<v-container fluid >
-			<v-row>
+			<v-row >
 				<!-- <VuetifyAll/> -->
 				<TopDashboard @scale-clicked="startDragging" @settings-changed="changeSettings" @mousedown.prevent/>
 			</v-row>
-			<v-row >
+			<v-row  >
 				<FretBoard             
 				:ndX="ndX"
 				:ndY="ndY"
@@ -66,10 +66,10 @@
 		methods: {
 			startDragging(event) {        
 				this.isDragging = true;
-				this.ndOffX = this.clientX(event) - event.scaleCircles - event.scaleX 
+				this.ndOffX = this.clientX(event) - event.scaleCircles - event.scaleX
 				this.ndOffY = this.clientY(event) - event.scaleCircles - event.scaleY 
-				this.ndX = this.clientX(event) - this.ndOffX;
-				this.ndY = this.clientY(event) - this.ndOffY;
+				this.ndX = this.clientX(event) - this.ndOffX
+				this.ndY = this.clientY(event) - this.ndOffY + window.scrollY;
 				this.ndScaleID = event.sid;
 
 			},
@@ -83,7 +83,7 @@
 			dragging(event) {
 				if (this.isDragging) {
 					this.ndX = this.clientX(event) - this.ndOffX;
-					this.ndY = this.clientY(event) - this.ndOffY;
+					this.ndY = this.clientY(event) - this.ndOffY + window.scrollY;
 				}
 			},
 

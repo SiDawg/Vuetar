@@ -1,28 +1,34 @@
 <template>
 
-	<v-container ref="dropArea" @mouseup="handleNoteDrop" @touchend="handleNoteDrop" @scroll="handleScroll" fluid style="overflow-x: auto; padding: 15px;">
-		<svg  
-			:width="this.width" 
-			:height="stringGap * strings" 
-			:style="{background: `rgba(var(--v-theme-surface))`}"
+	<v-container ref="dropArea" @mouseup="handleNoteDrop"  @touchend="handleNoteDrop" @scroll="handleScroll" fluid style="overflow-x: auto; ">
+		<svg :width="this.width" :height="(stringGap * strings) + 40" >
+			<rect :width="this.width" :height="stringGap * strings" x="0" y="40" :style="{fill: `rgba(var(--v-theme-surface))`}"/>
 			
-			> 
 			<!-- Draw Strings and frets -->
 			<g v-for="(i,index) in frets" :key="index">
 				<line 
 					:x1="(i * fretGap) - 2.5" 
-					y1="0"
+					y1="40"
 					:x2="(i * fretGap) - 2.5" 
-					:y2="stringGap * strings" 
-					:style="{stroke: index === 0 ? `rgba(var(--v-theme-on-surface), 1)` : `rgba(var(--v-border-color), var(--v-border-opacity))`, strokeWidth: '5'}" />
+					:y2="stringGap * strings + 40" 
+					:style="{stroke: (index === 0 || index == 12) ? `rgba(var(--v-theme-on-surface), 1)` : `rgba(var(--v-border-color), var(--v-border-opacity))`, strokeWidth: '5'}" />
+				<text
+					v-if="[3, 5, 7, 9, 12, 15, 17, 19].includes(index)"
+					:x="(i * fretGap) - 2.5 - (fretGap / 2)"
+					y="30"
+					text-anchor="middle"
+					fill="white" >
+					{{ index }}
+				</text>
+
 			</g>
 
 			<g v-for="(i,index) in strings" :key="index">
 				<line 
 					x1="0" 
-					:y1="index * stringGap + stringGap / 2" 
+					:y1="index * stringGap + stringGap / 2  + 40" 
 					:x2="neckLength" 
-					:y2="index * stringGap + stringGap / 2" 
+					:y2="index * stringGap + stringGap / 2  + 40" 
 					:style="{stroke: `rgba(var(--v-border-color), var(--v-border-opacity))`}" />
 
 			</g>		
@@ -34,7 +40,7 @@
 						+ this.noteStart
 						+ this.notePos(pos.scIndex)"
 
-					:cy="pos.string * this.stringGap + 15" :r="this.noteR" 
+					:cy="pos.string * this.stringGap + 55" :r="this.noteR" 
 					:fill="pos.fillc" 
 					:fill-opacity="pos.note.ntOpacity"
 					:stroke="pos.note.ntStroke ? pos.fillc : 'none'"
@@ -46,11 +52,11 @@
 					:x = "pos.fret * this.fretGap 
 						+ this.noteStart
 						+ this.notePos(pos.scIndex)"
-					:y="pos.string * this.stringGap + 16" :r="this.noteR"
+					:y="pos.string * this.stringGap + 56" :r="this.noteR"
 					fill="`rgba(var(--v-theme-surface))`">
 
 					<template v-if="this.btLabels === '123'">
-						{{pos.note.ntScaleNum}}
+						{{pos.note.ntChromaNum}}
 					</template>
 
 					<template v-else-if="this.btLabels === 'b3'">
@@ -106,6 +112,7 @@
 			</g>			
 		</svg>
 	</v-container>
+	<!-- <text fill="white">{{this.hoverX + ' ' + this.hoverFret + ' ' + this.hoverString}}</text> -->
 </template>
 
 <script>
@@ -189,7 +196,7 @@
 
 			},
 			hoverString() {
-				return (Math.floor((this.ndY - this.neckY + 15) / this.stringGap) - 1);
+				return (Math.floor((this.ndY - this.neckY - 25) / this.stringGap) - 1);
 			},
 
 			hoverNote() {

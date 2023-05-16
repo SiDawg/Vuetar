@@ -59,7 +59,7 @@
 
 		</v-card-text>
 	</v-card>
-	<v-card  elevation="2" class="rounded-lg mx-1">
+	<v-card  elevation="2" :height="dashboardHeight" class="rounded-lg mx-1" >
 		<v-row class="ma-2">
 			<v-col >
 				<div class="d-flex align-center flex-column ">
@@ -78,22 +78,28 @@
 					</v-btn-toggle>
 				</div>
 				<div class="d-flex align-center flex-column mt-5">
-					<div class="d-flex align-center mt-2">
-						<svg viewBox="0 0 500 500" width="50" height="50" x="0" y="0" xmlns="http://www.w3.org/2000/svg">
-						<path style="stroke-linecap: round; stroke-miterlimit: 1; stroke-linejoin: round; stroke: rgb(52, 73, 94); fill: rgb(52, 73, 94); stroke-width: 0px;" d="M 186.187 249.516 L 193.452 193.583 L 341.263 19.193 L 421.911 15.613 L 424.673 49.162 L 361.956 56.584 L 239.344 224.402 L 186.187 249.516 Z">
-						</path>
-						<g transform="matrix(1.542338, 1.120596, 1.120596, -1.542338, -303.13028, 417.528931)" style="">
-							<g transform="translate(178.06 235.01)">
-								<path d="m0 0-22.669-39.264-22.669 39.264h-75.491l98.16-170.02 98.16 170.02z" fill="#41b883"/>
-							</g>
-							<g transform="translate(178.06 235.01)">
-								<path d="m0 0-22.669-39.264-22.669 39.264h-36.227l58.896-102.01 58.896 102.01z" fill="#34495e"/>
-							</g>
-						</g>
-					</svg>
-					<text :style="{fill: `rgba(var(--v-theme-on-surface))`}">Vuetar</text>
-					</div>
+					<div class="mt-0 text-subtitle-2">Overlap</div>
+					<v-btn-toggle
+					v-model="btOverlap"
+					variant="outlined"
+					@click="settingsChange"
+					divided
+					>
+						<v-btn value="overlap" title="Overlapped">
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 20" width="25" height="20">
+								<circle :style="{fill: 'none', stroke: `rgba(var(--v-theme-on-surface))`, 'stroke-width': '2px'}" cx="10" cy="9" r="7"/>
+								<circle :style="{fill: 'none', stroke: `rgba(var(--v-theme-on-surface))`, 'stroke-width': '2px'}" cx="17" cy="9" r="7"/>
+							</svg>
+						</v-btn>
+						<v-btn value="discrete" title="Discrete">
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 20" width="30" height="20">
+								<circle :style="{fill: 'none', stroke: `rgba(var(--v-theme-on-surface))`, 'stroke-width': '2px'}" cx="8" cy="9" r="6"/>
+								<circle :style="{fill: 'none', stroke: `rgba(var(--v-theme-on-surface))`, 'stroke-width': '2px'}" cx="23" cy="9" r="6"/>
+							</svg>
+						</v-btn>
+					</v-btn-toggle>
 				</div>
+				
 			</v-col>
 			<v-col>
 				<div class="d-flex align-center flex-column ">
@@ -122,27 +128,23 @@
 						</v-btn>
 					</v-btn-toggle>
 				</div>
-				<div class="d-flex align-center flex-column mt-2">
-					<div class="mt-0 text-subtitle-2">Overlap</div>
-					<v-btn-toggle
-					v-model="btOverlap"
-					variant="outlined"
-					@click="settingsChange"
-					divided
-					>
-						<v-btn value="overlap" title="Overlapped">
-							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 20" width="25" height="20">
-								<circle :style="{fill: 'none', stroke: `rgba(var(--v-theme-on-surface))`, 'stroke-width': '2px'}" cx="10" cy="9" r="7"/>
-								<circle :style="{fill: 'none', stroke: `rgba(var(--v-theme-on-surface))`, 'stroke-width': '2px'}" cx="17" cy="9" r="7"/>
-							</svg>
-						</v-btn>
-						<v-btn value="discrete" title="Discrete">
-							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 20" width="30" height="20">
-								<circle :style="{fill: 'none', stroke: `rgba(var(--v-theme-on-surface))`, 'stroke-width': '2px'}" cx="8" cy="9" r="6"/>
-								<circle :style="{fill: 'none', stroke: `rgba(var(--v-theme-on-surface))`, 'stroke-width': '2px'}" cx="23" cy="9" r="6"/>
-							</svg>
-						</v-btn>
-					</v-btn-toggle>
+				
+				<div class="d-flex align-center flex-column mt-5">
+					<div class="d-flex align-center mt-2">
+						<svg viewBox="0 0 500 500" width="50" height="50" x="0" y="0" xmlns="http://www.w3.org/2000/svg">
+						<path style="stroke-linecap: round; stroke-miterlimit: 1; stroke-linejoin: round; stroke: rgb(52, 73, 94); fill: rgb(52, 73, 94); stroke-width: 0px;" d="M 186.187 249.516 L 193.452 193.583 L 341.263 19.193 L 421.911 15.613 L 424.673 49.162 L 361.956 56.584 L 239.344 224.402 L 186.187 249.516 Z">
+						</path>
+						<g transform="matrix(1.542338, 1.120596, 1.120596, -1.542338, -303.13028, 417.528931)" style="">
+							<g transform="translate(178.06 235.01)">
+								<path d="m0 0-22.669-39.264-22.669 39.264h-75.491l98.16-170.02 98.16 170.02z" fill="#41b883"/>
+							</g>
+							<g transform="translate(178.06 235.01)">
+								<path d="m0 0-22.669-39.264-22.669 39.264h-36.227l58.896-102.01 58.896 102.01z" fill="#34495e"/>
+							</g>
+						</g>
+					</svg>
+					<text :style="{fill: `rgba(var(--v-theme-on-surface))`}">Vuetar</text>
+					</div>
 				</div>
 			</v-col>					
 		</v-row>
