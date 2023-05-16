@@ -56,7 +56,7 @@
 					fill="`rgba(var(--v-theme-surface))`">
 
 					<template v-if="this.btLabels === '123'">
-						{{pos.note.ntChromaNum}}
+						{{pos.note.ntScaleNum}}
 					</template>
 
 					<template v-else-if="this.btLabels === 'b3'">
