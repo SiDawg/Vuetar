@@ -13,14 +13,22 @@ export  class ScNote {
 
 		switch (ntStyle) {
 			case 0 :
-				this.ntOpacity = 1;
+				this.ntShow = false;
+				this.ntOpacity = 0;
 				this.ntStroke = false;
 				break;
 			case 1 :
-				this.ntOpacity = 0.3;
+				this.ntShow = true;
+				this.ntOpacity = 1;
 				this.ntStroke = false;
 				break;
 			case 2 :
+				this.ntShow = true;
+				this.ntOpacity = 0.3;
+				this.ntStroke = false;
+				break;
+			case 3 :
+				this.ntShow = true;
 				this.ntOpacity = 0;
 				this.ntStroke = true;
 				break;
@@ -43,7 +51,6 @@ export class ScaleInstance {
 		this.scTheme = scTheme;
 		this.scName = scName;
 		this.notes = [];
-		console.log('Setting notes')
 		this.setNotes();
 	}
 
@@ -51,7 +58,7 @@ export class ScaleInstance {
 		const scaleObj = scaleTypes.find(obj => obj.name === this.scaleType);
 
 		if (typeof scaleObj === 'undefined') {
-			console.log('scaleObj is undefined');
+			console.log('scaleObj is undefined' + this.scaleType);
 		} else {
 			var stepIndex = this.mode;
 			var noteIndex = 0;
@@ -70,18 +77,6 @@ export class ScaleInstance {
 					newNoteNum = (prevNoteNum + scaleObj.absSteps[stepIndex]);
 					newRef = (prevRef + scaleObj.absSteps[noteIndex]);
 					rootModeString = this.getRootModeString(newRef, newNoteNum);
-
-					console.log('pre mod for note' + (noteIndex + 1))
-					console.log(newNoteNum)
-					console.log(newRef)
-					console.log(rootModeString)
-
-					console.log('post mod')
-					console.log(newNoteNum)
-					console.log(newRef)
-
-					console.log('')
-
 					rootModeNum = rootModeString + (noteIndex + 1);
 
 					this.notes.push(new ScNote(newNoteNum % 12, noteIndex + 1, rootModeNum, scaleThemes[this.scTheme][noteIndex]));

@@ -13,7 +13,7 @@
 				:isDragging="isDragging"
 				:isMobile="isMobile"
 				:scColor="scColors[colIndex]"
-				:btAlign="btAlign"
+				:btSpacing="btSpacing"
 				:btLabels="btLabels"
 				/>
 			</v-row>
@@ -24,8 +24,8 @@
 				<!-- {{ this.ndOffX + ' ' + this.ndOffY }}<br> -->
 
 				<!-- </div> -->
-			</v-container>
-			<svg v-if="isDragging" :width="noteCircles * 2" :height="noteCircles * 2" background="white"
+		</v-container>
+		<svg v-if="isDragging" :width="noteCircles * 2" :height="noteCircles * 2" 
 			:style="`pointer-events: none; position: absolute; z-index: 10; transform: translate(${ndX - noteCircles}px, ${ndY - noteCircles}px)`">
 			<circle :cx="noteCircles" :cy="noteCircles" :r="noteCircles" :fill="scColors[colIndex]"/>
 		</svg>
@@ -51,7 +51,7 @@
 				isMobile: false,
 				scColors: ['#FF9F1C','#1A91FF', '#8AC926','#E72AB2','#1BD9E5'],
 				colIndex: 0,
-				btAlign: 'left',
+				btSpacing: '5',
 				btLabels: 'abc',
 
 			}
@@ -75,9 +75,8 @@
 			},
 
 			changeSettings(event) {				
-				this.btAlign = event.btAlign;
+				this.btSpacing = event.btSpacing;
 				this.btLabels = event.btLabels;
-				console.log(this.btAlign)
 			},
 
 			dragging(event) {

@@ -84,6 +84,7 @@
 					variant="outlined"
 					@click="settingsChange"
 					divided
+					mandatory
 					>
 						<v-btn value="overlap" title="Overlapped">
 							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 20" width="25" height="20">
@@ -103,27 +104,32 @@
 			</v-col>
 			<v-col>
 				<div class="d-flex align-center flex-column ">
-					<div class="mt-0 text-subtitle-2">Alignment</div>
+					<div class="mt-0 text-subtitle-2">Spacing</div>
 					<v-btn-toggle
-					v-model="btAlign"
+					v-model="btSpacing"
 					variant="outlined"
 					@click="settingsChange"
 					divided
+					mandatory
 					>
-						<v-btn value="column" title="Locked to columns">
-							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 20" width="25" height="20">
-								<circle :style="{fill: `rgba(var(--v-theme-on-surface))`, stroke: 'none', 'stroke-width': '2px'}" cx="3" cy="3" r="3"/>
-								<circle :style="{fill: `rgba(var(--v-theme-on-surface))`, stroke: 'none', 'stroke-width': '2px'}" cx="12" cy="3" r="3"/>
-								<circle :style="{fill: `rgba(var(--v-theme-on-surface))`, stroke: 'none', 'stroke-width': '2px'}" cx="21" cy="3" r="3"/>
-								<circle :style="{fill: `rgba(var(--v-theme-on-surface))`, stroke: 'none', 'stroke-width': '2px'}" cx="3" cy="12" r="3"/>
-								<circle :style="{fill: `rgba(var(--v-theme-on-surface))`, stroke: 'none', 'stroke-width': '2px'}" cx="21" cy="12" r="3"/>
+						<v-btn value="20" title="Comfortable">
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 20" width="30" height="20">
+								<rect :style="{fill: `rgba(var(--v-theme-on-surface))`, stroke: 'none'}" 
+									x="0" y="0" width="2" height="20"/>
+								<circle :style="{fill: 'none', stroke: `rgba(var(--v-theme-on-surface))`, 'stroke-width': '2px'}" cx="15" cy="9" r="6"/>
+								<rect :style="{fill: `rgba(var(--v-theme-on-surface))`, stroke: 'none'}" 
+									x="28" y="0" width="2" height="20"/>
+
 							</svg>
 						</v-btn>
-						<v-btn value="centre" title="Centre between frets">
+						<v-btn value="5" title="Tight">
 							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 20" width="30" height="20">
-								<circle :style="{fill: `rgba(var(--v-theme-on-surface))`, stroke: 'none', 'stroke-width': '2px'}" cx="7" cy="3" r="3"/>
-								<circle :style="{fill: `rgba(var(--v-theme-on-surface))`, stroke: 'none', 'stroke-width': '2px'}" cx="17" cy="3" r="3"/>
-								<circle :style="{fill: `rgba(var(--v-theme-on-surface))`, stroke: 'none', 'stroke-width': '2px'}" cx="12" cy="12" r="3"/>
+								<rect :style="{fill: `rgba(var(--v-theme-on-surface))`, stroke: 'none'}" 
+									x="6" y="0" width="2" height="20"/>
+								<circle :style="{fill: 'none', stroke: `rgba(var(--v-theme-on-surface))`, 'stroke-width': '2px'}" cx="15" cy="9" r="6"/>
+								<rect :style="{fill: `rgba(var(--v-theme-on-surface))`, stroke: 'none'}" 
+									x="22" y="0" width="2" height="20"/>
+
 							</svg>
 						</v-btn>
 					</v-btn-toggle>
@@ -170,7 +176,7 @@
 				dashboardHeight: 200,    
 				btScales: "common",
 				btLabels: "abc",
-				btAlign: "column",
+				btSpacing: "5",
 				btOverlap: "discrete",
 				scaleButtons: scaleButtons,
 				scaleCircles: 20,
@@ -187,7 +193,7 @@
 				this.$emit('scale-clicked', {sid, scaleCircles: this.scaleCircles, scaleX, scaleY, clientX, clientY, type, touches});
 			},
 			settingsChange() {
-				this.$emit('settings-changed', {btAlign: this.btAlign, btLabels: this.btLabels});
+				this.$emit('settings-changed', {btSpacing: this.btSpacing, btLabels: this.btLabels});
 			}
 		},
 

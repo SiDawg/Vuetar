@@ -7,9 +7,9 @@
 			<!-- Draw Strings and frets -->
 			<g v-for="(i,index) in frets" :key="index">
 				<line 
-					:x1="(i * fretGap) - 2.5" 
+					:x1="(i * fretGap)" 
 					y1="40"
-					:x2="(i * fretGap) - 2.5" 
+					:x2="(i * fretGap)" 
 					:y2="stringGap * strings + 40" 
 					:style="{stroke: (index === 0 || index == 12) ? `rgba(var(--v-theme-on-surface), 1)` : `rgba(var(--v-border-color), var(--v-border-opacity))`, strokeWidth: '5'}" />
 				<text
@@ -35,10 +35,12 @@
 		
 			<!-- Draw all notes from all scales (using pre computed object 'fretboard', which reads the 'scales' object) -->
 			<g v-for="pos in this.fretboard" :key="pos">
-				<circle
+				<circle v-if="pos.note.ntShow"
 					:cx="pos.fret * this.fretGap
-						+ this.noteStart
-						+ this.notePos(pos.scIndex)"
+						+ (this.fretGap / 2)
+						+ this.noteR
+						+ (pos.scIndex * (this.noteDiameter + this.noteGapBetween))
+						- (((scales.length * this.noteDiameter) + (this.noteGapBetween * (scales.length - 1))) / 2)"
 
 					:cy="pos.string * this.stringGap + 55" :r="this.noteR" 
 					:fill="pos.fillc" 
@@ -48,15 +50,19 @@
 					:stroke-opacity="pos.note.ntStroke ? 1 : 0"
 				/>
 
-				<text class="scaleText" 
-					:x = "pos.fret * this.fretGap 
-						+ this.noteStart
-						+ this.notePos(pos.scIndex)"
+				<text v-if="pos.note.ntShow"
+					class="scaleText" 
+					:x="pos.fret * this.fretGap
+						+ (this.fretGap / 2)
+						+ this.noteR
+						+ (pos.scIndex * (this.noteDiameter + this.noteGapBetween))
+						- (((scales.length * this.noteDiameter) + (this.noteGapBetween * (scales.length - 1))) / 2)"
 					:y="pos.string * this.stringGap + 56" :r="this.noteR"
 					fill="`rgba(var(--v-theme-surface))`">
 
 					<template v-if="this.btLabels === '123'">
 						{{pos.note.ntScaleNum}}
+						<!-- {{pos.ntIndex}} -->
 					</template>
 
 					<template v-else-if="this.btLabels === 'b3'">
@@ -68,7 +74,7 @@
 					</template>
 					
 
-				</text><br>
+				</text>
 			</g>
 
 			<g  v-if="isDragging" >		
@@ -77,13 +83,13 @@
 		</svg>		
 		
 	</v-container>
-	<!-- Draw all the scales that are currently drawn -->
+	<!-- Draw all the scales that are currently dropped -->
 	<v-container fluid style="padding: 15px;">
-		<svg :width="this.width" :height="this.scales.length * (this.noteR * 2 + this.noteGapX * 5)">
+		<svg :width="this.width" :height="this.scales.length * (this.noteDiameter + this.noteGapBetween)">
 			<g v-for="(scale, index) in this.scales" :key="index">
 				<circle 
-					:cx="this.noteR + this.noteGapX" 
-					:cy="(index * (this.noteR * 2 + this.noteGapX * 5)) + this.noteR"
+					:cx="this.noteR + this.noteGapBetween" 
+					:cy="(index * (this.noteR * 2 + this.noteGapBetween)) + this.noteR"
 					:fill="scale.scColor"
 					fill-opacity="1"
 					:r="this.noteR"
@@ -91,15 +97,15 @@
 
 				/>
 
-				<text dominant-baseline="middle" alignment-baseline="middle" :x="noteR + noteR + noteGapX + 3" 
-					:y="(index * (this.noteR * 2 + this.noteGapX * 5)) + this.noteR"
+				<text dominant-baseline="middle" alignment-baseline="middle" :x="this.noteDiameter + 10" 
+					:y="(index * (this.noteDiameter + this.noteGapBetween)) + this.noteR"
 					fill="white">
 					{{noteName(scale.tonic) + ' ' + scale.scName}}
 				</text>
 
 				<svg xmlns="http://www.w3.org/2000/svg" 
 					:x="3" 
-					:y="(index * (this.noteR * 2 + this.noteGapX * 5)) + 1"
+					:y="(index * (this.noteDiameter + this.noteGapBetween))"
 					:height="noteR * 2"
 					:width="noteR * 2"
 					style="pointer-events: none;"
@@ -112,7 +118,13 @@
 			</g>			
 		</svg>
 	</v-container>
-	<!-- <text fill="white">{{this.hoverX + ' ' + this.hoverFret + ' ' + this.hoverString}}</text> -->
+<!-- 	<v-container>
+		<text y="0" fill="white">{{this.fretGap}}</text><br>
+		<text y="40" fill="white">{{this.fretGap / 2}}</text><br>
+		<text y="80" fill="white">{{this.scales.length}}</text><br>
+		<text y="120" fill="white">{{this.noteDiameter}}</text><br> -->
+		<!-- <text y="160" fill="white">{{(((scales.length * this.noteDiameter) + (this.noteGapBetween * (scales.length - 1))) / 2)}}</text> -->
+	<!-- </v-container> -->
 </template>
 
 <script>
@@ -129,7 +141,8 @@
 	// 8: Aeolian 3 6 7	
 	// 9: Locrian 2 3 5 6 7
 
-	import scaleButtons from './scaleButtons.json'
+	import scaleButtons from './scaleButtons.json';
+	import {watch} from 'vue';
 
 	const scaleSelections = scaleButtons.flatMap(group => group.rows).flat();
 
@@ -139,15 +152,19 @@
 
 		name: "FretBoard",
 		props: {
-		ndScaleID: Number,
-		ndX: Number,
-		ndY: Number,
-		isDragging: Boolean,
-		isMobile: Boolean,
-		scColor: String,
-		btAlign: String,
-		btLabels: String,
+			ndScaleID: Number,
+			ndX: Number,
+			ndY: Number,
+			isDragging: Boolean,
+			isMobile: Boolean,
+			scColor: String,
+			btSpacing: String,
+			btLabels: String,
 		},
+
+		// setup(props) {
+		// 	watch(() => props.btSpacing, this.handleResize())
+		// },
 
 		data() {
 			return {
@@ -158,7 +175,7 @@
 			fretGap: 20, 
 			stringGap: 30,
 			noteR: 14,
-			noteGapX: 1,
+			noteGapBetween: 2,
 			neckLength: 1200,
 			dropX: 0,
 			dropY: 0,
@@ -172,14 +189,23 @@
 
 		computed: {
 			noteStart() {
-				return this.noteR + (this.noteGapX * 3);
+				return this.noteR + this.noteGapSides;
+			},
+			
+			noteGapSides() {	
+				// console.log('noteGapSides')			
+				return Number(this.btSpacing);
+			},
+
+			noteDiameter() {
+				return this.noteR * 2
 			},
 
 			minFretGap() {
 				var numScales = this.scales.length;
 				if (numScales === 0) numScales = 1;
-
-				return (this.noteGapX * 3) + (numScales * (this.noteR * 2)) + (numScales * this.noteGapX) + (this.noteGapX * 7);
+				// console.log('minFretGap')
+				return this.noteGapSides + (numScales * this.noteDiameter) + ((numScales - 1) * this.noteGapBetween) + this.noteGapSides;
 			},
 
 			hoverX() {
@@ -219,7 +245,9 @@
 
 			},
 		updated() {
-			this.setScrollPos(this.scrollPos);			
+			this.setScrollPos(this.scrollPos);	
+			// console.log('handling it');
+			this.handleResize();		
 		},
 
 		beforeUnmount() {
@@ -228,7 +256,7 @@
 
 		methods: {
 			notePos(index) {
-				return ((index * ((this.noteR * 2) + this.noteGapX)))
+				return ((index * (this.noteDiameter + this.noteGapBetween)))
 			},
 
 			handleScroll() {							
@@ -246,7 +274,7 @@
 				}
 				this.neckLength = this.width;
 				this.fretGap = this.width / this.frets;
-				
+				// console.log('handleResize')
 			},
 			handleNoteDrop() {
 				this.dropX = this.ndX - this.neckX;
@@ -288,10 +316,13 @@
 				for (let freti = 0; freti < this.frets; freti++) {
 					for (let stringi = 0; stringi < this.strings; stringi++) {
 						let checkNoteNum = this.noteAdd(this.noteNum(Tuning[stringi]), freti)
+						let noteCount = this.scales.filter(scale => scale.notes.some(note => note.ntChromaNum === checkNoteNum)).length;
+						let ntIndex = 0;
 						this.scales.forEach((scObj, i) => {
 							let noteObj = scObj.getNote(checkNoteNum);
 							if (noteObj !== undefined) {
-								this.fretboard.push({scIndex: i, fret: freti, string: stringi, note: noteObj, fillc: scObj.scColor, desc: scObj.scName})
+								this.fretboard.push({noteCount: noteCount, ntIndex: ntIndex, scIndex: i, fret: freti, string: stringi, note: noteObj, fillc: scObj.scColor, desc: scObj.scName});
+								ntIndex++;
 							}
 						})
 					}
