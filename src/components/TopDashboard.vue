@@ -9,51 +9,49 @@
 			divided
 			elevation="2"  
 			density="compact" 
-			mandatory="force"      
+			mandatory="force"
 			>
-			<v-btn :width="scaleBoxWidth / 3" value="common">Common</v-btn>
-			<v-btn :width="scaleBoxWidth / 3" value="modes">Modes</v-btn>
-			<v-btn :width="scaleBoxWidth / 3" value="other">Other</v-btn>
+			<v-btn :width="scaleBoxWidth / 3" size="small" value="common">Common</v-btn>
+			<v-btn :width="scaleBoxWidth / 3" size="small" value="modes">Modes</v-btn>
+			<v-btn :width="scaleBoxWidth / 3" size="small" value="other">Other</v-btn>
+
 		</v-btn-toggle><br>
 		
-		<v-card-text no-gutters justify-center align-center style="padding: 0px 0px;">
-
+		<v-card-text no-gutters justify-center align-center style="padding: 0px 0px;display: flex; align-items: center; justify-content: center;">
 				<svg 
-					:width="scaleBoxWidth" 
+					:width="groupWidth" 
 					:height="dashboardHeight" 
-					:viewBox="
-					`${-scStroke / 2}, 
-					${-scStroke / 2}, 
-					${scaleBoxWidth}, 
-					${dashboardHeight}`"
+					:viewBox="`0, 0, ${groupWidth}, ${dashboardHeight}`"
+					align="center"
+					
 
 				>
 
 					<g v-for="(scales, rowIndex) in scaleButtons.find(group => group.group === btScales).rows" :key="rowIndex">
-					<g v-for="(scale, itemIndex) in scales" :key="itemIndex">
+						<g v-for="(scale, itemIndex) in scales" :key="itemIndex">
 
-						<circle 
-							:cx="`${itemIndex * (scaleCircles * 2) + scaleCircles + (scalePadding * (itemIndex + 1))}`" 
-							:cy="`${rowIndex * (scaleCircles * 2) + scaleCircles + (scalePadding * (rowIndex + 1))}`" 
-							:r="scaleCircles" 
-							class="scaleCircle"
-							:id="scale.sid"
-							@mousedown.prevent="startDragging($event, scale.sid)" 
-							@touchstart.prevent="startDragging($event, scale.sid)" >
-						
-						<title>{{ scale.name }}</title>
-						</circle>
-						
-						<text 
-							:x="`${itemIndex * (scaleCircles * 2) + scaleCircles + (scalePadding * (itemIndex + 1))}`" 
-							:y="`${rowIndex * (scaleCircles * 2) + scaleCircles + (scalePadding * (rowIndex + 1))}`" 
-							class="scaleText"
-							pointer-events="none"
-						>
-						{{ scale.shortname }}
-						</text>
-						
-					</g>
+							<circle 
+								:cx="`${itemIndex * (scaleCircles * 2) + scaleCircles + (scalePadding * (itemIndex + 1))}`" 
+								:cy="`${rowIndex * (scaleCircles * 2) + scaleCircles + (scalePadding * (rowIndex + 1))}`" 
+								:r="scaleCircles" 
+								class="scaleCircle"
+								:id="scale.sid"
+								@mousedown.prevent="startDragging($event, scale.sid)" 
+								@touchstart.prevent="startDragging($event, scale.sid)" >
+							
+							<title>{{ scale.name }}</title>
+							</circle>
+							
+							<text 
+								:x="`${itemIndex * (scaleCircles * 2) + scaleCircles + (scalePadding * (itemIndex + 1))}`" 
+								:y="`${rowIndex * (scaleCircles * 2) + scaleCircles + (scalePadding * (rowIndex + 1))}`" 
+								class="scaleText"
+								pointer-events="none"
+							>
+							{{ scale.shortname }}
+							</text>
+							
+						</g>
 					</g>
 				</svg>
 
@@ -63,22 +61,7 @@
 		<v-row class="ma-2">
 			<v-col >
 				<div class="d-flex align-center flex-column ">
-					<div class="mt-0 text-subtitle-2">Labels</div>
-					<v-btn-toggle
-					v-model="btLabels"
-					variant="outlined"
-					@click="settingsChange"
-					divided
-					mandatory
-					>
-						<v-btn value="abc" title="Note Name"> ABC </v-btn>
-						<v-btn value="b3" title="Note Number (standard: relative to root mode)" style="text-transform: none"> ♭3 </v-btn>
-						<v-btn value="123" title="Alternate Note Number (index)"> 123 </v-btn>
-						
-					</v-btn-toggle>
-				</div>
-				<div class="d-flex align-center flex-column ">
-					<div class="mt-3 text-subtitle-2">Spacing</div>
+					<div class="text-subtitle-2">Spacing</div>
 					<v-btn-toggle
 					v-model="btSpacing"
 					variant="outlined"
@@ -108,6 +91,22 @@
 						</v-btn>
 					</v-btn-toggle>
 				</div>
+				<div class="d-flex align-center flex-column mt-3">
+					<div class="mt-0 text-subtitle-2">Labels</div>
+					<v-btn-toggle
+					v-model="btLabels"
+					variant="outlined"
+					@click="settingsChange"
+					divided
+					mandatory
+					>
+						<v-btn value="abc" title="Note Name"> ABC </v-btn>
+						<v-btn value="b3" title="Note Number (standard: relative to root mode)" style="text-transform: none"> ♭3 </v-btn>
+						<v-btn value="123" title="Alternate Note Number (index)"> 123 </v-btn>
+						
+					</v-btn-toggle>
+				</div>
+
 				
 			</v-col>
 			<v-col >
@@ -199,26 +198,32 @@
 		},
 
 		computed: {
+			maxNumberOfButtons() {
+				let maxItemCount = 0;
+
+				scaleButtons.forEach((group) => {
+					group.rows.forEach((row) => {
+						if (row.length > maxItemCount) {
+						maxItemCount = row.length;
+						}
+					});
+				});
+				return maxItemCount;
+			},
+			groupWidth() {
+				var maxButtons = 0;
+				scaleButtons.find(group => group.group === this.btScales).rows.forEach((row,i) => {
+					if (row.length > maxButtons) maxButtons = row.length;
+				});
+				return (this.scaleCircles * 2) * maxButtons + (this.scalePadding * (maxButtons + 1) + (this.scStroke / 2));
+			},
+
 			scaleBoxWidth() {
-			return (this.scaleCircles * 2) * this.itemsPerGroup + (this.scalePadding * (this.itemsPerGroup + 1) + (this.scStroke / 2));
+				return (this.scaleCircles * 2) * this.maxNumberOfButtons + (this.scalePadding * (this.maxNumberOfButtons + 1) + (this.scStroke / 2));
+			},
+
+			
 		},
-
-		groupScales() {
-			const scaleGroups = [];
-
-			for (let i = 0; i < scaleButtons.length; i++) {
-
-				if (i % this.itemsPerGroup === 0) {
-					scaleGroups.push([]);
-				}
-
-				const groupIndex = Math.floor(i / this.itemsPerGroup);
-				scaleGroups[groupIndex].push(this.scaleButtons[i]);
-			}
-
-			return scaleGroups;
-		}
-	},
 
 };
 </script>
