@@ -11,49 +11,85 @@
 			density="compact" 
 			mandatory="force"
 			>
-			<v-btn :width="scaleBoxWidth / 3" size="small" value="common">Common</v-btn>
-			<v-btn :width="scaleBoxWidth / 3" size="small" value="modes">Modes</v-btn>
-			<v-btn :width="scaleBoxWidth / 3" size="small" value="other">Other</v-btn>
+			<v-btn style="text-transform: none" :width="scaleBoxWidth / 3" value="common">Common</v-btn>
+			<v-btn style="text-transform: none" :width="scaleBoxWidth / 3" value="modes">Modes</v-btn>
+			<v-btn style="text-transform: none" :width="scaleBoxWidth / 3" value="other">Other</v-btn>
 
 		</v-btn-toggle><br>
 		
 		<v-card-text no-gutters justify-center align-center style="padding: 0px 0px;display: flex; align-items: center; justify-content: center;">
-				<svg 
+				<div v-if="btScales !== 'other'">
+					<svg 
 					:width="groupWidth" 
 					:height="dashboardHeight" 
 					:viewBox="`0, 0, ${groupWidth}, ${dashboardHeight}`"
-					align="center"
-					
-
+					align="center"			
 				>
+						<g v-for="(scales, rowIndex) in scaleSelections.buttons.find(group => group.group === btScales).rows" :key="rowIndex">
 
-					<g v-for="(scales, rowIndex) in scaleButtons.find(group => group.group === btScales).rows" :key="rowIndex">
-						<g v-for="(scale, itemIndex) in scales" :key="itemIndex">
+							<g v-for="(scale, itemIndex) in scales" :key="itemIndex">
 
-							<circle 
-								:cx="`${itemIndex * (scaleCircles * 2) + scaleCircles + (scalePadding * (itemIndex + 1))}`" 
-								:cy="`${rowIndex * (scaleCircles * 2) + scaleCircles + (scalePadding * (rowIndex + 1))}`" 
-								:r="scaleCircles" 
-								class="scaleCircle"
-								:id="scale.sid"
-								@mousedown.prevent="startDragging($event, scale.sid)" 
-								@touchstart.prevent="startDragging($event, scale.sid)" >
-							
-							<title>{{ scale.name }}</title>
-							</circle>
-							
-							<text 
-								:x="`${itemIndex * (scaleCircles * 2) + scaleCircles + (scalePadding * (itemIndex + 1))}`" 
-								:y="`${rowIndex * (scaleCircles * 2) + scaleCircles + (scalePadding * (rowIndex + 1))}`" 
-								class="scaleText"
-								pointer-events="none"
-							>
-							{{ scale.shortname }}
-							</text>
-							
+								<circle 
+									:cx="`${itemIndex * (scaleCircles * 2) + scaleCircles + (scalePadding * (itemIndex + 1))}`" 
+									:cy="`${rowIndex * (scaleCircles * 2) + scaleCircles + (scalePadding * (rowIndex + 1))}`" 
+									:r="scaleCircles" 
+									class="scaleCircle"
+									:id="scale.sid"
+									@mousedown.prevent="startDragging($event, scale.sid)" 
+									@touchstart.prevent="startDragging($event, scale.sid)" >
+								
+								<title>{{ scale.name }}</title>
+								</circle>
+								
+								<text 
+									:x="`${itemIndex * (scaleCircles * 2) + scaleCircles + (scalePadding * (itemIndex + 1))}`" 
+									:y="`${rowIndex * (scaleCircles * 2) + scaleCircles + (scalePadding * (rowIndex + 1))}`" 
+									class="scaleText"
+									pointer-events="none"
+								>
+								{{ scale.shortname }}
+								</text>
+								
+							</g>
+
 						</g>
-					</g>
-				</svg>
+					</svg>
+				</div>
+				<div v-if="btScales == 'other'" class="mr-5" style="display: flex; align-items: center; flex-grow: 1">
+					<svg 
+						:width="scaleCircles * 2 + scalePadding * 2"
+						:height="scaleCircles * 2 + scalePadding * 2"
+						:style="{'min-width': `${scaleCircles * 2 + scalePadding * 2}px`, 'min-height': `${scaleCircles * 2 + scalePadding * 2}px`}"
+						:viewBox="`0, 0, ${scaleCircles * 2 + scalePadding * 2}, ${scaleCircles * 2 + scalePadding * 2}`">
+						<circle 
+							:cx="scaleCircles + scalePadding" 
+							:cy="scaleCircles +  scalePadding"
+							:r="scaleCircles" 
+							class="scaleCircle"
+							@mousedown.prevent="startDragging($event, 0)" 
+							@touchstart.prevent="startDragging($event, 0)" >
+								
+							<title>Other</title>
+						</circle>
+						<text 
+							:x="scaleCircles + scalePadding" 
+							:y="scaleCircles +  scalePadding"
+							class="scaleText"
+							pointer-events="none"
+							>
+								{{scaleByDropDownName(dropDownSelected).shortname}}
+						</text>
+
+					</svg>
+					<v-select
+						class="mt-5"
+						density="compact"
+						:items="dropDownOptions"
+						v-model="dropDownSelected"
+						variant="outlined"
+
+					></v-select>
+				</div>
 
 		</v-card-text>
 	</v-card>
@@ -63,13 +99,13 @@
 				<div class="d-flex align-center flex-column ">
 					<div class="text-subtitle-2">Spacing</div>
 					<v-btn-toggle
-					v-model="btSpacing"
-					variant="outlined"
-					@click="settingsChange"
-					divided
-					mandatory
-					>
-						<v-btn value="20" title="Comfortable">
+						v-model="btSpacing"
+						variant="outlined"
+						@click="settingsChange"
+						divided
+						mandatory
+						>
+						<v-btn :value="WIDE" title="Comfortable">
 							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 20" width="30" height="20">
 								<rect :style="{fill: `rgba(var(--v-theme-on-surface))`, stroke: 'none'}" 
 									x="0" y="0" width="2" height="20"/>
@@ -79,7 +115,7 @@
 
 							</svg>
 						</v-btn>
-						<v-btn value="5" title="Tight">
+						<v-btn :value="NARROW" title="Tight">
 							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 20" width="30" height="20">
 								<rect :style="{fill: `rgba(var(--v-theme-on-surface))`, stroke: 'none'}" 
 									x="6" y="0" width="2" height="20"/>
@@ -160,14 +196,19 @@
 </template>
 
 <script>
-	import scaleButtons from './scaleButtons.json'
+	import scaleSelections from './scaleSelections.json'
+	const dropDownOptions = scaleSelections.dropDown.flatMap(dropDown => dropDown.name);
+
+	const WIDE = '20';
+	const NARROW = '5';
+
 	export default {
-	name: 'TopDashboard',
-	
+	name: 'TopDashboard',	
 
 		data() {
 			return {
-
+				WIDE: '20',
+				NARROW: '5',
 				tickLabels: {
 					0: 'A B C',
 					1: '1 2 3',
@@ -176,32 +217,67 @@
 				dashboardHeight: 200,    
 				btScales: "common",
 				btLabels: "abc",
-				btSpacing: "5",
+				btSpacing: WIDE,
 				btOverlap: "discrete",
-				scaleButtons: scaleButtons,
+				scaleSelections: scaleSelections,
 				scaleCircles: 20,
 				itemsPerGroup: 7,
 				scalePadding: 15, 
-				scStroke: 3,     
+				scStroke: 3,   
+				dropDownOptions: dropDownOptions,
+				dropDownSelected: "",
 			}
 		},
+
 		methods: {
 			startDragging(event, sid) {
 				const { type, touches, clientX, clientY } = event
 				const scaleX = event.target.getBoundingClientRect().left 
 				const scaleY = event.target.getBoundingClientRect().top
-				this.$emit('scale-clicked', {sid, scaleCircles: this.scaleCircles, scaleX, scaleY, clientX, clientY, type, touches});
+				var blOther = sid === 0;
+
+				if (sid === 0) {
+					if (this.dropDownSelected === '' ) return
+					sid = this.scaleSelections.dropDown.find(dropDown => dropDown.name === this.dropDownSelected)?.sid;
+				}
+
+				if (!sid) return
+				this.$emit('scale-clicked', {sid, blOther, scaleCircles: this.scaleCircles, scaleX, scaleY, clientX, clientY, type, touches});
+
 			},
 			settingsChange() {
 				this.$emit('settings-changed', {btSpacing: this.btSpacing, btLabels: this.btLabels});
+			},
+			scaleByDropDownName(dropDownName) {
+				var scObj;
+				scObj = scaleSelections.dropDown.find(dropDown => dropDown.name === dropDownName)
+				if (scObj) {
+					return scObj;
+				} else {
+					return {
+						name: '',
+						shortname: '',
+						scaleType: '',
+						mode: -1,
+						scaleTheme: -1,
+						sid : -1}
+				}
 			}
+		},
+
+		mounted() {
+			this.settingsChange();
+		},
+
+		updated() {
+
 		},
 
 		computed: {
 			maxNumberOfButtons() {
 				let maxItemCount = 0;
 
-				scaleButtons.forEach((group) => {
+				scaleSelections.buttons.forEach((group) => {
 					group.rows.forEach((row) => {
 						if (row.length > maxItemCount) {
 						maxItemCount = row.length;
@@ -212,7 +288,7 @@
 			},
 			groupWidth() {
 				var maxButtons = 0;
-				scaleButtons.find(group => group.group === this.btScales).rows.forEach((row,i) => {
+				scaleSelections.buttons.find(group => group.group === this.btScales).rows.forEach((row,i) => {
 					if (row.length > maxButtons) maxButtons = row.length;
 				});
 				return (this.scaleCircles * 2) * maxButtons + (this.scalePadding * (maxButtons + 1) + (this.scStroke / 2));

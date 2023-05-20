@@ -1,13 +1,13 @@
-import scaleTypes from './components/scaleTypes.json'
+import scaleShapes from './components/scaleShapes.json'
 import scaleThemes from './components/scaleThemes.json'
 
 export const Chroma = ['A','Bb','B','C','Db','D','Eb','E','F','Gb','G','Ab'];
 
 export  class ScNote {
-	constructor(ntChromaNum, ntScaleNum, ntRootModeNum, ntStyle) {
+	constructor(ntChromaNum, ntScaleNum, ntMajorRelNum, ntStyle) {
 		this.ntChromaNum = ntChromaNum;
 		this.ntScaleNum = ntScaleNum;
-		this.ntRootModeNum = ntRootModeNum;
+		this.ntMajorRelNum = ntMajorRelNum;
 		this.ntStyle = ntStyle;
 		this.ntName = Chroma[ntChromaNum];
 
@@ -55,10 +55,11 @@ export class ScaleInstance {
 	}
 
 	setNotes() {
-		const scaleObj = scaleTypes.find(obj => obj.name === this.scaleType);
+		const scaleObj = scaleShapes.find(obj => obj.name === this.scaleType);
+		const majorObj = scaleShapes.find(obj => obj.name === 'Major');
 
 		if (typeof scaleObj === 'undefined') {
-			console.log('scaleObj is undefined' + this.scaleType);
+			console.log('scaleObj is undefined "' + this.scaleType + '"');
 		} else {
 			var stepIndex = this.mode;
 			var noteIndex = 0;
@@ -66,20 +67,20 @@ export class ScaleInstance {
 			var newNoteNum = this.tonic;
 			var prevRef = this.tonic;
 			var newRef =this.tonic;
-			var rootModeString = '';
-			var rootModeNum = '';
+			var majorRelChar = '';
+			var majorRelNoteNum = '';
 
 			do {
-				// scNote(ntChromaNum, ntScaleNum, ntRootModeNum, ntStyle)
+				// scNote(ntChromaNum, ntScaleNum, ntmajorRelNoteNum, ntStyle)
 				if (noteIndex === 0) {
 					this.notes.push(new ScNote(this.tonic, 1, 1, scaleThemes[this.scTheme][0]));
 				} else {
 					newNoteNum = (prevNoteNum + scaleObj.absSteps[stepIndex]);
-					newRef = (prevRef + scaleObj.absSteps[noteIndex]);
-					rootModeString = this.getRootModeString(newRef, newNoteNum);
-					rootModeNum = rootModeString + (noteIndex + 1);
+					newRef = (prevRef + majorObj.absSteps[noteIndex]);
+					majorRelChar = this.getmajorRelChar(newRef, newNoteNum);
+					majorRelNoteNum = majorRelChar + (noteIndex + 1);
 
-					this.notes.push(new ScNote(newNoteNum % 12, noteIndex + 1, rootModeNum, scaleThemes[this.scTheme][noteIndex]));
+					this.notes.push(new ScNote(newNoteNum % 12, noteIndex + 1, majorRelNoteNum, scaleThemes[this.scTheme][noteIndex]));
 
 					prevNoteNum = newNoteNum;
 					prevRef = newRef;
@@ -87,13 +88,18 @@ export class ScaleInstance {
 				noteIndex++;
 				stepIndex++;
 				if (stepIndex > scaleObj.absSteps.length - 1) {stepIndex = 0}
-
 			} while (noteIndex <= scaleObj.absSteps.length - 1);
 
+			// stupid blues scale exception
+			// (ntChromaNum, ntScaleNum, nMajorRelNum, ntStyle)
+
+			if (this.scName === 'Blues') {
+				this.notes.push(new ScNote((this.tonic + 6) % 12, '', '♭5', 3));
+			}
 		}
 	}
 
-	getRootModeString(RootNum, ModeNum) {
+	getmajorRelChar(RootNum, ModeNum) {
 		var noteDiff = Math.abs(RootNum - ModeNum)
 		if (RootNum > ModeNum) {
 			return "♭".repeat(noteDiff);

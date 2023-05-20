@@ -1,0 +1,422 @@
+{
+  "dropDown": [
+    {
+      "name": "Melodic Minor, Root Mode",
+      "shortname": "mm1",
+      "scaleType": "Melodic Minor",
+      "mode": 0,
+      "scaleTheme": 0,
+      "sid" : 23
+    },
+    {
+      "name": "Melodic Minor, 2nd Mode (Dorian ♭2)",
+      "shortname": "mm2",
+      "scaleType": "Melodic Minor",
+      "mode": 1,
+      "scaleTheme": 0,
+      "sid" : 24
+    },
+    {
+      "name": "Melodic Minor, 3rd Mode (Lydian Augmented)",
+      "shortname": "mm3",
+      "scaleType": "Melodic Minor",
+      "mode": 2,
+      "scaleTheme": 0,
+      "sid" : 25
+    },
+    {
+      "name": "Melodic Minor, 4th Mode (Lydian Dominant)",
+      "shortname": "mm4",
+      "scaleType": "Melodic Minor",
+      "mode": 3,
+      "scaleTheme": 0,
+      "sid" : 26
+    },
+    {
+      "name": "Melodic Minor, 5th Mode (Aeolian Dominant)",
+      "shortname": "mm5",
+      "scaleType": "Melodic Minor",
+      "mode": 4,
+      "scaleTheme": 0,
+      "sid" : 27
+    },
+    {
+      "name": "Melodic Minor, 6th Mode (Half Diminished)",
+      "shortname": "mm6",
+      "scaleType": "Melodic Minor",
+      "mode": 5,
+      "scaleTheme": 0,
+      "sid" : 28
+    },
+    {
+      "name": "Melodic Minor, 7th Mode (Altered)",
+      "shortname": "alt",
+      "scaleType": "Melodic Minor",
+      "mode": 6,
+      "scaleTheme": 0,
+      "sid" : 29
+    },
+    {
+      "name": "Harmonic Minor, Root Mode",
+      "shortname": "hm1",
+      "scaleType": "Harmonic Minor",
+      "mode": 0,
+      "scaleTheme": 0,
+      "sid" : 30
+    },
+    {
+      "name": "Harmonic Minor, 2nd Mode (Locrian ♮6)",
+      "shortname": "hm2",
+      "scaleType": "Harmonic Minor",
+      "mode": 1,
+      "scaleTheme": 0,
+      "sid" : 31
+    },
+    {
+      "name": "Harmonic Minor, 3rd Mode (Major ♯5)",
+      "shortname": "hm3",
+      "scaleType": "Harmonic Minor",
+      "mode": 2,
+      "scaleTheme": 0,
+      "sid" : 32
+    },
+    {
+      "name": "Harmonic Minor, 4th Mode (Dorian ♯4)",
+      "shortname": "hm4",
+      "scaleType": "Harmonic Minor",
+      "mode": 3,
+      "scaleTheme": 0,
+      "sid" : 33
+    },
+    {
+      "name": "Harmonic Minor, 5th Mode (Phrygian Dominant)",
+      "shortname": "hm5",
+      "scaleType": "Harmonic Minor",
+      "mode": 4,
+      "scaleTheme": 0,
+      "sid" : 34
+    },
+    {
+      "name": "Harmonic Minor, 6th Mode (Lydian ♯2)",
+      "shortname": "hm6",
+      "scaleType": "Harmonic Minor",
+      "mode": 5,
+      "scaleTheme": 0,
+      "sid" : 35
+    },
+    {
+      "name": "Harmonic Minor, 7th Mode (Altered Dominant ♭♭7 )",
+      "shortname": "atd",
+      "scaleType": "Harmonic Minor",
+      "mode": 6,
+      "scaleTheme": 0,
+      "sid" : 36
+    },
+    {
+      "name": "Harmonic Major, Root Mode",
+      "shortname": "hM1",
+      "scaleType": "Harmonic Major",
+      "mode": 0,
+      "scaleTheme": 0,
+      "sid" : 37
+    },
+    {
+      "name": "Harmonic Major, 2nd Mode (Dorian ♭5)",
+      "shortname": "hM2",
+      "scaleType": "Harmonic Major",
+      "mode": 1,
+      "scaleTheme": 0,
+      "sid" : 38
+    },
+    {
+      "name": "Harmonic Major, 3rd Mode (Phrygian ♭4)",
+      "shortname": "hM3",
+      "scaleType": "Harmonic Major",
+      "mode": 2,
+      "scaleTheme": 0,
+      "sid" : 39
+    },
+    {
+      "name": "Harmonic Major, 4th Mode (Lydian ♭3)",
+      "shortname": "hM4",
+      "scaleType": "Harmonic Major",
+      "mode": 3,
+      "scaleTheme": 0,
+      "sid" : 40
+    },
+    {
+      "name": "Harmonic Major, 5th Mode (Mixolydian ♭2)",
+      "shortname": "hM5",
+      "scaleType": "Harmonic Major",
+      "mode": 4,
+      "scaleTheme": 0,
+      "sid" : 41
+    },
+    {
+      "name": "Harmonic Major, 6th Mode (Lydian Augmented ♯2)",
+      "shortname": "hM6",
+      "scaleType": "Harmonic Major",
+      "mode": 5,
+      "scaleTheme": 0,
+      "sid" : 42
+    },
+    {
+      "name": "Harmonic Major, 7th Mode (Locrian ♭♭7 )",
+      "shortname": "hM7",
+      "scaleType": "Harmonic Major",
+      "mode": 6,
+      "scaleTheme": 0,
+      "sid" : 43
+    },
+    {
+      "name": "Diminished",
+      "shortname": "dim",
+      "scaleType": "Diminished",
+      "mode": 0,
+      "scaleTheme": 0,
+      "sid" : 44
+    },
+    {
+      "name": "Inverted Diminished",
+      "shortname": "invD",
+      "scaleType": "Diminished",
+      "mode": 1,
+      "scaleTheme": 0,
+      "sid" : 45
+    },
+    {
+      "name": "Whole Tone",
+      "shortname": "H",
+      "scaleType": "Whole Tone",
+      "mode": 0,
+      "scaleTheme": 0,
+      "sid" : 46
+    },
+    {
+      "name": "Augmented",
+      "shortname": "aug",
+      "scaleType": "Augmented",
+      "mode": 0,
+      "scaleTheme": 0,
+      "sid" : 47
+    },
+    {
+      "name": "Inverted Augmented",
+      "shortname": "augD",
+      "scaleType": "Augmented",
+      "mode": 1,
+      "scaleTheme": 0,
+      "sid" : 48
+    }
+    
+  ],
+
+  "buttons": [
+    {
+      "group": "common",
+      "rows": [
+        [
+          {
+            "name": "Major",
+            "shortname": "M",
+            "scaleType": "Major",
+            "mode": 0,
+            "scaleTheme": 0,
+            "sid" : 1
+          },
+          {
+            "name": "Minor",
+            "shortname": "m",
+            "scaleType": "Major",
+            "mode": 5,
+            "scaleTheme": 0,
+            "sid" : 2
+          },
+          {
+            "name": "Major Pentatonic",
+            "shortname": "M p",
+            "scaleType": "Major",
+            "mode": 0,
+            "scaleTheme": 10,
+            "sid" : 3
+          },
+          {
+            "name": "Minor Pentatonic",
+            "shortname": "m p",
+            "scaleType": "Major",
+            "mode": 5,
+            "scaleTheme": 11,
+            "sid" : 4
+          },
+          {
+            "name": "Blues",
+            "shortname": "blu",
+            "scaleType": "Major",
+            "mode": 5,
+            "scaleTheme": 11,
+            "sid" : 49
+          }
+        ],
+        [
+          {
+            "name": "Major (highlight on 3 & 5)",
+            "shortname": "M+",
+            "scaleType": "Major",
+            "mode": 0,
+            "scaleTheme": 1,
+            "sid" : 5
+          },
+          {
+            "name": "Minor (highlight on 3 & 5)",
+            "shortname": "m+",
+            "scaleType": "Major",
+            "mode": 5,
+            "scaleTheme": 1,
+            "sid" : 6
+          },
+          {
+            "name": "Major (highlight on Pentatonic notes)",
+            "shortname": "M+p",
+            "scaleType": "Major",
+            "mode": 0,
+            "scaleTheme": 2,
+            "sid" : 7
+          },
+          {
+            "name": "Minor (highlight on Pentatonic notes)",
+            "shortname": "m+p",
+            "scaleType": "Major",
+            "mode": 5,
+            "scaleTheme": 3,
+            "sid" : 8
+          }
+        ]
+      ]
+    },
+    {
+      "group": "modes",
+      "rows": [
+        [
+          {
+            "name": "Ionian (Major)",
+            "shortname": "Io",
+            "scaleType": "Major",
+            "mode": 0,
+            "scaleTheme": 0,
+            "sid" : 9
+          },
+          {
+            "name": "Dorian",
+            "shortname": "Do",
+            "scaleType": "Major",
+            "mode": 1,
+            "scaleTheme": 0,
+            "sid" : 10
+          },
+          {
+            "name": "Phrygian",
+            "shortname": "Ph",
+            "scaleType": "Major",
+            "mode": 2,
+            "scaleTheme": 0,
+            "sid" : 11
+          },
+          {
+            "name": "Lydian",
+            "shortname": "Ly",
+            "scaleType": "Major",
+            "mode": 3,
+            "scaleTheme": 0,
+            "sid" : 12
+          },
+          {
+            "name": "Mixolydian",
+            "shortname": "Mi",
+            "scaleType": "Major",
+            "mode": 4,
+            "scaleTheme": 0,
+            "sid" : 13
+          },
+          {
+            "name": "Aeolian (Natural Minor)",
+            "shortname": "Ae",
+            "scaleType": "Major",
+            "mode": 5,
+            "scaleTheme": 0,
+            "sid" : 14
+          },
+          {
+            "name": "Locrian",
+            "shortname": "Lo",
+            "scaleType": "Major",
+            "mode": 6,
+            "scaleTheme": 0,
+            "sid" : 15
+          }
+        ],
+        [
+          {
+            "name": "Ionian (No colour notes, but highlights on 3 & 5)",
+            "shortname": "Io+",
+            "scaleType": "Major",
+            "mode": 0,
+            "scaleTheme": 1,
+            "sid" : 16
+          },
+          {
+            "name": "Dorian (colour notes: ♭3, ♭7)",
+            "shortname": "Do+",
+            "scaleType": "Major",
+            "mode": 1,
+            "scaleTheme": 4,
+            "sid" : 17
+          },
+          {
+            "name": "Phrygian (colour notes: ♭2, ♭3, ♭6, ♭7)",
+            "shortname": "Ph+",
+            "scaleType": "Major",
+            "mode": 2,
+            "scaleTheme": 5,
+            "sid" : 18
+          },
+          {
+            "name": "Lydian (colour notes: ♯4)",
+            "shortname": "Ly+",
+            "scaleType": "Major",
+            "mode": 3,
+            "scaleTheme": 6,
+            "sid" : 19
+          },
+          {
+            "name": "Mixolydian (colour notes: ♭7)",
+            "shortname": "Mi+",
+            "scaleType": "Major",
+            "mode": 4,
+            "scaleTheme": 7,
+            "sid" : 20
+          },
+          {
+            "name": "Aeolian (colour notes: ♭3, ♭6, ♭7)",
+            "shortname": "Ae+",
+            "scaleType": "Major",
+            "mode": 5,
+            "scaleTheme": 8,
+            "sid" : 21
+          },
+          {
+            "name": "Locrian (colour notes: ♭2, ♭3, ♭5, ♭6, ♭7)",
+            "shortname": "Lo+",
+            "scaleType": "Major",
+            "mode": 6,
+            "scaleTheme": 9,
+            "sid" : 22
+          }
+        ]
+      ]
+    },
+    {
+      "group": "other",
+      "rows": [[]]
+    }
+  ]
+}

@@ -66,7 +66,7 @@
 					</template>
 
 					<template v-else-if="this.btLabels === 'b3'">
-						{{pos.note.ntRootModeNum}}
+						{{pos.note.ntMajorRelNum}}
 					</template>
 
 					<template v-else>
@@ -83,7 +83,7 @@
 		</svg>		
 		
 	</v-container>
-	<!-- Draw all the scales that are currently dropped -->
+	<!-- Draw a list of scales that are currently dropped -->
 	<v-container fluid style="padding: 15px;">
 		<svg :width="this.width" :height="this.scales.length * (this.noteDiameter + this.noteGapBetween)">
 			<g v-for="(scale, index) in this.scales" :key="index">
@@ -104,8 +104,8 @@
 				</text>
 
 				<svg xmlns="http://www.w3.org/2000/svg" 
-					:x="3" 
-					:y="(index * (this.noteDiameter + this.noteGapBetween))"
+					:x="4" 
+					:y="(index * (this.noteDiameter + this.noteGapBetween)) + 1"
 					:height="noteR * 2"
 					:width="noteR * 2"
 					style="pointer-events: none;"
@@ -141,10 +141,10 @@
 	// 8: Aeolian 3 6 7	
 	// 9: Locrian 2 3 5 6 7
 
-	import scaleButtons from './scaleButtons.json';
+	import scaleSelections from './scaleSelections.json';
 	import {watch} from 'vue';
 
-	const scaleSelections = scaleButtons.flatMap(group => group.rows).flat();
+	const scaleButtons = scaleSelections.buttons.flatMap(group => group.rows).flat();
 
 	const Tuning = ['E','B','G','D','A','E'];
 
@@ -155,6 +155,7 @@
 			ndScaleID: Number,
 			ndX: Number,
 			ndY: Number,
+			ndOther: Boolean,
 			isDragging: Boolean,
 			isMobile: Boolean,
 			scColor: String,
@@ -234,6 +235,7 @@
 			}
 		},
 		mounted() {
+			
 			window.addEventListener('resize', this.handleResize);
 			window.addEventListener('touchend', this.handleNoteDrop);
 
@@ -281,38 +283,47 @@
 				this.dropY = this.ndY - this.neckY;
 				const dropFret = this.hoverFret;
 				const dropNote = this.hoverNote;
+				var sel;
 
 				if (dropNote === undefined || !this.isDragging) { return }
 				if (this.scales.length >= 5) return;
 
-				const sel = scaleSelections.find(selections => selections.sid === this.ndScaleID);
+				if (this.ndOther) {
+					sel = scaleSelections.dropDown.find(dropDown => dropDown.sid === this.ndScaleID);
+				} else {
+					sel = scaleButtons.find(selections => selections.sid === this.ndScaleID);
+				}				
 
-				this.scales.push(new ScaleClasses.ScaleInstance(
-					sel.scaleType,
-					dropNote,
-					sel.mode,
-					this.scColor,
-					sel.scaleTheme,
-					sel.name,
-					));
+				if (!sel) {
+					console.log('Scale not found ' + this.ndScaleID)
 
-				this.buildFretboard();
-				this.handleResize();	
-				
-				const noteX = (this.noteStart + this.notePos(this.scales.length));
-				const newFretX = (dropFret * this.fretGap) ;
-				const totalX = (noteX + newFretX);
-				
-				// Holy crap I know that's just simple maths but that did my head in...
-				// Plus you can't set the scroll position directly because the element this event
-				// is called from needs to redraw (or some shit?) so i set the variable, and rely
-				// on 'updated' event to fire to set the new scroll pos
-				this.scrollPos = (totalX - this.dropX - 15)
-				if (this.scrollPos < 0) {this.scrollPos = 0}
+				} else {
+					this.scales.push(new ScaleClasses.ScaleInstance(
+						sel.scaleType,
+						dropNote,
+						sel.mode,
+						this.scColor,
+						sel.scaleTheme,
+						sel.name,
+						));
+
+					this.buildFretboard();
+					this.handleResize();	
+					
+					const noteX = (this.noteStart + this.notePos(this.scales.length));
+					const newFretX = (dropFret * this.fretGap) ;
+					const totalX = (noteX + newFretX);
+					
+					// Holy crap I know that's just simple maths but that did my head in...
+					// Plus you can't set the scroll position directly because the element this event
+					// is called from needs to redraw (or some shit?) so i set the variable, and rely
+					// on 'updated' event to fire to set the new scroll pos
+					this.scrollPos = (totalX - this.dropX - 15)
+					if (this.scrollPos < 0) {this.scrollPos = 0}
+				}
 			},
 			buildFretboard() {
 				this.fretboard.length = 0;
-
 				for (let freti = 0; freti < this.frets; freti++) {
 					for (let stringi = 0; stringi < this.strings; stringi++) {
 						let checkNoteNum = this.noteAdd(this.noteNum(Tuning[stringi]), freti)
