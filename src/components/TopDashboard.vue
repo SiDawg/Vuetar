@@ -90,7 +90,7 @@
 
 					></v-select>
 				</div>
-
+				<text :style="{ position: 'absolute', bottom: '3px' , left: '7px' , color: `rgba(var(--v-theme-on-surface),0.5)`}" v-if="!blHasDragged" >(Click-drag to fretboard)</text>
 		</v-card-text>
 	</v-card>
 	<v-card  elevation="2" :height="dashboardHeight" class="rounded-lg mx-1" >
@@ -226,6 +226,7 @@
 				scStroke: 3,   
 				dropDownOptions: dropDownOptions,
 				dropDownSelected: "",
+				blHasDragged: false,
 			}
 		},
 
@@ -243,6 +244,7 @@
 
 				if (!sid) return
 				this.$emit('scale-clicked', {sid, blOther, scaleCircles: this.scaleCircles, scaleX, scaleY, clientX, clientY, type, touches});
+				this.blHasDragged = true
 
 			},
 			settingsChange() {

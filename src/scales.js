@@ -63,6 +63,7 @@ export class ScaleInstance {
 		} else {
 			var stepIndex = this.mode;
 			var noteIndex = 0;
+			var absScaleNum = 1;
 			var prevNoteNum = this.tonic;
 			var newNoteNum = this.tonic;
 			var prevRef = this.tonic;
@@ -78,9 +79,17 @@ export class ScaleInstance {
 					newNoteNum = (prevNoteNum + scaleObj.absSteps[stepIndex]);
 					newRef = (prevRef + majorObj.absSteps[noteIndex]);
 					majorRelChar = this.getmajorRelChar(newRef, newNoteNum);
-					majorRelNoteNum = majorRelChar + (noteIndex + 1);
+					majorRelNoteNum = majorRelChar + (noteIndex + 1);					
 
-					this.notes.push(new ScNote(newNoteNum % 12, noteIndex + 1, majorRelNoteNum, scaleThemes[this.scTheme][noteIndex]));
+					if (scaleThemes[this.scTheme][noteIndex] !== 0) {
+						absScaleNum++;
+					}
+
+					if (this.scName === 'Blues' && absScaleNum === 4) {
+						absScaleNum++;
+					}
+
+					this.notes.push(new ScNote(newNoteNum % 12, absScaleNum, majorRelNoteNum, scaleThemes[this.scTheme][noteIndex]));
 
 					prevNoteNum = newNoteNum;
 					prevRef = newRef;
@@ -94,7 +103,7 @@ export class ScaleInstance {
 			// (ntChromaNum, ntScaleNum, nMajorRelNum, ntStyle)
 
 			if (this.scName === 'Blues') {
-				this.notes.push(new ScNote((this.tonic + 6) % 12, '', '♭5', 3));
+				this.notes.push(new ScNote((this.tonic + 6) % 12, '4', '♭5', 3));
 			}
 		}
 	}
