@@ -1,20 +1,20 @@
 <template>
-
+	<!-- <div class="model-container"><InstrumentSetup v-model:numbers="tuning" @update:numbers="handleUpdatedNumbers" /></div> -->
 	<v-container ref="dropArea" @mouseup="handleNoteDrop"  @touchend="handleNoteDrop" @scroll="handleScroll" fluid style="overflow-x: auto; ">
-		<svg :width="this.width" :height="(stringGap * strings) + 40" >
-			<rect :width="this.width" :height="stringGap * strings" x="0" y="40" :style="{fill: `rgba(var(--v-theme-surface))`}"/>
+		<svg :width="this.width" :height="(stringGap * strings) + TOPFRETBOARDGAP">
+			<rect :width="this.width - fretGap" :height="stringGap * strings" :x="LEFTFRETBOARDGAP + fretGap" :y="TOPFRETBOARDGAP" :style="{fill: `rgba(var(--v-theme-surface))`}"/>			
 			
-			<!-- Draw Strings and frets -->
+			<!-- Draw Frets -->
 			<g v-for="(i,index) in frets" :key="index">
 				<line 
-					:x1="(i * fretGap)" 
+					:x1="(i * fretGap) + LEFTFRETBOARDGAP" 
 					y1="40"
-					:x2="(i * fretGap)" 
-					:y2="stringGap * strings + 40" 
+					:x2="(i * fretGap) + LEFTFRETBOARDGAP" 
+					:y2="stringGap * strings + TOPFRETBOARDGAP" 
 					:style="{stroke: (index === 0 || index == 12) ? `rgba(var(--v-theme-on-surface), 1)` : `rgba(var(--v-border-color), var(--v-border-opacity))`, strokeWidth: '5'}" />
 				<text
 					v-if="[3, 5, 7, 9, 12, 15, 17, 19].includes(index)"
-					:x="(i * fretGap) - 2.5 - (fretGap / 2)"
+					:x="(i * fretGap) - 2.5 - (fretGap / 2) + LEFTFRETBOARDGAP"
 					y="30"
 					text-anchor="middle"
 					fill="white" >
@@ -22,27 +22,38 @@
 				</text>
 
 			</g>
-
+			<!-- Draw Strings -->
 			<g v-for="(i,index) in strings" :key="index">
 				<line 
 					x1="0" 
-					:y1="index * stringGap + stringGap / 2  + 40" 
-					:x2="neckLength" 
-					:y2="index * stringGap + stringGap / 2  + 40" 
+					:y1="index * stringGap + stringGap / 2  + TOPFRETBOARDGAP" 
+					:x2="neckLength + LEFTFRETBOARDGAP" 
+					:y2="index * stringGap + stringGap / 2  + TOPFRETBOARDGAP" 
 					:style="{stroke: `rgba(var(--v-border-color), var(--v-border-opacity))`}" />
 
 			</g>		
 		
+			<!-- Draw Tuning -->
+			<g v-for="(string,i) in this.tuning" :key="i">
+				<text
+					x="15"
+					:y="i * stringGap + stringGap / 2  + TOPFRETBOARDGAP + 4"
+					text-anchor="middle"
+					fill="white" >
+					{{ string }}
+				</text>
+			</g>
+
 			<!-- Draw all notes from all scales (using pre computed object 'fretboard', which reads the 'scales' object) -->
 			<g v-for="pos in this.fretboard" :key="pos">
 				<circle v-if="pos.note.ntShow"
-					:cx="pos.fret * this.fretGap
+					:cx="pos.fret * this.fretGap + LEFTFRETBOARDGAP
 						+ (this.fretGap / 2)
 						+ this.noteR
 						+ (pos.scIndex * (this.noteDiameter + this.noteGapBetween))
 						- (((scales.length * this.noteDiameter) + (this.noteGapBetween * (scales.length - 1))) / 2)"
 
-					:cy="pos.string * this.stringGap + 55" :r="this.noteR" 
+					:cy="(pos.string * this.stringGap) + (stringGap / 2) + TOPFRETBOARDGAP" :r="this.noteR" 
 					:fill="pos.fillc" 
 					:fill-opacity="pos.note.ntOpacity"
 					:stroke="pos.note.ntStroke ? pos.fillc : 'none'"
@@ -52,7 +63,7 @@
 
 				<text v-if="pos.note.ntShow"
 					class="scaleText" 
-					:x="pos.fret * this.fretGap
+					:x="pos.fret * this.fretGap + LEFTFRETBOARDGAP
 						+ (this.fretGap / 2)
 						+ this.noteR
 						+ (pos.scIndex * (this.noteDiameter + this.noteGapBetween))
@@ -78,7 +89,9 @@
 			</g>
 
 			<g  v-if="isDragging" >		
-				<text :x="hoverX" :y="ndY - neckY - (isMobile ? 60 : 40)" class="scaleText">{{noteName(hoverNote)}}</text>
+				<!-- <text :x="hoverX" :y="ndY - neckY - (isMobile ? 60 : 40)" class="scaleText">{{Math.floor(hoverX)}}</text> -->
+				<text :x="hoverX + LEFTFRETBOARDGAP" :y="ndY - neckY - (isMobile ? 60 : 40)" class="scaleText">{{noteName(hoverNote)}}</text>
+				<!-- <text :x="hoverX" :y="ndY - neckY - (isMobile ? 60 : 40)" class="scaleText">{{noteName(hoverNote)}}</text> -->
 			</g>
 		</svg>		
 		
@@ -128,28 +141,19 @@
 </template>
 
 <script>
-	import * as ScaleClasses from '../scales.js'
-
-	// 0: Tonic only
-	// 1: 3 and 5
-	// 2: Major pent	
-	// 3: Minor pent	
-	// 4: Dorian 3 7 	
-	// 5: Phrygian 2 3 6 7 	
-	// 6: Lydian 4	
-	// 7: Mixolydian 7
-	// 8: Aeolian 3 6 7	
-	// 9: Locrian 2 3 5 6 7
-
+	import * as Scales from '../scales.js'
 	import scaleSelections from './scaleSelections.json';
 	import {watch} from 'vue';
+	// import InstrumentSetup from './InstrumentSetup.vue';
 
 	const scaleButtons = scaleSelections.buttons.flatMap(group => group.rows).flat();
-
-	const Tuning = ['E','B','G','D','A','E'];
+	const TOPFRETBOARDGAP = 40;
+	const LEFTFRETBOARDGAP = 20;
 
 	export default {
-
+		// components: {
+		// 	InstrumentSetup,
+		// },
 		name: "FretBoard",
 		props: {
 			ndScaleID: Number,
@@ -169,22 +173,26 @@
 
 		data() {
 			return {
-			width: 300,
-			height: 150,
-			frets: 20,
-			strings: 6,
-			fretGap: 20, 
-			stringGap: 30,
-			noteR: 14,
-			noteGapBetween: 2,
-			neckLength: 1200,
-			dropX: 0,
-			dropY: 0,
-			neckX: 0,
-			neckY: 0,
-			scales: [],
-			fretboard: [],
-			scrollPos: 0,
+				TOPFRETBOARDGAP,
+				LEFTFRETBOARDGAP,
+
+				tuning: ['E','B','G','D','A','E'],
+				width: 300,
+				height: 150,
+				frets: 20,
+				strings: 6,
+				fretGap: 20, 
+				stringGap: 30,
+				noteR: 14,
+				noteGapBetween: 2,
+				neckLength: 1200,
+				dropX: 0,
+				dropY: 0,
+				neckX: 0,
+				neckY: 0,
+				scales: [],
+				fretboard: [],
+				scrollPos: 0,
 			};
 		},
 
@@ -213,13 +221,13 @@
 				
 				// console.log(dropArea.$el.scrollLeft);
 				// console.log(this.scrollPos);
-				return (this.ndX - this.neckX - 15 + this.scrollPos);
+				return (this.ndX - this.neckX - 15 - LEFTFRETBOARDGAP + this.scrollPos);
 
 			},
 
 			hoverFret() {
 				// console.log('hoverFret:' + this.hoverFret);
-				return Math.floor(this.hoverX / this.fretGap);				
+				return Math.floor(this.hoverX / this.fretGap );				
 
 			},
 			hoverString() {
@@ -230,7 +238,7 @@
 				if (this.hoverFret < 0 || this.hoverFret > this.frets - 1 || this.hoverString < 0 || this.hoverString > this.strings - 1) {
 					return undefined
 				} else {
-					return this.noteAdd(this.noteNum(Tuning[this.hoverString]), this.hoverFret);
+					return Scales.noteAdd(Scales.noteNum(this.tuning[this.hoverString]), this.hoverFret);
 				}							
 			}
 		},
@@ -261,6 +269,14 @@
 				return ((index * (this.noteDiameter + this.noteGapBetween)))
 			},
 
+			noteName(number) {
+				return Scales.noteName(number);
+			},
+
+			noteNum(name) {
+				return Scales.noteNum(name);
+			},
+
 			handleScroll() {							
 				const dropArea = this.$refs.dropArea;
 				this.scrollPos = dropArea.$el.scrollLeft;
@@ -274,8 +290,8 @@
 				} else { 
 					this.width = document.documentElement.clientWidth - 40
 				}
-				this.neckLength = this.width;
-				this.fretGap = this.width / this.frets;
+				this.neckLength = (this.width - LEFTFRETBOARDGAP);
+				this.fretGap = (this.neckLength / this.frets);
 				// console.log('handleResize')
 			},
 			handleNoteDrop() {
@@ -298,7 +314,7 @@
 					console.log('Scale not found ' + this.ndScaleID)
 
 				} else {
-					this.scales.push(new ScaleClasses.ScaleInstance(
+					this.scales.push(new Scales.ScaleInstance(
 						sel.scaleType,
 						dropNote,
 						sel.mode,
@@ -310,7 +326,7 @@
 					this.buildFretboard();
 					this.handleResize();	
 					
-					const noteX = (this.noteStart + this.notePos(this.scales.length));
+					const noteX = (this.noteStart + this.notePos(this.scales.length) + LEFTFRETBOARDGAP);
 					const newFretX = (dropFret * this.fretGap) ;
 					const totalX = (noteX + newFretX);
 					
@@ -326,7 +342,7 @@
 				this.fretboard.length = 0;
 				for (let freti = 0; freti < this.frets; freti++) {
 					for (let stringi = 0; stringi < this.strings; stringi++) {
-						let checkNoteNum = this.noteAdd(this.noteNum(Tuning[stringi]), freti)
+						let checkNoteNum = Scales.noteAdd(Scales.noteNum(this.tuning[stringi]), freti)
 						let noteCount = this.scales.filter(scale => scale.notes.some(note => note.ntChromaNum === checkNoteNum)).length;
 						let ntIndex = 0;
 						this.scales.forEach((scObj, i) => {
@@ -364,18 +380,8 @@
 				this.setScrollPos(newScroll);
 
 			},
-
-			noteName(noteNum) {
-				return ScaleClasses.Chroma[noteNum];
-			},
-			noteNum(noteName) {
-				return ScaleClasses.Chroma.indexOf(noteName);
-			},
-			noteAdd(noteOne, noteTwo) {
-				return (noteOne + noteTwo) % 12;
-			},
-			testtouch(event) {
-				console.log(event);
+			handleUpdatedNumbers() {
+				console.log(this.tuning);
 			}
 		}
 	}

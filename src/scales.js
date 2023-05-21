@@ -3,7 +3,7 @@ import scaleThemes from './components/scaleThemes.json'
 
 export const Chroma = ['A','Bb','B','C','Db','D','Eb','E','F','Gb','G','Ab'];
 
-export  class ScNote {
+export class ScNote {
 	constructor(ntChromaNum, ntScaleNum, ntMajorRelNum, ntStyle) {
 		this.ntChromaNum = ntChromaNum;
 		this.ntScaleNum = ntScaleNum;
@@ -124,4 +124,15 @@ export class ScaleInstance {
 	getNote(noteNum) {
 		return this.notes.find(note => note.ntChromaNum === noteNum);
 	}
+}
+
+export function noteName(noteNum) {
+				return Chroma[noteNum];
+}
+
+export function noteNum(noteName) {
+				return Chroma.indexOf(noteName);
+}
+export function noteAdd(noteOne, noteTwo) {
+				return (noteOne + noteTwo) % 12;
 }

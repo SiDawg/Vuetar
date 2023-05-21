@@ -1,21 +1,19 @@
 <template>
-
-
 	<v-container class="bg-background d-flex justify-center flex-shrink-0">
-	<v-card :width="scaleBoxWidth" :min-width="scaleBoxWidth" :height="dashboardHeight" elevation="2"  class="rounded-lg mx-1">
-		<v-btn-toggle
-			v-model="btScales"
-			class="rounded-t-lg rounded-b-0"
-			divided
-			elevation="2"  
-			density="compact" 
-			mandatory="force"
-			>
-			<v-btn style="text-transform: none" :width="scaleBoxWidth / 3" value="common">Common</v-btn>
-			<v-btn style="text-transform: none" :width="scaleBoxWidth / 3" value="modes">Modes</v-btn>
-			<v-btn style="text-transform: none" :width="scaleBoxWidth / 3" value="other">Other</v-btn>
+		<v-card :width="scaleBoxWidth" :min-width="scaleBoxWidth" :height="dashboardHeight" elevation="2"  class="rounded-lg mx-1">
+			<v-btn-toggle
+				v-model="btScales"
+				class="rounded-t-lg rounded-b-0"
+				divided
+				elevation="2"  
+				density="compact" 
+				mandatory="force"
+				>
+				<v-btn style="text-transform: none" :width="scaleBoxWidth / 3" value="common">Common</v-btn>
+				<v-btn style="text-transform: none" :width="scaleBoxWidth / 3" value="modes">Modes</v-btn>
+				<v-btn style="text-transform: none" :width="scaleBoxWidth / 3" value="other">Other</v-btn>
 
-		</v-btn-toggle><br>
+			</v-btn-toggle><br>
 		
 		<v-card-text no-gutters justify-center align-center style="padding: 0px 0px;display: flex; align-items: center; justify-content: center;">
 				<div v-if="btScales !== 'other'">
@@ -24,7 +22,7 @@
 					:height="dashboardHeight" 
 					:viewBox="`0, 0, ${groupWidth}, ${dashboardHeight}`"
 					align="center"			
-				>
+					>
 						<g v-for="(scales, rowIndex) in scaleSelections.buttons.find(group => group.group === btScales).rows" :key="rowIndex">
 
 							<g v-for="(scale, itemIndex) in scales" :key="itemIndex">
@@ -207,13 +205,8 @@
 
 		data() {
 			return {
-				WIDE: '20',
-				NARROW: '5',
-				tickLabels: {
-					0: 'A B C',
-					1: '1 2 3',
-					2: '1 2 b3'
-				},
+				WIDE,
+				NARROW,
 				dashboardHeight: 200,    
 				btScales: "common",
 				btLabels: "abc",
