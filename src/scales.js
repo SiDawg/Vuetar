@@ -127,12 +127,19 @@ export class ScaleInstance {
 }
 
 export function noteName(noteNum) {
-				return Chroma[noteNum];
+		return Chroma[noteNum];
 }
 
 export function noteNum(noteName) {
-				return Chroma.indexOf(noteName);
+		return Chroma.indexOf(noteName);
 }
-export function noteAdd(noteOne, noteTwo) {
-				return (noteOne + noteTwo) % 12;
+export function noteAdd(num1, num2) {
+		let sum = num1 + num2;
+
+		if (sum < 0) {
+			sum = (sum % 12) + 12;
+		} else if (sum >= 12) {
+			sum = sum % 12;
+		}
+		return sum;
 }

@@ -1,6 +1,6 @@
 <template>
-	<!-- <div class="model-container"><InstrumentSetup v-model:numbers="tuning" @update:numbers="handleUpdatedNumbers" /></div> -->
-	<v-container ref="dropArea" @mouseup="handleNoteDrop"  @touchend="handleNoteDrop" @scroll="handleScroll" fluid style="overflow-x: auto; ">
+	<div v-if="showSettings" ><InstrumentSetup :tuning="tuning" @update-tuning="handleUpdatedTuning" /></div>
+	<v-container ref="dropArea" @mouseup="handleNoteDrop"  @touchend="handleNoteDrop" @scroll="handleScroll" fluid style="overflow-x: auto; ">		
 		<svg :width="this.width" :height="(stringGap * strings) + TOPFRETBOARDGAP">
 			<rect :width="this.width - fretGap" :height="stringGap * strings" :x="LEFTFRETBOARDGAP + fretGap" :y="TOPFRETBOARDGAP" :style="{fill: `rgba(var(--v-theme-surface))`}"/>			
 			
@@ -17,7 +17,8 @@
 					:x="(i * fretGap) - 2.5 - (fretGap / 2) + LEFTFRETBOARDGAP"
 					y="30"
 					text-anchor="middle"
-					fill="white" >
+					fill="white"
+					style="user-select: none"  >
 					{{ index }}
 				</text>
 
@@ -34,12 +35,21 @@
 			</g>		
 		
 			<!-- Draw Tuning -->
+<!-- 			<svg viewBox="0 0 500 500" fill="white" :x="LEFTFRETBOARDGAP - 11" :y="TOPFRETBOARDGAP - 20" width="15" height="15" xmlns="http://www.w3.org/2000/svg">
+				<path style="" d="M 328.895 91.935 L 13.754 407.076 L 13.754 488.771 L 86.541 488.771 L 407.043 169.882 L 328.895 91.935 Z"/>
+				<path style="" d="M 356.952 64.584 L 408.995 12.541 C 447.935 -20.914 518.883 63.596 487.238 90.784 L 435.295 142.727 L 356.952 64.584 Z"/>
+			</svg> -->
+			<svg @click="showSettings = !showSettings" viewBox="0 0 500 500" width="20" fill="#41b883" :x="5" :y="TOPFRETBOARDGAP - 20" height="20" xmlns="http://www.w3.org/2000/svg">
+				<path d="M 31.872 45.995 C 77.157 -7.041 428.541 -3.2 466.463 45.995 C 505.76 98.049 494.66 219.057 466.463 268.59 C 435.753 314.777 72.078 322.402 31.872 268.59 C 0 219.243 -1.92 92.26 31.872 45.995 Z" style=""/>
+				<rect x="350.186" y="268.58" width="111.604" height="180.191" style="" transform="matrix(0.999965, 0.008418, 0, 1.000035, -158.457766, 17.411698)"/>
+			</svg>
 			<g v-for="(string,i) in this.tuning" :key="i">
 				<text
 					x="15"
 					:y="i * stringGap + stringGap / 2  + TOPFRETBOARDGAP + 4"
 					text-anchor="middle"
-					fill="white" >
+					fill="white"
+					style="user-select: none " >
 					{{ string }}
 				</text>
 			</g>
@@ -94,7 +104,6 @@
 				<!-- <text :x="hoverX" :y="ndY - neckY - (isMobile ? 60 : 40)" class="scaleText">{{noteName(hoverNote)}}</text> -->
 			</g>
 		</svg>		
-		
 	</v-container>
 	<!-- Draw a list of scales that are currently dropped -->
 	<v-container fluid style="padding: 15px;">
@@ -144,16 +153,16 @@
 	import * as Scales from '../scales.js'
 	import scaleSelections from './scaleSelections.json';
 	import {watch} from 'vue';
-	// import InstrumentSetup from './InstrumentSetup.vue';
+	import InstrumentSetup from './InstrumentSetup.vue';
 
 	const scaleButtons = scaleSelections.buttons.flatMap(group => group.rows).flat();
 	const TOPFRETBOARDGAP = 40;
 	const LEFTFRETBOARDGAP = 20;
 
 	export default {
-		// components: {
-		// 	InstrumentSetup,
-		// },
+		components: {
+			InstrumentSetup,
+		},
 		name: "FretBoard",
 		props: {
 			ndScaleID: Number,
@@ -179,7 +188,7 @@
 				tuning: ['E','B','G','D','A','E'],
 				width: 300,
 				height: 150,
-				frets: 20,
+				frets: 21,
 				strings: 6,
 				fretGap: 20, 
 				stringGap: 30,
@@ -193,6 +202,7 @@
 				scales: [],
 				fretboard: [],
 				scrollPos: 0,
+				showSettings: false,
 			};
 		},
 
@@ -380,9 +390,16 @@
 				this.setScrollPos(newScroll);
 
 			},
-			handleUpdatedNumbers() {
-				console.log(this.tuning);
-			}
+			handleUpdatedTuning(event) {
+				this.showSettings = false
+
+				if (event.blOK) {
+					this.tuning = event.newTuning
+					this.strings = event.newTuning.length
+					this.buildFretboard()
+				}
+				
+			},			
 		}
 	}
 
