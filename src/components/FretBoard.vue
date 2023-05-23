@@ -39,7 +39,7 @@
 				<path style="" d="M 328.895 91.935 L 13.754 407.076 L 13.754 488.771 L 86.541 488.771 L 407.043 169.882 L 328.895 91.935 Z"/>
 				<path style="" d="M 356.952 64.584 L 408.995 12.541 C 447.935 -20.914 518.883 63.596 487.238 90.784 L 435.295 142.727 L 356.952 64.584 Z"/>
 			</svg> -->
-			<svg @click="showSettings = !showSettings" viewBox="0 0 500 500" width="20" fill="#41b883" :x="5" :y="TOPFRETBOARDGAP - 20" height="20" xmlns="http://www.w3.org/2000/svg">
+			<svg @click="showSettings = !showSettings" viewBox="0 0 500 500" class="point-cursor" width="20" fill="#41b883" :x="5" :y="TOPFRETBOARDGAP - 20" height="20" xmlns="http://www.w3.org/2000/svg">
 				<path d="M 31.872 45.995 C 77.157 -7.041 428.541 -3.2 466.463 45.995 C 505.76 98.049 494.66 219.057 466.463 268.59 C 435.753 314.777 72.078 322.402 31.872 268.59 C 0 219.243 -1.92 92.26 31.872 45.995 Z" style=""/>
 				<rect x="350.186" y="268.58" width="111.604" height="180.191" style="" transform="matrix(0.999965, 0.008418, 0, 1.000035, -158.457766, 17.411698)"/>
 			</svg>

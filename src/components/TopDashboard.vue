@@ -304,6 +304,8 @@
 		stroke: rgba(var(--v-theme-surface-variant),.3); 
 		/*stroke: white; */
 		stroke-width: 3;
+		cursor: grab;
+		cursor: -webkit-grab;
 	}
 
 	.three-slide >>> .v-slider {

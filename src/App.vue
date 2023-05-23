@@ -162,4 +162,13 @@ body {
 overflow: hidden;
 }
 
+  .grab-cursor {
+    cursor: grab;
+    cursor: -webkit-grab;
+  }
+
+  .point-cursor {
+    cursor: pointer;
+    cursor: -webkit-pointer;
+  }
 </style>
