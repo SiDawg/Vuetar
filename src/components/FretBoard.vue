@@ -114,9 +114,8 @@
 					:fill="scale.scColor"
 					fill-opacity="1"
 					:r="this.noteR"
-					@click="removeScale(index)"
-
-				/>
+					class="point-cursor"
+					@click="removeScale(index)"/>
 
 				<text dominant-baseline="middle" alignment-baseline="middle" :x="this.noteDiameter + 10" 
 					:y="(index * (this.noteDiameter + this.noteGapBetween)) + this.noteR"
