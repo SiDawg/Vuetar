@@ -3,38 +3,7 @@ import scaleThemes from './components/scaleThemes.json'
 
 export const Chroma = ['A','Bb','B','C','Db','D','Eb','E','F','Gb','G','Ab'];
 
-export class ScNote {
-	constructor(ntChromaNum, ntScaleNum, ntMajorRelNum, ntStyle) {
-		this.ntChromaNum = ntChromaNum;
-		this.ntScaleNum = ntScaleNum;
-		this.ntMajorRelNum = ntMajorRelNum;
-		this.ntStyle = ntStyle;
-		this.ntName = Chroma[ntChromaNum];
 
-		switch (ntStyle) {
-			case 0 :
-				this.ntShow = false;
-				this.ntOpacity = 0;
-				this.ntStroke = false;
-				break;
-			case 1 :
-				this.ntShow = true;
-				this.ntOpacity = 1;
-				this.ntStroke = false;
-				break;
-			case 2 :
-				this.ntShow = true;
-				this.ntOpacity = 0.3;
-				this.ntStroke = false;
-				break;
-			case 3 :
-				this.ntShow = true;
-				this.ntOpacity = 0;
-				this.ntStroke = true;
-				break;
-		}
-	}
-}
 
 export class ScaleInstance {
 	constructor(scaleType, tonic, mode, scColor, scTheme, scName) {
@@ -123,6 +92,39 @@ export class ScaleInstance {
 
 	getNote(noteNum) {
 		return this.notes.find(note => note.ntChromaNum === noteNum);
+	}
+}
+
+export class ScNote {
+	constructor(ntChromaNum, ntScaleNum, ntMajorRelNum, ntStyle) {
+		this.ntChromaNum = ntChromaNum;
+		this.ntScaleNum = ntScaleNum;
+		this.ntMajorRelNum = ntMajorRelNum;
+		this.ntStyle = ntStyle;
+		this.ntName = Chroma[ntChromaNum];
+
+		switch (ntStyle) {
+			case 0 :
+				this.ntShow = false;
+				this.ntOpacity = 0;
+				this.ntStroke = false;
+				break;
+			case 1 :
+				this.ntShow = true;
+				this.ntOpacity = 1;
+				this.ntStroke = false;
+				break;
+			case 2 :
+				this.ntShow = true;
+				this.ntOpacity = 0.3;
+				this.ntStroke = false;
+				break;
+			case 3 :
+				this.ntShow = true;
+				this.ntOpacity = 0;
+				this.ntStroke = true;
+				break;
+		}
 	}
 }
 

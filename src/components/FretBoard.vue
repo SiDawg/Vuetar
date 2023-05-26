@@ -1,5 +1,6 @@
 <template>
 	<div v-if="showSettings" ><InstrumentSetup :tuning="tuning" @update-tuning="handleUpdatedTuning" /></div>
+	<!-- <v-btn @click="clearCookies">Clear Cookies</v-btn> -->
 	<v-container ref="dropArea" @mouseup="handleNoteDrop"  @touchend="handleNoteDrop" @scroll="handleScroll" fluid style="overflow-x: auto; ">		
 		<svg :width="this.width" :height="(stringGap * strings) + TOPFRETBOARDGAP">
 			<rect :width="this.width - fretGap" :height="stringGap * strings" :x="LEFTFRETBOARDGAP + fretGap" :y="TOPFRETBOARDGAP" :style="{fill: `rgba(var(--v-theme-surface))`}"/>			
@@ -152,15 +153,14 @@
 	import scaleSelections from './scaleSelections.json';
 	import {watch} from 'vue';
 	import InstrumentSetup from './InstrumentSetup.vue';
+	import { useCookies } from "vue3-cookies";
 
 	const scaleButtons = scaleSelections.buttons.flatMap(group => group.rows).flat();
 	const TOPFRETBOARDGAP = 40;
 	const LEFTFRETBOARDGAP = 20;
 
 	export default {
-		components: {
-			InstrumentSetup,
-		},
+
 		name: "FretBoard",
 		props: {
 			ndScaleID: Number,
@@ -173,15 +173,24 @@
 			btSpacing: String,
 			btLabels: String,
 		},
-
-		// setup(props) {
-		// 	watch(() => props.btSpacing, this.handleResize())
-		// },
+		components: {
+			InstrumentSetup,
+		},
+		setup() {
+			const { cookies } = useCookies();
+			return { cookies };
+		},
 
 		data() {
 			return {
 				TOPFRETBOARDGAP,
 				LEFTFRETBOARDGAP,
+
+				COOKIE_SCALES: 0,
+				COOKIE_TUNING: 1,
+				COOKIE_COLOR: 2,
+				COOKIE_SPACING: 3,
+				COOKIE_LABELS: 4,
 
 				tuning: ['E','B','G','D','A','E'],
 				width: 300,
@@ -261,11 +270,12 @@
 			this.neckX = dropArea.$el.getBoundingClientRect().left;
 			this.neckY =  dropArea.$el.getBoundingClientRect().top;
 
+			this.readCookie(this.cookies.get("VuetarFretboard"));
+
 			},
 		updated() {
 			this.setScrollPos(this.scrollPos);	
-			// console.log('handling it');
-			this.handleResize();		
+			this.handleResize();	
 		},
 
 		beforeUnmount() {
@@ -362,6 +372,9 @@
 						})
 					}
 				}
+				
+				// console.log(this.scales)
+				this.setCookie();
 			},
 
 			setScrollPos(pixels) {
@@ -387,6 +400,7 @@
 				if (this.scrollPos < 0) {this.scrollPos = 0}
 				this.setScrollPos(newScroll);
 
+				this.setCookie();
 			},
 			handleUpdatedTuning(event) {
 				this.showSettings = false
@@ -396,8 +410,74 @@
 					this.strings = event.newTuning.length
 					this.buildFretboard()
 				}
+				this.setCookie();
 				
-			},			
+			},
+			setCookie() {
+				var scaleCookie = '';
+
+				this.scales.forEach((scale,i) => {
+					scaleCookie += scale.scaleType + ','
+					scaleCookie += scale.tonic + ','
+					scaleCookie += scale.mode + ','
+					scaleCookie += scale.scColor + ','
+					scaleCookie += scale.scTheme + ','
+					scaleCookie += scale.scName
+					if (i < this.scales.length - 1) {scaleCookie += '&'}
+				});
+
+				scaleCookie += '|' + this.tuning
+
+				this.cookies.set("VuetarFretboard", scaleCookie)
+			},
+			reReadCookie() {
+				this.readCookie(this.cookies.get("VuetarFretboard"));
+			},
+			clearCookies() {
+				this.cookies.remove("VuetarFretboard");
+				this.cookies.remove("VuetarColor");
+				this.cookies.remove("VuetarSettings")
+			},
+			readCookie(clientcookie) {				
+				console.log(clientcookie)
+				if (clientcookie) {
+					var cookieBites = clientcookie.split("|")				
+
+					if (cookieBites) {
+						this.tuning = cookieBites[this.COOKIE_TUNING].split(",")
+						this.strings = this.tuning.length
+
+						var cookieScales = cookieBites[0].split("&")
+
+						if (cookieScales) {
+							cookieScales.forEach((scale) => {
+
+								var scaleDefs = scale.split(",")
+								
+								this.scales.push(new Scales.ScaleInstance(
+									// (scaleType, tonic, mode, scColor, scTheme, scName) 
+									scaleDefs[0],
+									Number(scaleDefs[1]),
+									scaleDefs[2],
+									scaleDefs[3],
+									scaleDefs[4],
+									scaleDefs[5]
+								))
+								if (this.scales.length >= 5) {
+									this.buildFretboard();
+									this.handleResize();
+									return;
+								}
+							});
+
+							this.buildFretboard();
+							this.handleResize();
+						}
+				}
+
+				}
+				
+			}
 		}
 	}
 

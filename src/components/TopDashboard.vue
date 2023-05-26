@@ -195,6 +195,9 @@
 
 <script>
 	import scaleSelections from './scaleSelections.json'
+	import { useCookies } from "vue3-cookies";
+
+
 	const dropDownOptions = scaleSelections.dropDown.flatMap(dropDown => dropDown.name);
 
 	const WIDE = '20';
@@ -205,6 +208,12 @@
 
 		data() {
 			return {
+				COOKIE_SCALES: 0,
+				COOKIE_TUNING: 1,
+				COOKIE_COLOR: 2,
+				COOKIE_SPACING: 3,
+				COOKIE_LABELS: 4,
+
 				WIDE,
 				NARROW,
 				dashboardHeight: 200,    
@@ -222,46 +231,14 @@
 				blHasDragged: false,
 			}
 		},
-
-		methods: {
-			startDragging(event, sid) {
-				const { type, touches, clientX, clientY } = event
-				const scaleX = event.target.getBoundingClientRect().left 
-				const scaleY = event.target.getBoundingClientRect().top
-				var blOther = sid === 0;
-
-				if (sid === 0) {
-					if (this.dropDownSelected === '' ) return
-					sid = this.scaleSelections.dropDown.find(dropDown => dropDown.name === this.dropDownSelected)?.sid;
-				}
-
-				if (!sid) return
-				this.$emit('scale-clicked', {sid, blOther, scaleCircles: this.scaleCircles, scaleX, scaleY, clientX, clientY, type, touches});
-				this.blHasDragged = true
-
-			},
-			settingsChange() {
-				this.$emit('settings-changed', {btSpacing: this.btSpacing, btLabels: this.btLabels});
-			},
-			scaleByDropDownName(dropDownName) {
-				var scObj;
-				scObj = scaleSelections.dropDown.find(dropDown => dropDown.name === dropDownName)
-				if (scObj) {
-					return scObj;
-				} else {
-					return {
-						name: '',
-						shortname: '',
-						scaleType: '',
-						mode: -1,
-						scaleTheme: -1,
-						sid : -1}
-				}
-			}
+		setup() {
+			const { cookies } = useCookies();
+			return { cookies };
 		},
-
 		mounted() {
+			this.readCookie(this.cookies.get("VuetarSettings"));
 			this.settingsChange();
+
 		},
 
 		updated() {
@@ -295,6 +272,56 @@
 
 			
 		},
+
+		methods: {
+			startDragging(event, sid) {
+				const { type, touches, clientX, clientY } = event
+				const scaleX = event.target.getBoundingClientRect().left 
+				const scaleY = event.target.getBoundingClientRect().top
+				var blOther = sid === 0;
+
+				if (sid === 0) {
+					if (this.dropDownSelected === '' ) return
+					sid = this.scaleSelections.dropDown.find(dropDown => dropDown.name === this.dropDownSelected)?.sid;
+				}
+
+				if (!sid) return
+				this.$emit('scale-clicked', {sid, blOther, scaleCircles: this.scaleCircles, scaleX, scaleY, clientX, clientY, type, touches});
+				this.blHasDragged = true
+
+			},
+			settingsChange() {
+				this.cookies.set("VuetarSettings", this.btSpacing + '|' + this.btLabels)
+				this.$emit('settings-changed', {btSpacing: this.btSpacing, btLabels: this.btLabels});
+			},
+			scaleByDropDownName(dropDownName) {
+				var scObj;
+				scObj = scaleSelections.dropDown.find(dropDown => dropDown.name === dropDownName)
+				if (scObj) {
+					return scObj;
+				} else {
+					return {
+						name: '',
+						shortname: '',
+						scaleType: '',
+						mode: -1,
+						scaleTheme: -1,
+						sid : -1}
+				}
+			},
+			readCookie(clientcookie) {
+				
+				if (clientcookie) {
+					var cookieBites = clientcookie.split("|")				
+
+					if (cookieBites[0].length !== 0 && cookieBites[1] !== 0 ) {
+						this.btSpacing 	= cookieBites[0]
+						this.btLabels 	= cookieBites[1]
+					}
+				}
+				
+			}
+		}
 
 };
 </script>

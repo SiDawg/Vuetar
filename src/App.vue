@@ -37,11 +37,17 @@
 	/* eslint-disable */
 	import TopDashboard from './components/TopDashboard.vue'
 	import FretBoard from './components/FretBoard.vue'
-	// import VuetifyAll from './components/VuetifyAll.vue'
+	import { useCookies } from "vue3-cookies";
 
 	export default {
 		data() {
 			return {
+				COOKIE_SCALES: 0,
+				COOKIE_TUNING: 1,
+				COOKIE_COLOR: 2,
+				COOKIE_SPACING: 3,
+				COOKIE_LABELS: 4,
+
 				noteCircles: 15,
 				ndX: 40,
 				ndY: 40,
@@ -58,13 +64,36 @@
 
 			}
 		},
+		
+		setup() {
+			const { cookies } = useCookies();
+			return { cookies };
+		},
 
 		components: {
 			TopDashboard,
 			FretBoard,
 			// VuetifyAll,
 		},
-		
+		mounted() {
+			window.addEventListener('mousemove', this.dragging, {passive: true});
+			window.addEventListener('touchmove', this.dragging, {passive: true});
+			window.addEventListener('mouseup', this.stopDragging, {passive: true});
+			window.addEventListener('touchend', this.stopDragging, {passive: true});
+			// console.log('start' + this.colIndex)
+			// this.cookies.remove("VuetarColor")
+			this.readCookie(this.cookies.get("VuetarColor"));
+		},
+		beforeUnmount() {
+			window.removeEventListener('mousemove', this.dragging, {passive: true});
+			window.removeEventListener('touchmove', this.dragging, {passive: true});
+			window.removeEventListener('mouseup', this.stopDragging, {passive: true});
+			window.removeEventListener('touchend', this.stopDragging, {passive: true});
+
+		},
+		updated() {
+			
+		},
 		methods: {
 			startDragging(event) {        
 				this.isDragging = true;
@@ -94,6 +123,9 @@
 					this.colIndex++;
 					if (this.colIndex >= this.scColors.length) this.colIndex = 0;
 					this.isDragging = false;
+
+					this.cookies.set("VuetarColor", this.colIndex.toString())
+
 				}
 				
 			},
@@ -115,19 +147,15 @@
 					return event.clientY;
 				}
 			},
-		},
-		mounted() {
-			window.addEventListener('mousemove', this.dragging, {passive: true});
-			window.addEventListener('touchmove', this.dragging, {passive: true});
-			window.addEventListener('mouseup', this.stopDragging, {passive: true});
-			window.addEventListener('touchend', this.stopDragging, {passive: true});
-		},
-		beforeUnmount() {
-			window.removeEventListener('mousemove', this.dragging, {passive: true});
-			window.removeEventListener('touchmove', this.dragging, {passive: true});
-			window.removeEventListener('mouseup', this.stopDragging, {passive: true});
-			window.removeEventListener('touchend', this.stopDragging, {passive: true});
-
+			readCookie(clientcookie) {
+				if (clientcookie) {
+					if (clientcookie.length !== 0) {
+						var newIndex = Number(clientcookie)
+						if (newIndex < 0 || newIndex >= this.scColors.length ) newIndex = 0;
+						this.colIndex = newIndex
+					}
+				}					
+			}
 		}
 	}
 </script>
