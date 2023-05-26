@@ -439,21 +439,20 @@
 				this.cookies.remove("VuetarSettings")
 			},
 			readCookie(clientcookie) {				
-				console.log(clientcookie)
 				if (clientcookie) {
-					var cookieBites = clientcookie.split("|")				
+					var cookieBites = clientcookie.split("|")			
+	
+					this.tuning = cookieBites[this.COOKIE_TUNING].split(",")
+					this.strings = this.tuning.length
 
-					if (cookieBites) {
-						this.tuning = cookieBites[this.COOKIE_TUNING].split(",")
-						this.strings = this.tuning.length
+					var cookieScales = cookieBites[this.COOKIE_SCALES].split("&")
 
-						var cookieScales = cookieBites[0].split("&")
+					if (cookieScales[0] !== '') {
+						cookieScales.forEach((scale) => {
 
-						if (cookieScales) {
-							cookieScales.forEach((scale) => {
+							var scaleDefs = scale.split(",")
 
-								var scaleDefs = scale.split(",")
-								
+							if (scaleDefs[0] !== '') {
 								this.scales.push(new Scales.ScaleInstance(
 									// (scaleType, tonic, mode, scColor, scTheme, scName) 
 									scaleDefs[0],
@@ -463,17 +462,20 @@
 									scaleDefs[4],
 									scaleDefs[5]
 								))
+
 								if (this.scales.length >= 5) {
 									this.buildFretboard();
 									this.handleResize();
 									return;
 								}
-							});
-
-							this.buildFretboard();
-							this.handleResize();
-						}
-				}
+							}
+							
+						});
+						// console.log(this.scales)
+						this.buildFretboard();
+						this.handleResize();
+					}
+				
 
 				}
 				
