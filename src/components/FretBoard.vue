@@ -139,13 +139,6 @@
 			</g>			
 		</svg>
 	</v-container>
-<!-- 	<v-container>
-		<text y="0" fill="white">{{this.fretGap}}</text><br>
-		<text y="40" fill="white">{{this.fretGap / 2}}</text><br>
-		<text y="80" fill="white">{{this.scales.length}}</text><br>
-		<text y="120" fill="white">{{this.noteDiameter}}</text><br> -->
-		<!-- <text y="160" fill="white">{{(((scales.length * this.noteDiameter) + (this.noteGapBetween * (scales.length - 1))) / 2)}}</text> -->
-	<!-- </v-container> -->
 </template>
 
 <script>

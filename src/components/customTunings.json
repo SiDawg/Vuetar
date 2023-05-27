@@ -1,0 +1,26 @@
+[
+	{
+		"name": "Standard",
+		"tuning": ["E","A","D","G","B","E"]
+	},
+	{
+		"name": "Drop D",
+		"tuning": ["D","A","D","G","B","E"]
+	},
+	{
+		"name": "Open D",
+		"tuning": ["D","A","D","Gb","A","D"]
+	},
+	{
+		"name": "Drop C",
+		"tuning": ["C","G","C","F","A","D"]
+	},
+	{
+		"name": "Vuekulele",
+		"tuning": ["G","C","E","A"]
+	},
+	{
+		"name": "KoRn",
+		"tuning": ["A","D","G","C","F","A","D"]
+	}
+]

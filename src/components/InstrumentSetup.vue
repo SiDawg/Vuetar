@@ -1,7 +1,13 @@
 <template>
-	<v-card class="d-flex modal-container rounded-lg flex-shrink-1" elevation="4" width="auto" height="auto">
-		<div class="d-flex flex-column justify-center">
-			<div class="d-flex">
+	<v-card class="d-flex flex-column justify-center modal-container rounded-lg flex-shrink-1" elevation="4" width="auto" height="auto">
+			
+			<div class="d-flex flex-wrap justify-center">
+				<div 
+					v-for="(horse) in customTunings" :key="horse" class="ma-1">
+					<v-btn color="#555555" style="text-transform: none" variant="outlined"  density="comfortable"  @click="setTuning(horse.tuning)">{{horse.name}}</v-btn>	
+				</div>	
+			</div>
+			<div class="d-flex align-self-center ">
 				<v-btn class="settingButton align-self-center" color="#777777" density="compact" icon="mdi-plus" @click="changeStrings('left','add')"></v-btn>
 				<v-btn class="settingButton align-self-center" color="#777777" density="compact" icon="mdi-minus" @click="changeStrings('left','remove')"></v-btn>
 
@@ -13,17 +19,18 @@
 				<v-btn class="settingButton align-self-center" color="#777777" density="compact" icon="mdi-minus" @click="changeStrings('right','remove')"></v-btn>
 				<v-btn class="settingButton align-self-center" color="#777777" density="compact" icon="mdi-plus" @click="changeStrings('right','add')"></v-btn>
 			</div>
-			<div class="d-flex justify-center align-self-center mt-8">			
+			<div class="d-flex align-self-center mt-8">			
 				<v-btn @click="handleOK" style="text-transform: none" color="#41b883" class="settingButton  align-self-center mx-1">OK</v-btn>
 				<v-btn @click="handleCancel" style="text-transform: none" color="#777777" class="settingButton  align-self-center  mx-1">Cancel</v-btn>
 			</div>
-		</div>
+
 	</v-card>
 
 </template>
 
 <script>
 	import * as Scales from '../scales.js'
+	import customTunings from './customTunings'
 
 	export default {			
 		props: {
@@ -34,10 +41,15 @@
 		},
 		data() {
 			return {
-				tuningCopy: this.tuning.slice().reverse()
+				tuningCopy: this.tuning.slice().reverse(),
+				customTunings: customTunings
 			}
 		},
-
+		// mounted() {
+		// 	customTunings.forEach((tuning) => {
+		// 		console.log(tuning.tuning);
+		// 	});
+		// },
 		methods: {
 			increaseNumber(index) {
 				this.tuningCopy[index] = Scales.noteName(Scales.noteAdd(Scales.noteNum(this.tuningCopy[index]),1));
@@ -52,6 +64,9 @@
 			},
 			handleCancel() {
 				this.$emit('update-tuning', {blOK: false, newTUning: undefined});
+			},
+			setTuning(tuning) {
+				this.tuningCopy = tuning
 			},
 			changeStrings(end, action) {
 				switch (end) {
