@@ -428,7 +428,7 @@
 				scaleCookie += '|' + this.tuning
 
 				this.cookies.set("VuetarFretboard", scaleCookie)
-				console.log(this.cookies)
+				// console.log(this.cookies)
 			},
 			reReadCookie() {
 				this.readCookie(this.cookies.get("VuetarFretboard"));
