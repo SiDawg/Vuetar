@@ -66,7 +66,7 @@
 				this.$emit('update-tuning', {blOK: false, newTUning: undefined});
 			},
 			setTuning(tuning) {
-				this.tuningCopy = tuning
+				this.tuningCopy = tuning.slice()
 			},
 			changeStrings(end, action) {
 				switch (end) {
