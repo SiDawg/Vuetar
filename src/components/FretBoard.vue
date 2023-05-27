@@ -415,7 +415,6 @@
 			},
 			setCookie() {
 				var scaleCookie = '';
-
 				this.scales.forEach((scale,i) => {
 					scaleCookie += scale.scaleType + ','
 					scaleCookie += scale.tonic + ','
@@ -429,6 +428,7 @@
 				scaleCookie += '|' + this.tuning
 
 				this.cookies.set("VuetarFretboard", scaleCookie)
+				console.log(this.cookies)
 			},
 			reReadCookie() {
 				this.readCookie(this.cookies.get("VuetarFretboard"));

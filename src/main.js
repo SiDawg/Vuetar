@@ -7,11 +7,17 @@ import { globalCookiesConfig } from "vue3-cookies";
 
 globalCookiesConfig({
   expireTimes: "30d",
-  path: "/",
-  domain: "",
+  // path: "horse",
+  // domain: "",
   secure: true,
   sameSite: "None",
 });
+
+// globalCookiesConfig({
+//   expireTimes: "30d",
+//   secure: true,
+//   sameSite: "Strict",
+// });
 
 loadFonts()
 
