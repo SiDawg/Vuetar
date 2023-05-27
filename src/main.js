@@ -8,7 +8,7 @@ import { globalCookiesConfig } from "vue3-cookies";
 globalCookiesConfig({
   expireTimes: "30d",
   path: "/Vuetar",
-  domain: "sidawg.github.io",
+  // domain: "sidawg.github.io",
   secure: true,
   sameSite: "None",
 });
