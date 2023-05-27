@@ -422,7 +422,7 @@
 					scaleCookie += scale.scColor + ','
 					scaleCookie += scale.scTheme + ','
 					scaleCookie += scale.scName
-					if (i < this.scales.length - 1) {scaleCookie += '&'}
+					if (i < this.scales.length - 1) {scaleCookie += '`'}
 				});
 
 				scaleCookie += '|' + this.tuning
@@ -445,7 +445,7 @@
 					this.tuning = cookieBites[this.COOKIE_TUNING].split(",")
 					this.strings = this.tuning.length
 
-					var cookieScales = cookieBites[this.COOKIE_SCALES].split("&")
+					var cookieScales = cookieBites[this.COOKIE_SCALES].split("`")
 
 					if (cookieScales[0] !== '') {
 						cookieScales.forEach((scale) => {
