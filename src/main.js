@@ -7,7 +7,7 @@ import { globalCookiesConfig } from "vue3-cookies";
 
 globalCookiesConfig({
   expireTimes: "30d",
-  // path: "/Vuetar",
+  path: "/Vuetar",
   domain: "",
   secure: true,
   sameSite: "None",
