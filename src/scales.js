@@ -9,6 +9,9 @@ export class ScaleInstance {
 	constructor(scaleType, tonic, mode, scColor, scTheme, scName) {
 		this.scaleType = scaleType;
 
+		this.editable = false;
+		this.custom = false;
+
 		if (typeof tonic === 'number') {
 			this.tonic = tonic;
 		} else {				
@@ -87,11 +90,25 @@ export class ScaleInstance {
 	}
 
 	hasNote(noteNum) {		
-		return this.notes.some(note => note.ntChromaNum === noteNum);
+			return this.notes.some(note => note.ntChromaNum === noteNum);
 	}
 
 	getNote(noteNum) {
-		return this.notes.find(note => note.ntChromaNum === noteNum);
+			return this.notes.find(note => note.ntChromaNum === noteNum);
+	}
+
+	removeNote(noteNum) {
+		if (noteNum === this.tonic) {return}
+		const index = this.notes.findIndex(note => note.ntChromaNum === noteNum);
+		if (index !== -1) {
+			this.notes.splice(index, 1);
+			this.custom = true
+		}
+	}
+
+	addCustomNote(notenum) {
+		this.notes.push(new ScNote(notenum, '', '', 4));
+		this.custom = true
 	}
 }
 
@@ -124,9 +141,17 @@ export class ScNote {
 				this.ntOpacity = 0;
 				this.ntStroke = true;
 				break;
+			case 4 :
+				this.ntShow = true;
+				this.ntOpacity = 0.3;
+				this.ntStroke = true;
+				break;
 		}
+		
 	}
 }
+
+
 
 export function noteName(noteNum) {
 		return Chroma[noteNum];
@@ -135,6 +160,7 @@ export function noteName(noteNum) {
 export function noteNum(noteName) {
 		return Chroma.indexOf(noteName);
 }
+
 export function noteAdd(num1, num2) {
 		let sum = num1 + num2;
 
@@ -145,3 +171,4 @@ export function noteAdd(num1, num2) {
 		}
 		return sum;
 }
+

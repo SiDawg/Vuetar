@@ -90,8 +90,8 @@
 					
 					
 				</div>
-				<text :style="{ position: 'absolute', bottom: '3px' , left: '7px' , color: `rgba(var(--v-theme-on-surface),0.5)`}" v-if="!blHasDragged" >(Click-drag to fretboard)</text>
-				<text :style="{ position: 'absolute', bottom: '3px' , left: '7px' , color: `rgba(var(--v-theme-on-surface),0.5)`}" v-if="!blHasDragged" >(Click-drag to fretboard)</text>
+				<text :style="{ position: 'absolute', bottom: '3px' , left: '65px' , color: `rgba(var(--v-theme-on-surface),0.5)`}" v-if="!blHasDragged" >
+					Drag-and-drop scales above to fretboard</text>				
 		</v-card-text>
 	</v-card>
 	<v-card  elevation="2" :height="dashboardHeight" class="rounded-lg mx-1" >
