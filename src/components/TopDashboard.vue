@@ -15,7 +15,7 @@
 
 			</v-btn-toggle><br>
 		
-		<v-card-text no-gutters justify-center align-center style="padding: 0px 0px;display: flex; align-items: center; justify-content: center;">
+		<v-card-text no-gutters justify-center align-center class="d-flex justify-center ma-0 pa-0">
 				<div v-if="btScales !== 'other'">
 					<svg 
 					:width="groupWidth" 
@@ -53,15 +53,25 @@
 						</g>
 					</svg>
 				</div>
-				<div v-if="btScales == 'other'" class="mr-5" style="display: flex; align-items: center; flex-grow: 1">
+				<div v-if="btScales == 'other'" 
+					class="d-flex flex-grow-1 flex-column ma-0 pa-0">
+					<v-select				
+						class="mt-5 mx-5"
+						:items="dropDownOptions"
+						v-model="dropDownSelected"
+						variant="outlined"	
+						label="Select then drag below"
+						single-line />
+					
 					<svg 
-						:width="scaleCircles * 2 + scalePadding * 2"
-						:height="scaleCircles * 2 + scalePadding * 2"
-						:style="{'min-width': `${scaleCircles * 2 + scalePadding * 2}px`, 'min-height': `${scaleCircles * 2 + scalePadding * 2}px`}"
-						:viewBox="`0, 0, ${scaleCircles * 2 + scalePadding * 2}, ${scaleCircles * 2 + scalePadding * 2}`">
+						x="0" y="0"
+						class="align-self-center"
+						:width="scaleCircles * 2 + 4"
+						:height="scaleCircles * 2 + 4"								
+						:viewBox="`0, 0, ${scaleCircles * 2 + 4}, ${scaleCircles * 2 + 4}`">
 						<circle 
-							:cx="scaleCircles + scalePadding" 
-							:cy="scaleCircles +  scalePadding"
+							:cx="scaleCircles + 2 " 
+							:cy="scaleCircles +  2"
 							:r="scaleCircles" 
 							class="scaleCircle"
 							@mousedown.prevent="startDragging($event, 0)" 
@@ -70,24 +80,17 @@
 							<title>Other</title>
 						</circle>
 						<text 
-							:x="scaleCircles + scalePadding" 
-							:y="scaleCircles +  scalePadding"
+							:x="scaleCircles + 2" 
+							:y="scaleCircles +  2"
 							class="scaleText"
-							pointer-events="none"
-							>
-								{{scaleByDropDownName(dropDownSelected).shortname}}
+							pointer-events="none">
+							{{scaleByDropDownName(dropDownSelected).shortname}}
 						</text>
-
 					</svg>
-					<v-select
-						class="mt-5"
-						density="compact"
-						:items="dropDownOptions"
-						v-model="dropDownSelected"
-						variant="outlined"
-
-					></v-select>
+					
+					
 				</div>
+				<text :style="{ position: 'absolute', bottom: '3px' , left: '7px' , color: `rgba(var(--v-theme-on-surface),0.5)`}" v-if="!blHasDragged" >(Click-drag to fretboard)</text>
 				<text :style="{ position: 'absolute', bottom: '3px' , left: '7px' , color: `rgba(var(--v-theme-on-surface),0.5)`}" v-if="!blHasDragged" >(Click-drag to fretboard)</text>
 		</v-card-text>
 	</v-card>
@@ -143,51 +146,28 @@
 
 				
 			</v-col>
-			<v-col >
-<!-- 				<div class="d-flex align-center flex-column mt-0">
-					<div class="mt-0 text-subtitle-2">Overlap</div>
-					<v-btn-toggle
-					v-model="btOverlap"
-					variant="outlined"
-					@click="settingsChange"
-					divided
-					mandatory
-					>
-						<v-btn value="overlap" title="Overlapped">
-							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 20" width="25" height="20">
-								<circle :style="{fill: 'none', stroke: `rgba(var(--v-theme-on-surface))`, 'stroke-width': '2px'}" cx="10" cy="9" r="7"/>
-								<circle :style="{fill: 'none', stroke: `rgba(var(--v-theme-on-surface))`, 'stroke-width': '2px'}" cx="17" cy="9" r="7"/>
-							</svg>
-						</v-btn>
-						<v-btn value="discrete" title="Discrete">
-							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 20" width="30" height="20">
-								<circle :style="{fill: 'none', stroke: `rgba(var(--v-theme-on-surface))`, 'stroke-width': '2px'}" cx="8" cy="9" r="6"/>
-								<circle :style="{fill: 'none', stroke: `rgba(var(--v-theme-on-surface))`, 'stroke-width': '2px'}" cx="23" cy="9" r="6"/>
-							</svg>
-						</v-btn>
-					</v-btn-toggle>
-				</div> -->
-
-				
+			<v-col>				
 				<div class="d-flex align-center flex-column mt-0">
 					<div class="d-flex align-center mt-2">
 						<svg viewBox="0 0 500 500" width="50" height="50" x="0" y="0" xmlns="http://www.w3.org/2000/svg">
-						<path style="stroke-linecap: round; stroke-miterlimit: 1; stroke-linejoin: round; stroke: rgb(52, 73, 94); fill: rgb(52, 73, 94); stroke-width: 0px;" d="M 186.187 249.516 L 193.452 193.583 L 341.263 19.193 L 421.911 15.613 L 424.673 49.162 L 361.956 56.584 L 239.344 224.402 L 186.187 249.516 Z">
-						</path>
-						<g transform="matrix(1.542338, 1.120596, 1.120596, -1.542338, -303.13028, 417.528931)" style="">
-							<g transform="translate(178.06 235.01)">
-								<path d="m0 0-22.669-39.264-22.669 39.264h-75.491l98.16-170.02 98.16 170.02z" fill="#41b883"/>
+							<path style="stroke-linecap: round; stroke-miterlimit: 1; stroke-linejoin: round; stroke: rgb(52, 73, 94); fill: rgb(52, 73, 94); stroke-width: 0px;" d="M 186.187 249.516 L 193.452 193.583 L 341.263 19.193 L 421.911 15.613 L 424.673 49.162 L 361.956 56.584 L 239.344 224.402 L 186.187 249.516 Z">
+							</path>
+							<g transform="matrix(1.542338, 1.120596, 1.120596, -1.542338, -303.13028, 417.528931)" style="">
+								<g transform="translate(178.06 235.01)">
+									<path d="m0 0-22.669-39.264-22.669 39.264h-75.491l98.16-170.02 98.16 170.02z" fill="#41b883"/>
+								</g>
+								<g transform="translate(178.06 235.01)">
+									<path d="m0 0-22.669-39.264-22.669 39.264h-36.227l58.896-102.01 58.896 102.01z" fill="#34495e"/>
+								</g>
 							</g>
-							<g transform="translate(178.06 235.01)">
-								<path d="m0 0-22.669-39.264-22.669 39.264h-36.227l58.896-102.01 58.896 102.01z" fill="#34495e"/>
-							</g>
-						</g>
-					</svg>
-					<text :style="{fill: `rgba(var(--v-theme-on-surface))`}">Vuetar</text>
+						</svg>
+						<text :style="{fill: `rgba(var(--v-theme-on-surface))`}">Vuetar</text>
 					</div>
+					<v-btn class="mt-3" @click="handleReset" density="compact" color="#555555" icon="mdi-autorenew"></v-btn>
 				</div>
 			</v-col>					
 		</v-row>
+
 	</v-card>
 	</v-container>
 
@@ -313,13 +293,19 @@
 				
 				if (clientcookie) {
 					var cookieBites = clientcookie.split("|")				
-
+					this.blHasDragged = true
 					if (cookieBites[0].length !== 0 && cookieBites[1] !== 0 ) {
 						this.btSpacing 	= cookieBites[0]
 						this.btLabels 	= cookieBites[1]
 					}
 				}
 				
+			},
+			handleReset() {
+				this.cookies.remove("VuetarSettings");
+				this.cookies.remove("VuetarColor");
+				this.cookies.remove("VuetarFretboard");
+				location.reload();
 			}
 		}
 
