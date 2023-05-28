@@ -347,5 +347,6 @@
 		text-anchor: middle;
 		text-shadow: 1px 1px 1px #000000;
 		pointer-events: none;
+		user-select: none;
 	}
 </style>

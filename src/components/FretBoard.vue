@@ -36,7 +36,7 @@
 					:style="{stroke: `rgba(var(--v-border-color), var(--v-border-opacity))`}" />
 
 			</g>		
-
+			<!-- Draw Tuning -->
 			<svg class="point-cursor" @click="showSettings = !showSettings" :x="0" :y="TOPFRETBOARDGAP - 25" viewBox="0 0 30 30" width="30" height="30">
 				<circle cx="15" cy="15" r="15" />
 				<svg viewBox="0 0 500 500" width="20" height="20" fill="#41b883" :x="5" :y="5"  xmlns="http://www.w3.org/2000/svg">
@@ -71,6 +71,7 @@
 					:stroke="pos.note.ntStroke ? pos.fillc : 'none'"
 					:stroke-width="pos.note.ntStroke ? 2 : 0"
 					:stroke-opacity="pos.note.ntStroke ? 1 : 0"
+
 				/>
 
 				<text v-if="pos.note.ntShow"
@@ -113,17 +114,17 @@
 			<g v-for="(scale, index) in this.scales" :key="index">
 				<!-- Delete -->
 				<circle 
-					:cx="this.noteR + this.noteGapBetween" 
+					:cx="this.noteR" 
 					:cy="(index * (this.noteR * 2 + this.noteGapBetween)) + this.noteR"
-					fill="#000000"
-					fill-opacity="1"
+					fill="#333333"
+					fill-opacity="0"
 					:r="this.noteR"
 					class="point-cursor"
 					@click="removeScale(index)"
 					/>
 				
 				<svg viewBox="0 0 24 24" :width="noteR * 1.8" :height="noteR * 1.8"			
-					:x="this.noteGapBetween + 2" 
+					:x="2" 
 					:y="(index * (this.noteR * 2 + this.noteGapBetween)) + 1"					
 					fill="#555555"
 					style="pointer-events: none">
@@ -132,37 +133,54 @@
 
 				<!-- Edit -->
 				<circle 
-					:cx="(this.noteR * 3) + 5" 
-					:cy="(index * (this.noteDiameter + this.noteGapBetween)) + this.noteR"
-					:fill="scale.scColor"
-					fill-opacity="1"
+					:cx="this.noteR + this.noteDiameter + this.noteGapBetween * 2" 
+					:cy="(index * (this.noteR * 2 + this.noteGapBetween)) + this.noteR"
+					fill="#333333"
+					fill-opacity="0"
 					:r="this.noteR"
 					class="point-cursor"
 					@click="scale.editable = !scale.editable"
-					/>		
+					/>
 
 				<!-- Locked -->
-					<svg v-if="!scale.editable" viewBox="0 0 24 24" :width="noteR * 1.3" :height="noteR * 1.3"
-						:x="this.noteDiameter + 10"
-						:y="(index * (this.noteDiameter + this.noteGapBetween)) + 5" 
-						fill="#FFFFFF"
+					<svg v-if="!scale.editable" viewBox="0 0 24 24" :width="noteR * 1.5" :height="noteR * 1.5"
+						:x="this.noteDiameter + 6"
+						:y="(index * (this.noteDiameter + this.noteGapBetween)) + 3" 
+						fill="#555555"
 						style="pointer-events: none">
 						<path d="M12,17A2,2 0 0,0 14,15C14,13.89 13.1,13 12,13A2,2 0 0,0 10,15A2,2 0 0,0 12,17M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6A2,2 0 0,1 4,20V10C4,8.89 4.9,8 6,8H7V6A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,3A3,3 0 0,0 9,6V8H15V6A3,3 0 0,0 12,3Z" />
 					</svg>	
 
 				<!-- Unlocked -->
-					<svg v-if="scale.editable" viewBox="0 0 24 24" :width="noteR * 1.3" :height="noteR * 1.3"
-						:x="this.noteDiameter + 10"
-						:y="(index * (this.noteDiameter + this.noteGapBetween)) + 5" 
-						fill="#FFFFFF"
+					<svg v-if="scale.editable" viewBox="0 0 24 24" :width="noteR * 1.5" :height="noteR * 1.5"
+						:x="this.noteDiameter + 6"
+						:y="(index * (this.noteDiameter + this.noteGapBetween)) + 3" 
+						fill="#41b883"
 						style="pointer-events: none">
 						<path d="M18 1C15.24 1 13 3.24 13 6V8H4C2.9 8 2 8.89 2 10V20C2 21.11 2.9 22 4 22H16C17.11 22 18 21.11 18 20V10C18 8.9 17.11 8 16 8H15V6C15 4.34 16.34 3 18 3C19.66 3 21 4.34 21 6V8H23V6C23 3.24 20.76 1 18 1M10 13C11.1 13 12 13.89 12 15C12 16.11 11.11 17 10 17C8.9 17 8 16.11 8 15C8 13.9 8.9 13 10 13Z" />
 					</svg>							
 
-				<text dominant-baseline="middle" alignment-baseline="middle" :x="this.noteDiameter * 2 + 10" 
-					:y="(index * (this.noteDiameter + this.noteGapBetween)) + this.noteR"
+				<circle 
+					:cx="this.noteR + (this.noteDiameter + this.noteGapBetween * 2) * 2" 
+					:cy="(index * (this.noteDiameter + this.noteGapBetween)) + this.noteR"
+					:fill="scale.scColor"
+					fill-opacity="1"
+					:r="this.noteR"
+					class="point-cursor"
+					
+					/>	
+				<text dominant-baseline="middle" alignment-baseline="middle" 
+					:x="this.noteR + (this.noteDiameter + this.noteGapBetween * 2) * 2" 
+					:y="(index * (this.noteDiameter + this.noteGapBetween)) + this.noteR + 1"
+					fill="white"
+					class="scaleText" >
+					{{noteName(scale.tonic)}}
+				</text>
+				<text dominant-baseline="middle" alignment-baseline="middle" 
+					:x="this.noteDiameter * 3 + 12" 
+					:y="(index * (this.noteDiameter + this.noteGapBetween)) + this.noteR + 2"
 					fill="white">
-					{{noteName(scale.tonic) + ' ' + (scale.custom ? '*' : '') + ' ' + scale.scName}}
+					{{(scale.custom ? '*' : '') + scale.scName}}
 				</text>
 
 			</g>			
