@@ -162,7 +162,7 @@
 				<text dominant-baseline="middle" alignment-baseline="middle" :x="this.noteDiameter * 2 + 10" 
 					:y="(index * (this.noteDiameter + this.noteGapBetween)) + this.noteR"
 					fill="white">
-					{{noteName(scale.tonic) + ' ' + (scale.custom ? 'custom' : scale.scName) + ((scale.custom && scale.editable && this.isMobile) ? ' (lock again to scroll)' : '')}}
+					{{noteName(scale.tonic) + ' ' + (scale.custom ? '*' : '') + ' ' + scale.scName}}
 				</text>
 
 			</g>			
