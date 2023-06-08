@@ -1,7 +1,7 @@
 <template>
 	<div v-if="showSettings" ><InstrumentSetup :tuning="tuning" @update-tuning="handleUpdatedTuning" /></div>
 	<!-- <v-btn @click="clearCookies">Clear Cookies</v-btn> -->
-	<v-container ref="dropArea" @mouseup="handleNoteDrop"  @touchend="handleNoteDrop" @scroll="handleScroll" fluid style="overflow-x: auto; ">		
+	<v-container ref="dropArea" @mouseup="handleNoteDrop"  @touchend="handleNoteDrop" @click="handleEdit" @scroll="handleScroll" fluid style="overflow-x: auto; ">		
 		<svg :width="this.width" :height="(stringGap * strings) + TOPFRETBOARDGAP">
 			<rect :width="this.width - fretGap" :height="stringGap * strings" :x="LEFTFRETBOARDGAP + fretGap" :y="TOPFRETBOARDGAP" 
 				:style="{fill: `rgba(var(--v-theme-surface))`}"
@@ -58,43 +58,43 @@
 
 			<!-- Draw all notes from all scales (using pre computed object 'fretboard', which reads the 'scales' object) -->
 			<g v-for="pos in this.fretboard" :key="pos">
-				<circle v-if="pos.note.ntShow"
+				<circle
 					:cx="pos.fret * this.fretGap + LEFTFRETBOARDGAP
 						+ (this.fretGap / 2)
 						+ this.noteR
-						+ (pos.scIndex * (this.noteDiameter + this.noteGapBetween))
+						+ (pos.scaleIndex * (this.noteDiameter + this.noteGapBetween))
 						- (((scales.length * this.noteDiameter) + (this.noteGapBetween * (scales.length - 1))) / 2)"
 
 					:cy="(pos.string * this.stringGap) + (stringGap / 2) + TOPFRETBOARDGAP" :r="this.noteR" 
-					:fill="pos.fillc" 
-					:fill-opacity="pos.note.ntOpacity"
-					:stroke="pos.note.ntStroke ? pos.fillc : 'none'"
-					:stroke-width="pos.note.ntStroke ? 2 : 0"
-					:stroke-opacity="pos.note.ntStroke ? 1 : 0"
-
+					:fill="pos.color" 
+					:fill-opacity="pos.note.opacity"
+					:stroke="pos.note.stroke ? pos.color : 'none'"
+					:stroke-width="pos.note.stroke ? 2 : 0"
+					:stroke-opacity="pos.note.stroke ? 1 : 0"
+					style="pointer-events: none;"
 				/>
 
-				<text v-if="pos.note.ntShow"
-					class="scaleText" 
+				<text
+					class="noteLabel" 
 					:x="pos.fret * this.fretGap + LEFTFRETBOARDGAP
 						+ (this.fretGap / 2)
 						+ this.noteR
-						+ (pos.scIndex * (this.noteDiameter + this.noteGapBetween))
+						+ (pos.scaleIndex * (this.noteDiameter + this.noteGapBetween))
 						- (((scales.length * this.noteDiameter) + (this.noteGapBetween * (scales.length - 1))) / 2)"
 					:y="pos.string * this.stringGap + 56" :r="this.noteR"
-					fill="`rgba(var(--v-theme-surface))`">
+					:style="{ fill: pos.note.labelColor }">
 
 					<template v-if="this.btLabels === '123'">
-						{{pos.note.ntScaleNum}}
+						{{pos.noteIndex}}
 						<!-- {{pos.ntIndex}} -->
 					</template>
 
 					<template v-else-if="this.btLabels === 'b3'">
-						{{pos.note.ntMajorRelNum}}
+						{{pos.note.degree}}
 					</template>
 
 					<template v-else>
-						{{pos.note.ntName}}
+						{{pos.note.name}}
 					</template>
 					
 
@@ -122,7 +122,7 @@
 					class="point-cursor"
 					@click="removeScale(index)"
 					/>
-				
+
 				<svg viewBox="0 0 24 24" :width="noteR * 1.8" :height="noteR * 1.8"			
 					:x="2" 
 					:y="(index * (this.noteR * 2 + this.noteGapBetween)) + 1"					
@@ -163,7 +163,7 @@
 				<circle 
 					:cx="this.noteR + (this.noteDiameter + this.noteGapBetween * 2) * 2" 
 					:cy="(index * (this.noteDiameter + this.noteGapBetween)) + this.noteR"
-					:fill="scale.scColor"
+					:fill="scale.color"
 					fill-opacity="1"
 					:r="this.noteR"
 					class="point-cursor"
@@ -179,8 +179,9 @@
 				<text dominant-baseline="middle" alignment-baseline="middle" 
 					:x="this.noteDiameter * 3 + 12" 
 					:y="(index * (this.noteDiameter + this.noteGapBetween)) + this.noteR + 2"
-					fill="white">
-					{{(scale.custom ? '*' : '') + scale.scName}}
+					fill="white"
+					style="user-select: none;">
+					{{scale.description}}
 				</text>
 
 			</g>			
@@ -307,7 +308,7 @@
 			this.neckX = dropArea.$el.getBoundingClientRect().left;
 			this.neckY =  dropArea.$el.getBoundingClientRect().top;
 
-			this.readCookie(this.cookies.get("VuetarFretboard"));
+			this.readCookie();
 
 			},
 		updated() {
@@ -358,8 +359,7 @@
 				this.fretGap = (this.neckLength / this.frets);
 				// console.log('handleResize')
 			},
-			handleNoteDrop(point) {
-				
+			handleNoteDrop(point) {				
 
 				if (this.isDragging) {
 					this.dropX = this.ndX - this.neckX;
@@ -382,15 +382,21 @@
 						console.log('Scale not found ' + this.ndScaleID)
 
 					} else {
-						this.scales.push(new Scales.ScaleInstance(
-							sel.scaleType,
-							dropNote,
-							sel.mode,
-							this.scColor,
-							sel.scaleTheme,
-							sel.name,
-							));
+						var newscale = new Scales.Scale(dropNote, this.scColor, sel.name);
 
+						newscale.addNotesFromShape(sel.scaleType, sel.mode, sel.scaleTheme)						
+
+						// stupid damn blues scale ruin my plans...
+						if (sel.name === 'Blues') {
+							newscale.addNote(Scales.noteAdd(dropNote, 6))
+						}
+
+						newscale.setShape()
+						newscale.setNoteNames()
+						newscale.setNoteDegrees()
+						
+
+						this.scales.push(newscale)
 						this.buildFretboard();
 						this.handleResize();	
 						
@@ -406,68 +412,61 @@
 						if (this.scrollPos < 0) {this.scrollPos = 0}
 					}
 
-				} else {
-					// Attempt to edit scale
-
-					var clientX, clientY, fretboardNote, clickIndex
-
-					if (event.type.startsWith("touch")) {
-						clientX = point.touches[0].clientX;
-						clientY = point.touches[0].clientY;
-					} else {
-						clientX =  point.clientX;
-						clientY =  point.clientY + window.scrollY;
-					}
-
-					const fretboardClickX =  clientX - this.neckX - 15 - LEFTFRETBOARDGAP + this.scrollPos
-					const fretboardClickFret = Math.floor(fretboardClickX / this.fretGap );
-					const fretboardClickString = Math.floor((clientY - this.neckY - 25) / this.stringGap) - 1;
-
-					if (fretboardClickFret < 0 || fretboardClickFret > this.frets - 1 || fretboardClickString < 0 || fretboardClickString > this.strings - 1) {
-						fretboardNote = undefined
-					} else {
-						fretboardNote = Scales.noteAdd(Scales.noteNum(this.tuning[fretboardClickString]), fretboardClickFret);
-					}
-
-					clickIndex = this.scaleIndex(fretboardClickX - (fretboardClickFret * this.fretGap));
-					if (clickIndex !== undefined) {
-						const scale = this.scales[clickIndex]
-
-						if (scale.editable) {
-							if (scale.hasNote(fretboardNote)) {
-							
-								scale.removeNote(fretboardNote);
-
-							} else { 
-								scale.addCustomNote(fretboardNote);	
-							}
-
-							this.buildFretboard();
-							this.handleResize();
-						}
-						
-					}
-				}
+				} 
 				
+			},
+			handleEdit(point)  {
+				// Attempt to edit scale
+				console.log(point);
+				
+				var clientX, clientY, fretboardNote, clickIndex
+
+				if (event.type.startsWith("touch")) {
+					clientX = point.touches[0].clientX;
+					clientY = point.touches[0].clientY;
+				} else {
+					clientX =  point.clientX;
+					clientY =  point.clientY + window.scrollY;
+				}
+
+				const fretboardClickX =  clientX - this.neckX - 15 - LEFTFRETBOARDGAP + this.scrollPos
+				const fretboardClickFret = Math.floor(fretboardClickX / this.fretGap );
+				const fretboardClickString = Math.floor((clientY - this.neckY - 25) / this.stringGap) - 1;
+
+				if (fretboardClickFret < 0 || fretboardClickFret > this.frets - 1 || fretboardClickString < 0 || fretboardClickString > this.strings - 1) {
+					fretboardNote = undefined
+				} else {
+					fretboardNote = Scales.noteAdd(Scales.noteNum(this.tuning[fretboardClickString]), fretboardClickFret);
+				}
+
+				clickIndex = this.scaleIndex(fretboardClickX - (fretboardClickFret * this.fretGap));
+				if (clickIndex !== undefined) {
+					const scale = this.scales[clickIndex]
+
+					if (scale.editable) {
+						scale.cycleNote(fretboardNote);
+						this.buildFretboard();
+						this.handleResize();
+					}
+					
+				}
 			},
 			buildFretboard() {
 				this.fretboard.length = 0;
 				for (let freti = 0; freti < this.frets; freti++) {
 					for (let stringi = 0; stringi < this.strings; stringi++) {
 						let checkNoteNum = Scales.noteAdd(Scales.noteNum(this.tuning[stringi]), freti)
-						let noteCount = this.scales.filter(scale => scale.notes.some(note => note.ntChromaNum === checkNoteNum)).length;
-						let ntIndex = 0;
-						this.scales.forEach((scObj, i) => {
-							let noteObj = scObj.getNote(checkNoteNum);
-							if (noteObj !== undefined) {
-								this.fretboard.push({noteCount: noteCount, ntIndex: ntIndex, scIndex: i, fret: freti, string: stringi, note: noteObj, fillc: scObj.scColor, desc: scObj.scName});
-								ntIndex++;
+						// let noteCount = this.scales.filter(scale => scale.notes.some(note => note.ntChromaNum === checkNoteNum)).length;
+						this.scales.forEach((scale, index) => {
+							let note = scale.getNote(checkNoteNum);
+							if (note !== undefined) {
+								let noteIndex = (scale.notes.indexOf(note) + 1);
+								this.fretboard.push({fret: freti, string: stringi, scaleIndex: index, color: scale.color, noteIndex: noteIndex, note: note});
+								noteIndex++;
 							}
 						})
 					}
-				}
-				
-				// console.log(this.scales)
+				}				
 				this.setCookie();
 			},
 
@@ -508,72 +507,61 @@
 				
 			},
 			setCookie() {
-				var scaleCookie = '';
-				this.scales.forEach((scale,i) => {
-					scaleCookie += scale.scaleType + ','
-					scaleCookie += scale.tonic + ','
-					scaleCookie += scale.mode + ','
-					scaleCookie += scale.scColor + ','
-					scaleCookie += scale.scTheme + ','
-					scaleCookie += scale.scName
-					if (i < this.scales.length - 1) {scaleCookie += '`'}
+				var scaleCookie = []
+				this.scales.forEach((scale) => {
+					scaleCookie.push({tonic: scale.tonic, color: scale.color, notes: []})
+					// debugger;
+					scale.notes.forEach((note) => {
+						// debugger;
+						scaleCookie[scaleCookie.length - 1].notes.push({number: note.number, style: note.style})
+					})
 				});
 
-				scaleCookie += '|' + this.tuning
-
-				this.cookies.set("VuetarFretboard", scaleCookie)
-				// console.log(this.cookies)
+				this.cookies.set("VuetarScales", JSON.stringify(scaleCookie))
+				this.cookies.set("VuetarTuning", this.tuning)
+				// console.log(this.cookies.get("VuetarScales"))
+				// console.log(JSON.stringify(this.scales))
 			},
 			reReadCookie() {
 				this.readCookie(this.cookies.get("VuetarFretboard"));
 			},
 			clearCookies() {
+				this.cookies.remove("VuetarScales");
+				this.cookies.remove("VuetarTuning");
 				this.cookies.remove("VuetarFretboard");
 				this.cookies.remove("VuetarColor");
 				this.cookies.remove("VuetarSettings")
 			},
-			readCookie(clientcookie) {				
-				if (clientcookie) {
-					var cookieBites = clientcookie.split("|")			
-	
-					this.tuning = cookieBites[this.COOKIE_TUNING].split(",")
-					this.strings = this.tuning.length
-
-					var cookieScales = cookieBites[this.COOKIE_SCALES].split("`")
-
-					if (cookieScales[0] !== '') {
-						cookieScales.forEach((scale) => {
-
-							var scaleDefs = scale.split(",")
-
-							if (scaleDefs[0] !== '') {
-								this.scales.push(new Scales.ScaleInstance(
-									// (scaleType, tonic, mode, scColor, scTheme, scName) 
-									scaleDefs[0],
-									Number(scaleDefs[1]),
-									scaleDefs[2],
-									scaleDefs[3],
-									scaleDefs[4],
-									scaleDefs[5]
-								))
-
-								if (this.scales.length >= 5) {
-									this.buildFretboard();
-									this.handleResize();
-									return;
-								}
-							}
-							
-						});
-						// console.log(this.scales)
-						this.buildFretboard();
-						this.handleResize();
-					}
+			readCookie() {		
 				
-
+				let tuning = this.cookies.get("VuetarTuning")
+				// debugger;
+				if (tuning) {
+					// debugger;
+					this.tuning = tuning.split(',')
+					this.strings= this.tuning.length
+					// debugger;
 				}
-				
+
+				var cookieScales = JSON.parse(this.cookies.get("VuetarScales"))
+
+				if (cookieScales) {
+					cookieScales.forEach((scale) => {
+						var newscale = new Scales.Scale(scale.tonic, scale.color)
+						for (var note of scale.notes) {
+							newscale.addNote(note.number, note.style)
+						}
+						newscale.setShape()
+						newscale.setNoteNames()
+						newscale.setNoteDegrees()
+						// console.log(newscale)
+						this.scales.push(newscale)
+					})
+				}
+				this.buildFretboard();
+				this.handleResize();
 			}
+
 		}
 	}
 

@@ -1,14 +1,14 @@
 [
-  [1, 2, 2, 2, 2, 2, 2, 2],
-  [1, 2, 3, 2, 3, 2, 2],
-  [1, 3, 3, 2, 3, 3, 2],
-  [1, 2, 3, 3, 3, 2, 3],
-  [1, 2, 3, 2, 2, 2, 3],
-  [1, 3, 3, 2, 2, 3, 3],
-  [1, 2, 2, 3, 2, 2, 2],
-  [1, 2, 2, 2, 2, 2, 3],
-  [1, 2, 3, 2, 2, 3, 3],
-  [1, 3, 3, 2, 3, 3, 3],
-  [1, 2, 2, 0, 2, 2, 0],
-  [1, 0, 2, 2, 2, 0, 2]
+  ["full", "faded", "faded", "faded", "faded", "faded", "faded", "faded"],
+  ["full", "faded", "outline", "faded", "outline", "faded", "faded"],
+  ["full", "outline", "outline", "faded", "outline", "outline", "faded"],
+  ["full", "faded", "outline", "outline", "outline", "faded", "outline"],
+  ["full", "faded", "outline", "faded", "faded", "faded", "outline"],
+  ["full", "outline", "outline", "faded", "faded", "outline", "outline"],
+  ["full", "faded", "faded", "outline", "faded", "faded", "faded"],
+  ["full", "faded", "faded", "faded", "faded", "faded", "outline"],
+  ["full", "faded", "outline", "faded", "faded", "outline", "outline"],
+  ["full", "outline", "outline", "faded", "outline", "outline", "outline"],
+  ["full", "faded", "faded", "hidden", "faded", "faded", "hidden"],
+  ["full", "hidden", "faded", "faded", "faded", "hidden", "faded"]
 ]

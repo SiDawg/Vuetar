@@ -179,9 +179,7 @@
 		height: 100px;
 		align-items: center;
 		margin: 10px;
-/*  border: 1px solid #888888;*/
-/*  border-radius:10px;*/
-/*  background-color: #505560;  */
+
 }
 
 body {

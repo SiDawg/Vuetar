@@ -302,9 +302,11 @@
 				
 			},
 			handleReset() {
-				this.cookies.remove("VuetarSettings");
-				this.cookies.remove("VuetarColor");
+				this.cookies.remove("VuetarScales");
+				this.cookies.remove("VuetarTuning");
 				this.cookies.remove("VuetarFretboard");
+				this.cookies.remove("VuetarColor");
+				this.cookies.remove("VuetarSettings")
 				location.reload();
 			}
 		}
@@ -344,6 +346,24 @@
 	.scaleText {
 		dominant-baseline: middle;
 		fill: rgba(var(--v-theme-on-surface));
+		text-anchor: middle;
+		text-shadow: 1px 1px 1px #000000;
+		pointer-events: none;
+		user-select: none;
+	}
+
+	.noteCircle {
+		fill: rgba(var(--v-theme-surface)); 
+		stroke: rgba(var(--v-theme-surface-variant),.3); 
+		/*stroke: white; */
+		stroke-width: 3;
+		cursor: grab;
+		cursor: -webkit-grab;
+		pointer-events: none;
+	}
+
+	.noteLabel {
+		dominant-baseline: middle;
 		text-anchor: middle;
 		text-shadow: 1px 1px 1px #000000;
 		pointer-events: none;

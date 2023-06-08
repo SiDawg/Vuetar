@@ -1,7 +1,7 @@
 {
   "dropDown": [
     {
-      "name": "Melodic Minor, Root Mode",
+      "name": "Melodic Minor (1st mode of the Melodic Minor scale)",
       "shortname": "mm1",
       "scaleType": "Melodic Minor",
       "mode": 0,
@@ -9,7 +9,7 @@
       "sid" : 23
     },
     {
-      "name": "Melodic Minor, 2nd Mode (Dorian ♭2)",
+      "name": "Dorian b2 (2nd mode of the Melodic Minor scale)",
       "shortname": "mm2",
       "scaleType": "Melodic Minor",
       "mode": 1,
@@ -17,7 +17,7 @@
       "sid" : 24
     },
     {
-      "name": "Melodic Minor, 3rd Mode (Lydian Augmented)",
+      "name": "Lydian Augmented (3rd mode of the Melodic Minor scale)",
       "shortname": "mm3",
       "scaleType": "Melodic Minor",
       "mode": 2,
@@ -25,7 +25,7 @@
       "sid" : 25
     },
     {
-      "name": "Melodic Minor, 4th Mode (Lydian Dominant)",
+      "name": "Lydian Dominant (4th mode of the Melodic Minor scale)",
       "shortname": "mm4",
       "scaleType": "Melodic Minor",
       "mode": 3,
@@ -33,7 +33,7 @@
       "sid" : 26
     },
     {
-      "name": "Melodic Minor, 5th Mode (Aeolian Dominant)",
+      "name": "Aeolian Dominant (5th mode of the Melodic Minor scale)",
       "shortname": "mm5",
       "scaleType": "Melodic Minor",
       "mode": 4,
@@ -41,7 +41,7 @@
       "sid" : 27
     },
     {
-      "name": "Melodic Minor, 6th Mode (Half Diminished)",
+      "name": "Half Diminished (6th mode of the Melodic Minor scale)",
       "shortname": "mm6",
       "scaleType": "Melodic Minor",
       "mode": 5,
@@ -49,7 +49,7 @@
       "sid" : 28
     },
     {
-      "name": "Melodic Minor, 7th Mode (Altered)",
+      "name": "Altered (7th mode of the Melodic Minor scale)",
       "shortname": "alt",
       "scaleType": "Melodic Minor",
       "mode": 6,
@@ -57,7 +57,7 @@
       "sid" : 29
     },
     {
-      "name": "Harmonic Minor, Root Mode",
+      "name": "Harmonic Minor (1st mode of the Harmonic Minor scale)",
       "shortname": "hm1",
       "scaleType": "Harmonic Minor",
       "mode": 0,
@@ -65,7 +65,7 @@
       "sid" : 30
     },
     {
-      "name": "Harmonic Minor, 2nd Mode (Locrian ♮6)",
+      "name": "Locrian Natural (2nd mode of the Harmonic Minor scale)",
       "shortname": "hm2",
       "scaleType": "Harmonic Minor",
       "mode": 1,
@@ -73,7 +73,7 @@
       "sid" : 31
     },
     {
-      "name": "Harmonic Minor, 3rd Mode (Major ♯5)",
+      "name": "Major #5 (3rd mode of the Harmonic Minor scale)",
       "shortname": "hm3",
       "scaleType": "Harmonic Minor",
       "mode": 2,
@@ -81,7 +81,7 @@
       "sid" : 32
     },
     {
-      "name": "Harmonic Minor, 4th Mode (Dorian ♯4)",
+      "name": "Dorian ♯4 (4th mode of the Harmonic Minor scale)",
       "shortname": "hm4",
       "scaleType": "Harmonic Minor",
       "mode": 3,
@@ -89,7 +89,7 @@
       "sid" : 33
     },
     {
-      "name": "Harmonic Minor, 5th Mode (Phrygian Dominant)",
+      "name": "Phrygian Dominant (5th mode of the Harmonic Minor scale)",
       "shortname": "hm5",
       "scaleType": "Harmonic Minor",
       "mode": 4,
@@ -97,7 +97,7 @@
       "sid" : 34
     },
     {
-      "name": "Harmonic Minor, 6th Mode (Lydian ♯2)",
+      "name": "Lydian #2 (6th mode of the Harmonic Minor scale)",
       "shortname": "hm6",
       "scaleType": "Harmonic Minor",
       "mode": 5,
@@ -105,7 +105,7 @@
       "sid" : 35
     },
     {
-      "name": "Harmonic Minor, 7th Mode (Altered Dominant ♭♭7 )",
+      "name": "Altered Dominant bb7 (7th mode of the Harmonic Minor scale)",
       "shortname": "atd",
       "scaleType": "Harmonic Minor",
       "mode": 6,
@@ -113,7 +113,7 @@
       "sid" : 36
     },
     {
-      "name": "Harmonic Major, Root Mode",
+      "name": "Harmonic Major (1st mode of the Harmonic Major scale)",
       "shortname": "hM1",
       "scaleType": "Harmonic Major",
       "mode": 0,
@@ -121,7 +121,7 @@
       "sid" : 37
     },
     {
-      "name": "Harmonic Major, 2nd Mode (Dorian ♭5)",
+      "name": "Dorian b5 (2nd mode of the Harmonic Major scale)",
       "shortname": "hM2",
       "scaleType": "Harmonic Major",
       "mode": 1,
@@ -129,7 +129,7 @@
       "sid" : 38
     },
     {
-      "name": "Harmonic Major, 3rd Mode (Phrygian ♭4)",
+      "name": "Phrygian b4 (3rd mode of the Harmonic Major scale)",
       "shortname": "hM3",
       "scaleType": "Harmonic Major",
       "mode": 2,
@@ -137,7 +137,7 @@
       "sid" : 39
     },
     {
-      "name": "Harmonic Major, 4th Mode (Lydian ♭3)",
+      "name": "Lydian b3 (4th mode of the Harmonic Major scale)",
       "shortname": "hM4",
       "scaleType": "Harmonic Major",
       "mode": 3,
@@ -145,7 +145,7 @@
       "sid" : 40
     },
     {
-      "name": "Harmonic Major, 5th Mode (Mixolydian ♭2)",
+      "name": "Mixolydian b2 (5th mode of the Harmonic Major scale)",
       "shortname": "hM5",
       "scaleType": "Harmonic Major",
       "mode": 4,
@@ -153,7 +153,7 @@
       "sid" : 41
     },
     {
-      "name": "Harmonic Major, 6th Mode (Lydian Augmented ♯2)",
+      "name": "Lydian Augmented #2 (6th mode of the Harmonic Major scale)",
       "shortname": "hM6",
       "scaleType": "Harmonic Major",
       "mode": 5,
@@ -161,7 +161,7 @@
       "sid" : 42
     },
     {
-      "name": "Harmonic Major, 7th Mode (Locrian ♭♭7 )",
+      "name": "Locrian bb7 (7th mode of the Harmonic Major scale)",
       "shortname": "hM7",
       "scaleType": "Harmonic Major",
       "mode": 6,
@@ -177,7 +177,7 @@
       "sid" : 44
     },
     {
-      "name": "Inverted Diminished",
+      "name": "Inverted Diminished (2nd mode of the Diminished scale)",
       "shortname": "invD",
       "scaleType": "Diminished",
       "mode": 1,
@@ -201,7 +201,7 @@
       "sid" : 47
     },
     {
-      "name": "Inverted Augmented",
+      "name": "Inverted Augmented (2nd mode of the Augmented scale)",
       "shortname": "augD",
       "scaleType": "Augmented",
       "mode": 1,
@@ -235,25 +235,25 @@
           {
             "name": "Major Pentatonic",
             "shortname": "M p",
-            "scaleType": "Major",
+            "scaleType": "Pentatonic",
             "mode": 0,
-            "scaleTheme": 10,
+            "scaleTheme": 0,
             "sid" : 3
           },
           {
             "name": "Minor Pentatonic",
             "shortname": "m p",
-            "scaleType": "Major",
-            "mode": 5,
-            "scaleTheme": 11,
+            "scaleType": "Pentatonic",
+            "mode": 4,
+            "scaleTheme": 0,
             "sid" : 4
           },
           {
             "name": "Blues",
             "shortname": "blu",
-            "scaleType": "Major",
-            "mode": 5,
-            "scaleTheme": 11,
+            "scaleType": "Pentatonic",
+            "mode": 4,
+            "scaleTheme": 0,
             "sid" : 49
           }
         ],

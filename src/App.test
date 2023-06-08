@@ -1,0 +1,67 @@
+<template>
+	<v-app>		
+		
+	</v-app>
+</template>
+
+<script>
+	import * as scales from './scales.js'
+
+	export default {
+		data() {
+			return {
+				
+			}
+		},
+		
+		setup() {
+			
+		},
+
+		components: {
+			
+		},
+
+		mounted() {
+			this.addScale();
+		},
+
+		beforeUnmount() {			
+
+		},
+
+		updated() {
+			
+		},
+
+		methods: {
+			addScale() {
+				// console.log(scales);
+				// debugger;
+				var tonic = scales.noteNum('A#')
+
+				var myscale = new scales.Scale(tonic, '#333333', 'my scale');
+				myscale.addNotesFromShape('Major', 5, 0);
+
+				// var modescale = new scales.Scale(tonic, '#333333', 'my scale');
+				// modescale.addNotesFromShape('Harmonic Minor', 3, 0);
+				console.log(myscale.notes);
+				// debugger;
+				myscale.addNote(2,2)
+				// console.log(myscale.shape.name);
+				// console.log(myscale.shape.steps);
+				// console.log(myscale.shape.mode);
+				// myscale.removeNote(1)
+				console.log(myscale.notes);
+				// debugger;
+				myscale.removeNote(2)
+				console.log(myscale.notes);
+				// debugger;
+			}
+		}
+	}
+</script>
+
+<style>
+	
+</style>
