@@ -133,8 +133,20 @@ export class Scale {
 				this.description = 'Blues (Minor pentatonic + b5)'
 							
 			} else {
-				this.shape = {name: 'Custom', mode: 0, steps}
-				this.description = 'Custom ' + this.notes.length + ' note scale'
+				switch (this.notes.length) {
+					case 1:
+						this.shape = {name: 'Custom', mode: 0, steps}
+						this.description = 'Custom 1 note scale. Rocking.'
+						break;
+					case 12:
+						this.shape = {name: 'Custom', mode: 0, steps}
+						this.description = 'Got enough notes there, Sparky?'
+						break;
+					default:
+						this.shape = {name: 'Custom', mode: 0, steps}
+						this.description = 'Custom ' + this.notes.length + ' note scale'
+						break;
+				}
 			}
 			
 		}

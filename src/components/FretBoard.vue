@@ -357,7 +357,7 @@
 				}
 				this.neckLength = (this.width - LEFTFRETBOARDGAP);
 				this.fretGap = (this.neckLength / this.frets);
-				// console.log('handleResize')
+
 			},
 			handleNoteDrop(point) {				
 
@@ -415,10 +415,9 @@
 				} 
 				
 			},
+
 			handleEdit(point)  {
-				// Attempt to edit scale
-				console.log(point);
-				
+								
 				var clientX, clientY, fretboardNote, clickIndex
 
 				if (event.type.startsWith("touch")) {
@@ -440,7 +439,8 @@
 				}
 
 				clickIndex = this.scaleIndex(fretboardClickX - (fretboardClickFret * this.fretGap));
-				if (clickIndex !== undefined) {
+
+				if (clickIndex !== undefined && fretboardNote !== undefined) {
 					const scale = this.scales[clickIndex]
 
 					if (scale.editable) {
@@ -451,12 +451,13 @@
 					
 				}
 			},
+
 			buildFretboard() {
 				this.fretboard.length = 0;
 				for (let freti = 0; freti < this.frets; freti++) {
 					for (let stringi = 0; stringi < this.strings; stringi++) {
 						let checkNoteNum = Scales.noteAdd(Scales.noteNum(this.tuning[stringi]), freti)
-						// let noteCount = this.scales.filter(scale => scale.notes.some(note => note.ntChromaNum === checkNoteNum)).length;
+
 						this.scales.forEach((scale, index) => {
 							let note = scale.getNote(checkNoteNum);
 							if (note !== undefined) {
@@ -510,17 +511,14 @@
 				var scaleCookie = []
 				this.scales.forEach((scale) => {
 					scaleCookie.push({tonic: scale.tonic, color: scale.color, notes: []})
-					// debugger;
+
 					scale.notes.forEach((note) => {
-						// debugger;
 						scaleCookie[scaleCookie.length - 1].notes.push({number: note.number, style: note.style})
 					})
 				});
 
 				this.cookies.set("VuetarScales", JSON.stringify(scaleCookie))
 				this.cookies.set("VuetarTuning", this.tuning)
-				// console.log(this.cookies.get("VuetarScales"))
-				// console.log(JSON.stringify(this.scales))
 			},
 			reReadCookie() {
 				this.readCookie(this.cookies.get("VuetarFretboard"));
@@ -535,12 +533,10 @@
 			readCookie() {		
 				
 				let tuning = this.cookies.get("VuetarTuning")
-				// debugger;
+
 				if (tuning) {
-					// debugger;
 					this.tuning = tuning.split(',')
 					this.strings= this.tuning.length
-					// debugger;
 				}
 
 				var cookieScales = JSON.parse(this.cookies.get("VuetarScales"))
@@ -554,7 +550,7 @@
 						newscale.setShape()
 						newscale.setNoteNames()
 						newscale.setNoteDegrees()
-						// console.log(newscale)
+
 						this.scales.push(newscale)
 					})
 				}
