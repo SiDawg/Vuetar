@@ -105,20 +105,14 @@ export class Scale {
 		
 		var shape
 		var mode = 0
-
-		for (var i = 0 ; i < steps.length ; i++) {
-			
+		for (var i = 0 ; i < steps.length ; i++) {			
 			var match = scaleShapes.some((searchShape) => {
 				let tail = []
-
 				if (i !== 0) {
 					tail = steps.slice(-i);
 				}
-
 				let head = steps.slice(0,steps.length - i);
-
 				if (JSON.stringify(searchShape.steps) === JSON.stringify(tail.concat(head))) {
-
 					shape = searchShape;
 					mode = i;
 					return true;
@@ -139,7 +133,6 @@ export class Scale {
 				this.description = 'Blues (Minor pentatonic + b5)'
 							
 			} else {
-
 				this.shape = {name: 'Custom', mode: 0, steps}
 				this.description = 'Custom ' + this.notes.length + ' note scale'
 			}
@@ -147,62 +140,35 @@ export class Scale {
 		}
 	}
 
+
 	setNoteNames() {		
 
 		if (this.notes.length === 7
 			&& this.shape.name !== 'Custom' 
-			&& typeof this.shape !== undefined) {		
+			&& typeof this.shape !== undefined) {
 
-			var sharpEnharmonics = [Chroma[this.tonic]]
-			var sharpAccidentalCount = 0
-			var flatEnharmonics	
-			var flatAccidentalCount	= 0
-			var isEnharmonic = false
-			var nextNote
-			// debugger;
-			if (Chroma[this.tonic].length === 2) {				
-				flatEnharmonics = [Chroma[noteAdd(this.tonic, 1)][0] + 'b']
-				isEnharmonic = true
-			}
+			var sharpScale = getEnharmonicScale('#',this.notes.map((note) => note.number))
+			var flatScale = getEnharmonicScale('b',this.notes.map((note) => note.number))	
 
-			for (i = 1; i < 7; i++) {
-				let nextName = nextBareName(sharpEnharmonics[sharpEnharmonics.length - 1])				
-				let accidentalString = accidentals(noteDifference(noteNum(nextName),this.notes[i].number))
-				
-				sharpEnharmonics.push(nextName + accidentalString)		
-				sharpAccidentalCount += accidentalString.length
-			}
+			// debugger;		
 
-			if (isEnharmonic) {
-
-				for (var i = 1; i < 7; i++) {
-					let nextName = nextBareName(flatEnharmonics[flatEnharmonics.length - 1])
-					let accidentalString = accidentals(noteDifference(noteNum(nextName), this.notes[i].number))
-					
-					flatEnharmonics.push(nextName + accidentalString)		
-					flatAccidentalCount += accidentalString.length
-				}
-
-			} else { flatEnharmonics = sharpEnharmonics }	
-
-
-			if (this.steps.length === 7 && (this.shape.name !== 'Major' || this.shape.mode !== 0)) {
+			if (this.steps().length === 7 && (this.shape.name !== 'Major' || this.shape.mode !== 0)) {
 
 				switch (majorEnharmonic(this.tonic)) {
 					case 'b' :
-						this.notes.forEach((note, index) => note.name = flatEnharmonics[index])
+						this.notes.forEach((note, index) => note.name = flatScale.noteNames[index])
 						break;
 					case 'f' :
-						this.notes.forEach((note, index) => note.name = sharpEnharmonics[index])
+						this.notes.forEach((note, index) => note.name = sharpScale.noteNames[index])
 						break;
 				}
 
 			} else {
 
-				if (flatAccidentalCount < sharpAccidentalCount) {
-					this.notes.forEach((note, index) => note.name = flatEnharmonics[index])
+				if (flatScale.accidentalCount < sharpScale.accidentalCount) {
+					this.notes.forEach((note, index) => note.name = flatScale.noteNames[index])
 				} else {
-					this.notes.forEach((note, index) => note.name = sharpEnharmonics[index])
+					this.notes.forEach((note, index) => note.name = sharpScale.noteNames[index])
 				}
 			}
 
@@ -299,11 +265,6 @@ export class Scale {
 			this.notes.splice(index, 1);
 		}
 	}
-
-	// _addNote(notenum, style) {
-	// 	if (this.hasNote(notenum)) {return}
-	// 	this.notes.push(new Note(notenum, style));
-	// }
 
 	addNote(notenum, style) {
 
@@ -470,3 +431,32 @@ function nextBareName(name) {
 		return names[names.indexOf(name[0]) + 1];
 	}
 }
+
+function getEnharmonicScale(accidental, noteNumbers) {
+	var scale = []
+	var accidentalCount = 0 
+
+	let tonicName = Chroma[noteNumbers[0]]
+
+	if (tonicName.length === 2) {
+		accidentalCount++
+		if (accidental === "b") {
+			tonicName = Chroma[noteAdd(noteNumbers[0], 1)][0] + 'b'
+		} else {
+			tonicName = tonicName[0] + "#"
+		}
+	}
+
+	scale.push(tonicName)
+
+	for (var i = 1; i < 7; i++) {
+			let nextName = nextBareName(scale[scale.length - 1])				
+			let accidentalList = accidentals(noteDifference(noteNum(nextName),noteNumbers[i]))
+			
+			scale.push(nextName + accidentalList)		
+			accidentalCount += accidentalList.length
+	}
+
+	return {noteNames: scale, accidentalCount: accidentalCount}
+
+}	

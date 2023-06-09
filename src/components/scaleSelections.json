@@ -1,6 +1,46 @@
 {
   "dropDown": [
     {
+      "name": "Major Pentatonic (1st mode of the Pentatonic scale)",
+      "shortname": "pn1",
+      "scaleType": "Pentatonic",
+      "mode": 0,
+      "scaleTheme": 0,
+      "sid" : 50
+    },
+    {
+      "name": "Egyptian (2nd mode of the Pentatonic scale)",
+      "shortname": "pn2",
+      "scaleType": "Pentatonic",
+      "mode": 1,
+      "scaleTheme": 0,
+      "sid" : 51
+    },
+    {
+      "name": "Man Gong (3rd mode of the Pentatonic scale)",
+      "shortname": "pn3",
+      "scaleType": "Pentatonic",
+      "mode": 2,
+      "scaleTheme": 0,
+      "sid" : 52
+    },
+    {
+      "name": "Ritusen (4th mode of the Pentatonic scale)",
+      "shortname": "pn4",
+      "scaleType": "Pentatonic",
+      "mode": 3,
+      "scaleTheme": 0,
+      "sid" : 53
+    },
+    {
+      "name": "Minor Pentatonic (5th mode of the Pentatonic scale)",
+      "shortname": "pn5",
+      "scaleType": "Pentatonic",
+      "mode": 4,
+      "scaleTheme": 0,
+      "sid" : 54
+    },
+    {
       "name": "Melodic Minor (1st mode of the Melodic Minor scale)",
       "shortname": "mm1",
       "scaleType": "Melodic Minor",

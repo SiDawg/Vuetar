@@ -174,7 +174,7 @@
 					:y="(index * (this.noteDiameter + this.noteGapBetween)) + this.noteR + 1"
 					fill="white"
 					class="scaleText" >
-					{{noteName(scale.tonic)}}
+					{{scale.notes[0].name}}
 				</text>
 				<text dominant-baseline="middle" alignment-baseline="middle" 
 					:x="this.noteDiameter * 3 + 12" 
