@@ -138,17 +138,40 @@
 					mandatory
 					>
 						<v-btn value="abc" title="Note Name"> ABC </v-btn>
-						<v-btn value="b3" title="Note Number (standard: relative to root mode)" style="text-transform: none"> ♭3 </v-btn>
-						<v-btn value="123" title="Alternate Note Number (index)"> 123 </v-btn>
+						<v-btn value="b3" title="Degrees (relative to parallel-Major)" style="text-transform: none"> b3 </v-btn>
+						<v-btn value="123" title="Index"> 123 </v-btn>
 						
 					</v-btn-toggle>
-				</div>
-
-				
+				</div>				
 			</v-col>
 			<v-col>				
-				<div class="d-flex align-center flex-column mt-0">
-					<div class="d-flex align-center mt-2">
+				<div class="d-flex align-center flex-column ">
+					<div class="text-subtitle-2">Enharmonics</div>
+					<v-btn-toggle
+						v-model="btEnharmonics"
+						variant="outlined"
+						@click="settingsChange"
+						divided
+						mandatory
+						>
+						<v-btn value="manual" title="Manual: based on drop area">
+							<svg viewBox="0 0 30 20" width="30" height="20" xmlns="http://www.w3.org/2000/svg">
+								<rect x="0" y="0" width="2" height="20" :style="{fill: `rgba(var(--v-theme-on-surface))`, stroke: 'none'}" />
+								<rect x="28" y="0" width="2" height="20" :style="{fill: `rgba(var(--v-theme-on-surface))`, stroke: 'none'}" />
+								<path :style="{fill: `rgba(var(--v-theme-on-surface))`, stroke: 'none'}"  d="M 4.346 4.986 L 4.346 4.521 Q 5.964 4.023 7.06 3.417 L 7.276 3.608 Q 7.052 5.243 7.052 8.506 L 7.06 9.211 Q 8.305 7.908 8.679 7.696 Q 9.052 7.485 9.725 7.485 Q 10.513 7.485 11.202 7.866 Q 11.891 8.248 12.261 9.045 Q 12.63 9.842 12.63 10.913 Q 12.63 12.988 11.244 14.403 Q 9.858 15.819 7.907 15.819 Q 6.828 15.819 5.641 15.246 Q 5.765 12.415 5.765 7.875 L 5.749 6.19 L 5.749 5.808 Q 5.749 5.235 5.624 5.061 Q 5.5 4.886 5.259 4.886 Q 5.002 4.886 4.346 4.986 Z M 7.06 14.482 Q 7.84 14.93 8.637 14.93 Q 9.758 14.93 10.468 14.113 Q 11.177 13.295 11.177 11.635 Q 11.177 10.182 10.592 9.46 Q 10.007 8.738 9.185 8.738 Q 8.679 8.738 8.231 9.004 Q 7.782 9.269 7.479 9.717 Q 7.176 10.166 7.102 10.589 Q 7.06 10.838 7.06 11.892 Z" style="white-space: pre;"/>
+								<path :style="{fill: `rgba(var(--v-theme-on-surface))`, stroke: 'none'}"  d="M 16.304 7.731 L 18.691 7.731 L 19.321 4.765 L 20.222 4.765 L 19.592 7.731 L 22.668 7.731 L 23.291 4.765 L 24.192 4.765 L 23.569 7.731 L 25.005 7.731 L 25.005 8.624 L 23.379 8.624 L 22.829 11.342 L 25.005 11.342 L 25.005 12.243 L 22.646 12.243 L 22.016 15.187 L 21.116 15.187 L 21.745 12.243 L 18.655 12.243 L 18.032 15.187 L 17.131 15.187 L 17.754 12.243 L 16.304 12.243 L 16.304 11.342 L 17.944 11.342 L 18.508 8.624 L 16.304 8.624 Z M 19.409 8.624 L 18.838 11.342 L 21.929 11.342 L 22.485 8.624 Z" style="white-space: pre;"/>
+							</svg>
+						</v-btn>						
+						<v-btn value="auto" title="Auto: minimum symbols" >
+							<svg viewBox="0 0 30 20" width="30" height="20" xmlns="http://www.w3.org/2000/svg">
+								<path :style="{fill: `rgba(var(--v-theme-on-surface))`, stroke: 'none'}" d="M 13.732 14.929 L 3.499 10.652 L 3.499 9.103 L 13.732 4.816 L 13.732 6.672 L 5.828 9.873 L 13.732 13.073 Z" style="white-space: pre;"/>
+								<path :style="{fill: `rgba(var(--v-theme-on-surface))`, stroke: 'none'}" d="M 16.769 7.935 L 19.156 7.935 L 19.786 4.969 L 20.687 4.969 L 20.057 7.935 L 23.133 7.935 L 23.756 4.969 L 24.657 4.969 L 24.034 7.935 L 25.47 7.935 L 25.47 8.828 L 23.844 8.828 L 23.294 11.546 L 25.47 11.546 L 25.47 12.447 L 23.111 12.447 L 22.481 15.391 L 21.581 15.391 L 22.21 12.447 L 19.12 12.447 L 18.497 15.391 L 17.596 15.391 L 18.219 12.447 L 16.769 12.447 L 16.769 11.546 L 18.409 11.546 L 18.973 8.828 L 16.769 8.828 Z M 19.874 8.828 L 19.303 11.546 L 22.394 11.546 L 22.95 8.828 Z" style="white-space: pre;"/>
+							</svg>
+						</v-btn>
+						<v-btn value="major" title="From parallel Major" style="text-transform: none"> Maj </v-btn>
+					</v-btn-toggle>
+
+					<div class="d-flex align-center mt-7">
 						<svg viewBox="0 0 500 500" width="50" height="50" x="0" y="0" xmlns="http://www.w3.org/2000/svg">
 							<path style="stroke-linecap: round; stroke-miterlimit: 1; stroke-linejoin: round; stroke: rgb(52, 73, 94); fill: rgb(52, 73, 94); stroke-width: 0px;" d="M 186.187 249.516 L 193.452 193.583 L 341.263 19.193 L 421.911 15.613 L 424.673 49.162 L 361.956 56.584 L 239.344 224.402 L 186.187 249.516 Z">
 							</path>
@@ -163,7 +186,8 @@
 						</svg>
 						<text :style="{fill: `rgba(var(--v-theme-on-surface))`}">Vuetar</text>
 					</div>
-					<v-btn class="mt-3" @click="handleReset" density="compact" color="#555555" icon="mdi-autorenew"></v-btn>
+					
+
 				</div>
 			</v-col>					
 		</v-row>
@@ -197,10 +221,11 @@
 				WIDE,
 				NARROW,
 				dashboardHeight: 200,    
-				btScales: "common",
-				btLabels: "abc",
+				btScales: 'common',
+				btLabels: 'abc',
 				btSpacing: WIDE,
-				btOverlap: "discrete",
+				btOverlap: 'discrete',
+				btEnharmonics: 'auto',
 				scaleSelections: scaleSelections,
 				scaleCircles: 20,
 				itemsPerGroup: 7,
@@ -258,7 +283,7 @@
 				const { type, touches, clientX, clientY } = event
 				const scaleX = event.target.getBoundingClientRect().left 
 				const scaleY = event.target.getBoundingClientRect().top
-				var blOther = sid === 0;
+				var other = sid === 0;
 
 				if (sid === 0) {
 					if (this.dropDownSelected === '' ) return
@@ -266,13 +291,13 @@
 				}
 
 				if (!sid) return
-				this.$emit('scale-clicked', {sid, blOther, scaleCircles: this.scaleCircles, scaleX, scaleY, clientX, clientY, type, touches});
+				this.$emit('scale-clicked', {sid, other, scaleCircles: this.scaleCircles, scaleX, scaleY, clientX, clientY, type, touches});
 				this.blHasDragged = true
 
 			},
 			settingsChange() {
-				this.cookies.set("VuetarSettings", this.btSpacing + '|' + this.btLabels)
-				this.$emit('settings-changed', {btSpacing: this.btSpacing, btLabels: this.btLabels});
+				this.cookies.set("VuetarSettings", this.btSpacing + '|' + this.btLabels + '|' + this.btEnharmonics)
+				this.$emit('settings-changed', {spacing: this.btSpacing, labels: this.btLabels, enharmonics: this.btEnharmonics});
 			},
 			scaleByDropDownName(dropDownName) {
 				var scObj;
@@ -290,25 +315,18 @@
 				}
 			},
 			readCookie(clientcookie) {
-				
 				if (clientcookie) {
-					var cookieBites = clientcookie.split("|")				
+					var cookieBites = clientcookie.split("|")	
 					this.blHasDragged = true
 					if (cookieBites[0].length !== 0 && cookieBites[1] !== 0 ) {
 						this.btSpacing 	= cookieBites[0]
 						this.btLabels 	= cookieBites[1]
+						this.btEnharmonics = cookieBites[2]
 					}
 				}
 				
-			},
-			handleReset() {
-				this.cookies.remove("VuetarScales");
-				this.cookies.remove("VuetarTuning");
-				this.cookies.remove("VuetarFretboard");
-				this.cookies.remove("VuetarColor");
-				this.cookies.remove("VuetarSettings")
-				location.reload();
 			}
+
 		}
 
 };

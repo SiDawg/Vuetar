@@ -13,9 +13,10 @@
 					:isDragging="isDragging"
 					:isMobile="isMobile"
 					:scColor="scColors[colIndex]"
-					:btSpacing="btSpacing"
-					:btLabels="btLabels"
-					:ndOther="ndOther"
+					:spacing="spacing"
+					:labels="labels"
+					:enharmonics="enharmonics"
+					:other="other"
 				/>
 			</v-row>
 
@@ -51,7 +52,7 @@
 				noteCircles: 15,
 				ndX: 40,
 				ndY: 40,
-				ndOther: false,
+				other: false,
 				isDragging: false,
 				ndScaleID: 0, 
 				ndOffX: 10,
@@ -59,8 +60,9 @@
 				isMobile: false,
 				scColors: ['#FF9F1C','#1A91FF', '#8AC926','#E72AB2','#1BD9E5'],
 				colIndex: 0,
-				btSpacing: '',
-				btLabels: '',
+				spacing: '',
+				labels: '',
+				enharmonics: '',
 
 			}
 		},
@@ -102,13 +104,14 @@
 				this.ndX = this.clientX(event) - this.ndOffX
 				this.ndY = this.clientY(event) - this.ndOffY + window.scrollY;
 				this.ndScaleID = event.sid;
-				this.ndOther = event.blOther;
+				this.other = event.other;
 
 			},
 
 			changeSettings(event) {	
-				this.btSpacing = event.btSpacing;
-				this.btLabels = event.btLabels;
+				this.spacing = event.spacing;
+				this.labels = event.labels;
+				this.enharmonics = event.enharmonics;
 			},
 
 			dragging(event) {
@@ -129,6 +132,7 @@
 				}
 				
 			},
+
 
 			clientX(event) {
 				if (event.type.startsWith("touch")) {

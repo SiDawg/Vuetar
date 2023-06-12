@@ -84,17 +84,25 @@
 					:y="pos.string * this.stringGap + 56" :r="this.noteR"
 					:style="{ fill: pos.note.labelColor }">
 
-					<template v-if="this.btLabels === '123'">
+					<template v-if="this.labels === '123'">
 						{{pos.noteIndex}}
 						<!-- {{pos.ntIndex}} -->
 					</template>
 
-					<template v-else-if="this.btLabels === 'b3'">
+					<template v-else-if="this.labels === 'b3'">
 						{{pos.note.degree}}
 					</template>
 
 					<template v-else>
-						{{pos.note.name}}
+						<template v-if="this.enharmonics === 'auto'">
+							{{pos.note.name.auto}}
+						</template>
+						<template v-if="this.enharmonics === 'major'">
+							{{pos.note.name.major}}
+						</template>
+						<template v-if="this.enharmonics === 'manual'">
+							{{pos.note.name.manual}}
+						</template>
 					</template>
 					
 
@@ -102,9 +110,9 @@
 			</g>
 
 			<g  v-if="isDragging" >		
-				<!-- <text :x="hoverX" :y="ndY - neckY - (isMobile ? 60 : 40)" class="scaleText">{{Math.floor(hoverX)}}</text> -->
-				<text :x="hoverX + LEFTFRETBOARDGAP" :y="ndY - neckY - (isMobile ? 60 : 40)" class="scaleText">{{noteName(hoverNote)}}</text>
-				<!-- <text :x="hoverX" :y="ndY - neckY - (isMobile ? 60 : 40)" class="scaleText">{{noteName(hoverNote)}}</text> -->
+				<text :x="hoverX + LEFTFRETBOARDGAP" :y="ndY - neckY - (isMobile ? 60 : 40)" class="scaleText">{{hoverEnharmonic}}</text>		
+				<!-- <text :x="hoverX + LEFTFRETBOARDGAP" :y="ndY - neckY - (isMobile ? 60 : 40)" class="scaleText">{{noteName(hoverNote)}}</text> -->
+				<!-- <text :x="hoverX + LEFTFRETBOARDGAP" :y="ndY - neckY - (isMobile ? 60 : 40)" class="scaleText">{{hoverNote}}</text> -->
 			</g>
 		</svg>		
 	</v-container>
@@ -174,7 +182,15 @@
 					:y="(index * (this.noteDiameter + this.noteGapBetween)) + this.noteR + 1"
 					fill="white"
 					class="scaleText" >
-					{{scale.notes[0].name}}
+					<template v-if="this.enharmonics === 'auto'">
+						{{scale.notes[0].name.auto}}
+					</template>
+					<template v-if="this.enharmonics === 'major'">
+						{{scale.notes[0].name.major}}
+					</template>
+					<template v-if="this.enharmonics === 'manual'">
+						{{scale.notes[0].name.manual}}
+					</template>
 				</text>
 				<text dominant-baseline="middle" alignment-baseline="middle" 
 					:x="this.noteDiameter * 3 + 12" 
@@ -186,6 +202,8 @@
 
 			</g>			
 		</svg>
+		<v-btn class="ml-0" @click="handleReset" density="compact" color="#555555" icon="mdi-autorenew"></v-btn>
+		
 	</v-container>
 </template>
 
@@ -207,12 +225,13 @@
 			ndScaleID: Number,
 			ndX: Number,
 			ndY: Number,
-			ndOther: Boolean,
+			other: Boolean,
 			isDragging: Boolean,
 			isMobile: Boolean,
 			scColor: String,
-			btSpacing: String,
-			btLabels: String,
+			spacing: String,
+			labels: String,
+			enharmonics: String,
 		},
 		components: {
 			InstrumentSetup,
@@ -261,7 +280,7 @@
 			
 			noteGapSides() {	
 				// console.log('noteGapSides')			
-				return Number(this.btSpacing);
+				return Number(this.spacing);
 			},
 
 			noteDiameter() {
@@ -285,6 +304,13 @@
 				return Math.floor(this.hoverX / this.fretGap );				
 
 			},
+
+			hoverFretX() {
+				// return Math.round((((this.hoverX / this.fretGap) % 1) * 100) / 100);	
+
+				return Math.round(((this.hoverX / this.fretGap) % 1) * 100)
+			},
+
 			hoverString() {
 				return (Math.floor((this.ndY - this.neckY - 25) / this.stringGap) - 1);
 			},
@@ -295,6 +321,29 @@
 				} else {
 					return Scales.noteAdd(Scales.noteNum(this.tuning[this.hoverString]), this.hoverFret);
 				}							
+			},
+
+			hoverEnharmonic() {
+				var threshold = 50
+
+				if (this.hoverNote !== undefined) {
+					if (this.hoverNote === 2 || this.hoverNote === 7) {
+						threshold = 75 // don't display "Cb" or "Fb" unless at the edges, because they're "weird"
+
+					} else if (this.hoverNote === 3 || this.hoverNote === 8) {
+						threshold = 25 // don't display "B#" or "E#" unless at the edges, because they're "weird"
+					}
+
+					if (this.hoverFretX < threshold) {
+						return Scales.enharmonicNeighbours(this.hoverNote).sharp
+					} else {
+						return Scales.enharmonicNeighbours(this.hoverNote).flat
+					}
+
+				} else {
+					return ''
+				}
+				
 			}
 		},
 		mounted() {
@@ -309,6 +358,7 @@
 			this.neckY =  dropArea.$el.getBoundingClientRect().top;
 
 			this.readCookie();
+			this.testStuff()
 
 			},
 		updated() {
@@ -372,7 +422,7 @@
 
 					if (this.scales.length >= 5) return;
 
-					if (this.ndOther) {
+					if (this.other) {
 						sel = scaleSelections.dropDown.find(dropDown => dropDown.sid === this.ndScaleID);
 					} else {
 						sel = scaleButtons.find(selections => selections.sid === this.ndScaleID);
@@ -392,7 +442,9 @@
 						}
 
 						newscale.setShape()
-						newscale.setNoteNames()
+
+
+						newscale.setNoteNames(this.hoverEnharmonic)
 						newscale.setNoteDegrees()
 						
 
@@ -476,6 +528,27 @@
 				dropArea.$el.scrollLeft = pixels;
 			},
 
+			testStuff() {
+				// const names = Scales.enharmonicNeighbours(12)
+
+				// if (names !== undefined) {
+					
+				// 	console.log(names.sharp)
+				// 	console.log(names.flat)
+				// }
+
+
+			},
+
+			handleReset() {
+				this.cookies.remove("VuetarScales");
+				this.cookies.remove("VuetarTuning");
+				this.cookies.remove("VuetarFretboard");
+				this.cookies.remove("VuetarColor");
+				this.cookies.remove("VuetarSettings")
+				location.reload();
+			},
+
 			removeScale(scaleID) {
 				const oldCentre = ((document.documentElement.clientWidth) / 2) + this.scrollPos
 				const centreFret = Math.floor((oldCentre - 20) / this.fretGap);	
@@ -510,7 +583,7 @@
 			setCookie() {
 				var scaleCookie = []
 				this.scales.forEach((scale) => {
-					scaleCookie.push({tonic: scale.tonic, color: scale.color, notes: []})
+					scaleCookie.push({tonic: scale.tonic, color: scale.color, notes: [], enharmonic: scale.notes[0].name.manual})
 
 					scale.notes.forEach((note) => {
 						scaleCookie[scaleCookie.length - 1].notes.push({number: note.number, style: note.style})
@@ -548,7 +621,7 @@
 							newscale.addNote(note.number, note.style)
 						}
 						newscale.setShape()
-						newscale.setNoteNames()
+						newscale.setNoteNames(scale.enharmonic)
 						newscale.setNoteDegrees()
 
 						this.scales.push(newscale)

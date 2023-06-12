@@ -2,6 +2,7 @@ import scaleShapes from './components/scaleShapes.json'
 import scaleThemes from './components/scaleThemes.json'
 
 export const Chroma = ['A','A#','B','C','C#','D','D#','E','F','F#','G','G#'];
+export const ChromaFlat = ['A','Bb','B','C','Db','D','Eb','E','F','Gb','G','Ab'];
 
 export class Scale {
 	constructor(tonic, color) {
@@ -152,44 +153,73 @@ export class Scale {
 		}
 	}
 
-
-	setNoteNames() {		
-
-		if (this.notes.length === 7
-			&& this.shape.name !== 'Custom' 
-			&& typeof this.shape !== undefined) {
-
+	setNoteNames(enharmonic) {		
+		if (enharmonic === '') {enharmonic = undefined}		
+		// debugger;
+		if (this.steps().length === 7) {
 			var sharpScale = getEnharmonicScale('#',this.notes.map((note) => note.number))
 			var flatScale = getEnharmonicScale('b',this.notes.map((note) => note.number))	
 
-			// debugger;		
+			// sharpScale = "if this scale was built with sharps"
 
-			if (this.steps().length === 7 && (this.shape.name !== 'Major' || this.shape.mode !== 0)) {
+			// so A# sharp scale = A#, B#...., flat scale = Bb, C... ) -> Scenario a) simple enharmonic, go with least accidentals
+			
+			// E sharp scale = E, F#... E flat scale = Fb, Gb ... -> Scenario b) first of half step pair 
+			// B sharp scale = B, C#.... flat scale = Cb, Db.... --> Scenario b)
 
-				switch (majorEnharmonic(this.tonic)) {
-					case 'b' :
-						this.notes.forEach((note, index) => note.name = flatScale.noteNames[index])
-						break;
-					case 'f' :
-						this.notes.forEach((note, index) => note.name = sharpScale.noteNames[index])
-						break;
-				}
+			// F sharp scale = E#, F## ... F flat scale = F, G... -> Scenario c) second of half step pair 
+			// C sharp scale = B#, C## ... C flat scale = C, D, E, F
 
+
+			// console.log('Note: ' + this.tonic + ' ' + enharmonic)
+			// console.log('Sharp: ' + JSON.stringify(sharpScale))
+			// console.log('Flat: ' + JSON.stringify(flatScale))
+			// console.log(majorAccidental(this.tonic))
+			// console.log(enharmonicType(enharmonic))
+			// console.log('')
+
+			if (flatScale.accidentalCount < sharpScale.accidentalCount) {
+				this.notes.forEach((note, index) => note.name.auto = flatScale.noteNames[index])
 			} else {
-
-				if (flatScale.accidentalCount < sharpScale.accidentalCount) {
-					this.notes.forEach((note, index) => note.name = flatScale.noteNames[index])
-				} else {
-					this.notes.forEach((note, index) => note.name = sharpScale.noteNames[index])
-				}
+				this.notes.forEach((note, index) => note.name.auto = sharpScale.noteNames[index])
 			}
 
-		// else if it's a custom scale, or not 7 notes, just use the default # from Chroma
+			if (majorAccidental(this.tonic) === 'b') {
+				this.notes.forEach((note, index) => note.name.major = flatScale.noteNames[index])
+			} else {
+				this.notes.forEach((note, index) => note.name.major = sharpScale.noteNames[index])
+			}
+			
+			if (enharmonicType(enharmonic) === undefined) {
+				if (majorAccidental(this.tonic) === 'b') {
+					this.notes.forEach((note, index) => note.name.manual = flatScale.noteNames[index])
+				} else {
+					this.notes.forEach((note, index) => note.name.manual = sharpScale.noteNames[index])
+				}
+			} else if (enharmonicType(enharmonic) === 'b') {
+				this.notes.forEach((note, index) => note.name.manual = flatScale.noteNames[index])
+			} else {
+				this.notes.forEach((note, index) => note.name.manual = sharpScale.noteNames[index])
+			}
+
 		} else {
-			this.notes.forEach((note) => note.name = Chroma[note.number]);
+
+			if (enharmonicType(enharmonic) === 'b') {
+				this.notes.forEach((note, index) => note.name.manual = ChromaFlat[note.number])
+				this.notes.forEach((note, index) => note.name.auto = ChromaFlat[note.number])
+			} else {
+				this.notes.forEach((note, index) => note.name.manual = Chroma[note.number])
+				this.notes.forEach((note, index) => note.name.auto = Chroma[note.number])
+			}
+
+			if (majorAccidental(this.tonic) === 'b') {
+				this.notes.forEach((note, index) => note.name.major = ChromaFlat[note.number])
+			} else {
+				this.notes.forEach((note, index) => note.name.major = Chroma[note.number])
+			}
+
 		}
-
-
+		// console.log(this.notes)
 	}
 
 	setNoteDegrees() {
@@ -305,7 +335,7 @@ export class Scale {
 export class Note {
 	constructor(number, style) {
 		this.number = number;		
-		this.name = Chroma[number];
+		this.name = {major: undefined, manual: undefined, auto:undefined};
 		this.degree = '';
 		this.setStyle(style);		
 	}
@@ -351,24 +381,80 @@ export function noteName(noteNum) {
 	return Chroma[noteNum];
 }
 
-export function majorEnharmonic(number) {
-	
-	switch (number) {
 
-		case 0:
-		case 2:
-		case 3:
-		case 5:
-		case 7:
-		case 9:
-		case 10:
+
+export function isEnharmonic(number){
+	number %= 12
+	return Chroma[number].length > 1;
+}
+
+export function enharmonicType(enharmonic){
+	if (enharmonic === undefined) {return undefined}
+
+	if (enharmonic.length === 1) {
+		return undefined;
+	} else  {
+		return enharmonic[1]
+	}
+}
+
+export function enharmonicNeighbours(number) {
+	number %= 12
+
+	var names = {sharp: null, flat: null}
+	// ['A','A#','B','C','C#','D','D#','E','F','F#','G','G#'];
+
+	let name = Chroma[number]
+	let previous = Chroma[noteAdd(number,-1)]
+	let next = Chroma[noteAdd(number,1)]
+	// debugger;
+
+	if (name.length > 1) { // number = A#, C#, D#, F#, G#: reasonably simple
+		names.sharp = name // It's the sharp version of the previous: it's already a "sharp" name
+		names.flat = next + 'b'// It's also the flat version of next, A# = Bb etc
+
+	} else { // It's either B, C, A/D (or E, F, G) same approach respectively but more complex: three scenarios
+		if (previous.length === 1) { // C, F only
+			names.sharp = previous + '#' // C = B#, F = E#
+			names.flat = name // C# flat = C, F# flat = F
+		} else { // B/E, A/D/G
+			names.sharp = name // Not going to use 'A##' etc, going to leave it as is
+			if (next.length === 1) { // B, E
+				names.flat = next + 'b'
+			} else { // A/D/G
+				names.flat = name;
+			}
+
+		}
+	}
+
+	return names ;
+
+}
+
+export function bareName(number) {
+	return Chroma[number][0];
+}
+
+
+export function majorAccidental(number) {
+	// Lookup table with the result of 'getEnharmonicScale' in mind
+	// It says "For each note, which scale should we choose 
+	switch (noteName(number)) {
+				
+		case 'B': // Default "B" over "Cb"
+		case 'E': // E, F#...	
+		case 'A': // A, B, C#...
+		case 'D': // D, E, F#...
+		case 'G': // G...F#
+		case 'F#': //  Equal number of # and B: sharp is usually associated with stringed instruments (apparently because fretting = "#" a note...)
 			return '#';
-
-		case 1:
-		case 4:
-		case 6:
-		case 8:
-		case 11:
+		case 'G#':
+		case 'A#':
+		case 'D#':
+		case 'C#':
+		case 'C': // Default "C" over "B#"
+		case 'F':
 			return 'b';
 	}
 }
@@ -447,16 +533,12 @@ function nextBareName(name) {
 function getEnharmonicScale(accidental, noteNumbers) {
 	var scale = []
 	var accidentalCount = 0 
+	var tonicName = ''
 
-	let tonicName = Chroma[noteNumbers[0]]
-
-	if (tonicName.length === 2) {
-		accidentalCount++
-		if (accidental === "b") {
-			tonicName = Chroma[noteAdd(noteNumbers[0], 1)][0] + 'b'
-		} else {
-			tonicName = tonicName[0] + "#"
-		}
+	if (accidental === "b") {
+		tonicName = enharmonicNeighbours(noteNumbers[0]).flat
+	} else {
+		tonicName = enharmonicNeighbours(noteNumbers[0]).sharp
 	}
 
 	scale.push(tonicName)
