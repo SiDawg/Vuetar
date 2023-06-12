@@ -43,12 +43,7 @@
 	export default {
 		data() {
 			return {
-				COOKIE_SCALES: 0,
-				COOKIE_TUNING: 1,
-				COOKIE_COLOR: 2,
-				COOKIE_SPACING: 3,
-				COOKIE_LABELS: 4,
-
+				VERSION: 1,
 				noteCircles: 15,
 				ndX: 40,
 				ndY: 40,
@@ -82,9 +77,7 @@
 			window.addEventListener('touchmove', this.dragging, {passive: true});
 			window.addEventListener('mouseup', this.stopDragging, {passive: true});
 			window.addEventListener('touchend', this.stopDragging, {passive: true});
-			// console.log('start' + this.colIndex)
-			// this.cookies.remove("VuetarColor")
-			this.readCookie(this.cookies.get("VuetarColor"));
+			this.readCookies();
 		},
 		beforeUnmount() {
 			window.removeEventListener('mousemove', this.dragging, {passive: true});
@@ -133,7 +126,6 @@
 				
 			},
 
-
 			clientX(event) {
 				if (event.type.startsWith("touch")) {
 					this.isMobile = true;
@@ -151,10 +143,36 @@
 					return event.clientY;
 				}
 			},
-			readCookie(clientcookie) {
-				if (clientcookie) {
-					if (clientcookie.length !== 0) {
-						var newIndex = Number(clientcookie)
+			
+			reset() {
+				this.cookies.remove("VuetarScales");
+				this.cookies.remove("VuetarTuning");
+				this.cookies.remove("VuetarFretboard");
+				this.cookies.remove("VuetarColor");
+				this.cookies.remove("VuetarSettings")
+				location.reload();
+			},
+
+			acceptsCookies() {
+				this.cookies.set("VuetarTest","test")
+				var test = this.cookies.get("VuetarTest","test")
+				this.cookies.remove("VuetarTest")
+
+				return test;
+			},
+
+			readCookies() {
+				var cookieColor = this.cookies.get("VuetarColor")
+				var cookieVersion = this.cookies.get("VuetarVersion")
+				
+				if (cookieVersion !== this.VERSION.toString() && this.acceptsCookies()) {
+					this.cookies.set("VuetarVersion", this.VERSION.toString())
+					this.reset()
+				}
+
+				if (cookieColor) {
+					if (cookieColor.length !== 0) {
+						var newIndex = Number(cookieColor)
 						if (newIndex < 0 || newIndex >= this.scColors.length ) newIndex = 0;
 						this.colIndex = newIndex
 					}

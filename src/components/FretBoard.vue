@@ -1,6 +1,5 @@
 <template>
 	<div v-if="showSettings" ><InstrumentSetup :tuning="tuning" @update-tuning="handleUpdatedTuning" /></div>
-	<!-- <v-btn @click="clearCookies">Clear Cookies</v-btn> -->
 	<v-container ref="dropArea" @mouseup="handleNoteDrop"  @touchend="handleNoteDrop" @click="handleEdit" @scroll="handleScroll" fluid style="overflow-x: auto; ">		
 		<svg :width="this.width" :height="(stringGap * strings) + TOPFRETBOARDGAP">
 			<rect :width="this.width - fretGap" :height="stringGap * strings" :x="LEFTFRETBOARDGAP + fretGap" :y="TOPFRETBOARDGAP" 
@@ -596,15 +595,9 @@
 			reReadCookie() {
 				this.readCookie(this.cookies.get("VuetarFretboard"));
 			},
-			clearCookies() {
-				this.cookies.remove("VuetarScales");
-				this.cookies.remove("VuetarTuning");
-				this.cookies.remove("VuetarFretboard");
-				this.cookies.remove("VuetarColor");
-				this.cookies.remove("VuetarSettings")
-			},
-			readCookie() {		
-				
+
+			readCookie() {			
+
 				let tuning = this.cookies.get("VuetarTuning")
 
 				if (tuning) {
