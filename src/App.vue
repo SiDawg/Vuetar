@@ -3,7 +3,7 @@
 		<v-container fluid >
 			<v-row >
 				<!-- <VuetifyAll/> -->
-				<TopDashboard @scale-clicked="startDragging" @settings-changed="changeSettings"/>
+				<TopDashboard @scale-clicked="startDragging" @settings-changed="changeSettings" :version="VERSION"/>
 			</v-row>
 			<v-row  >
 				<FretBoard             
@@ -43,7 +43,7 @@
 	export default {
 		data() {
 			return {
-				VERSION: 1,
+				VERSION: 1.3,
 				noteCircles: 15,
 				ndX: 40,
 				ndY: 40,

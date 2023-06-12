@@ -186,8 +186,9 @@
 						</svg>
 						<text :style="{fill: `rgba(var(--v-theme-on-surface))`}">Vuetar</text>
 					</div>
-					
-
+					<div class="d-flex align-self-end mt-0">
+						<text :style="{fill: `rgba(var(--v-theme-on-surface))`, 'font-size': '10pt'}">{{version}}</text>
+					</div>
 				</div>
 			</v-col>					
 		</v-row>
@@ -208,7 +209,10 @@
 	const NARROW = '5';
 
 	export default {
-	name: 'TopDashboard',	
+		name: 'TopDashboard',	
+		props: {
+			version: Number
+		},
 
 		data() {
 			return {
@@ -243,7 +247,6 @@
 		mounted() {
 			this.readCookie(this.cookies.get("VuetarSettings"));
 			this.settingsChange();
-
 		},
 
 		updated() {
